@@ -10,7 +10,7 @@ function getResend(): Resend {
 
 // Must be a Resend-verified sending domain before launch.
 // For local testing use 'onboarding@resend.dev' with your own email as recipient.
-const FROM_ADDRESS = 'ANTRO <orders@giorgioantro.com>'
+const FROM_ADDRESS = 'ANTRO <onboarding@resend.dev>'
 // Inbox that receives contact form submissions
 const CONTACT_TO = process.env.CONTACT_EMAIL ?? 'info@giorgioantro.com'
 

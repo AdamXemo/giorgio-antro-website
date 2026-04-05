@@ -30,8 +30,7 @@ export interface Order {
   subtotal: number
   shipping: number
   status: 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
-  shopifyOrderId?: number
-  shopifyOrderNumber?: string
+  stripePaymentIntentId?: string
   createdAt: string
   updatedAt: string
 }
@@ -67,11 +66,10 @@ function rowToOrder(row: DbRow): Order {
     subtotal:           Number(row.subtotal),
     shipping:           Number(row.shipping),
     total:              Number(row.total),
-    status:             row.status as Order['status'],
-    shopifyOrderId:     row.shopify_order_id as number | undefined,
-    shopifyOrderNumber: row.shopify_order_number as string | undefined,
-    createdAt:          row.created_at as string,
-    updatedAt:          row.updated_at as string,
+    status:                  row.status as Order['status'],
+    stripePaymentIntentId:   row.stripe_payment_intent_id as string | undefined,
+    createdAt:               row.created_at as string,
+    updatedAt:               row.updated_at as string,
   }
 }
 
@@ -101,9 +99,8 @@ export async function createOrder(
       subtotal:             orderData.subtotal,
       shipping:             orderData.shipping,
       total:                orderData.total,
-      items:                orderData.items,
-      shopify_order_id:     orderData.shopifyOrderId ?? null,
-      shopify_order_number: orderData.shopifyOrderNumber ?? null,
+      items:                        orderData.items,
+      stripe_payment_intent_id:     orderData.stripePaymentIntentId ?? null,
     })
     .select()
     .single()
@@ -123,14 +120,16 @@ export async function getOrderById(id: string): Promise<Order | null> {
   return data ? rowToOrder(data as DbRow) : null
 }
 
-export async function getOrderByShopifyId(shopifyOrderId: number): Promise<Order | null> {
+export async function getOrderByStripePaymentIntentId(
+  paymentIntentId: string
+): Promise<Order | null> {
   const { data, error } = await getDb()
     .from('orders')
     .select('*')
-    .eq('shopify_order_id', shopifyOrderId)
+    .eq('stripe_payment_intent_id', paymentIntentId)
     .maybeSingle()
 
-  if (error) throw new Error(`[getOrderByShopifyId] ${error.message}`)
+  if (error) throw new Error(`[getOrderByStripePaymentIntentId] ${error.message}`)
   return data ? rowToOrder(data as DbRow) : null
 }
 

@@ -1,43 +1,12 @@
 'use client'
 
-import { useState } from 'react'
 import { useCart } from '@/components/CartContext'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Trash2, ShoppingBag, Lock } from 'lucide-react'
-import { toast } from 'sonner'
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, cartTotal } = useCart()
-  const [isProcessing, setIsProcessing] = useState(false)
-
-  const handleCheckout = async () => {
-    setIsProcessing(true)
-
-    try {
-      const response = await fetch('/api/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: cart }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Checkout failed')
-      }
-
-      // Redirect to Shopify's hosted checkout
-      window.location.href = data.checkoutUrl
-    } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : 'Something went wrong. Please try again.'
-      console.error('Checkout error:', error)
-      toast.error(message)
-      setIsProcessing(false)
-    }
-    // Note: don't set isProcessing(false) on success — the page is navigating away
-  }
 
   if (cart.length === 0) {
     return (
@@ -159,23 +128,13 @@ export default function CartPage() {
                 </p>
               )}
 
-              <button
-                onClick={handleCheckout}
-                disabled={isProcessing}
-                className="w-full bg-black text-white py-4 text-[10px] tracking-[0.25em] flex items-center justify-center gap-3 border border-black hover:bg-white hover:text-black transition-colors duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-black disabled:hover:text-white mb-4"
+              <Link
+                href="/checkout"
+                className="w-full bg-black text-white py-4 text-[10px] tracking-[0.25em] flex items-center justify-center gap-3 border border-black hover:bg-white hover:text-black transition-colors duration-300 mb-4"
               >
-                {isProcessing ? (
-                  <>
-                    <div className="w-3.5 h-3.5 border border-current border-t-transparent rounded-full animate-spin" />
-                    PROCESSING...
-                  </>
-                ) : (
-                  <>
-                    <Lock size={11} strokeWidth={1.5} />
-                    CHECKOUT
-                  </>
-                )}
-              </button>
+                <Lock size={11} strokeWidth={1.5} />
+                PROCEED TO CHECKOUT
+              </Link>
 
               <Link
                 href="/"
@@ -186,7 +145,7 @@ export default function CartPage() {
 
               <div className="mt-10 pt-8 border-t border-black/10 space-y-3">
                 {[
-                  'Secure checkout via Shopify',
+                  'Secure checkout via Stripe',
                   'Free returns within 30 days',
                   'Free shipping over $100',
                 ].map((text) => (
