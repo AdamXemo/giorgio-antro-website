@@ -62,7 +62,7 @@ export default function CartPage() {
                         </p>
                       </div>
                       <p className="text-sm font-light tabular-nums flex-shrink-0">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        €{(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
 
@@ -108,23 +108,23 @@ export default function CartPage() {
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between text-sm">
                   <span className="text-black/45">Subtotal</span>
-                  <span className="tabular-nums">${subtotal.toFixed(2)}</span>
+                  <span className="tabular-nums">€{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-black/45">Shipping</span>
                   <span className="tabular-nums font-medium">
-                    {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? 'FREE' : `€${shipping.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="border-t border-black/10 pt-4 flex justify-between">
                   <span className="text-sm font-medium">Total</span>
-                  <span className="text-sm tabular-nums font-medium">${total.toFixed(2)}</span>
+                  <span className="text-sm tabular-nums font-medium">€{total.toFixed(2)}</span>
                 </div>
               </div>
 
               {subtotal < 100 && (
                 <p className="text-[10px] tracking-[0.08em] text-black/35 mb-8 leading-loose">
-                  Add ${(100 - subtotal).toFixed(2)} more for free shipping.
+                  Add €{(100 - subtotal).toFixed(2)} more for free shipping.
                 </p>
               )}
 
@@ -147,7 +147,7 @@ export default function CartPage() {
                 {[
                   'Secure checkout via Stripe',
                   'Free returns within 30 days',
-                  'Free shipping over $100',
+                  'Free shipping over €100',
                 ].map((text) => (
                   <p key={text} className="text-[10px] tracking-[0.08em] text-black/30">
                     — {text}

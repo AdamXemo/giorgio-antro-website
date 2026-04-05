@@ -265,18 +265,36 @@ function CheckoutForm({ subtotal, shipping, total }: CheckoutFormProps) {
                 />
               </div>
               <div>
-                <label htmlFor="country" className="sr-only">Country code</label>
-                <input
+                <label htmlFor="country" className="sr-only">Country</label>
+                <select
                   id="country"
-                  type="text"
                   required
                   value={form.country}
-                  onChange={set('country')}
-                  placeholder="Country (e.g. BE)"
+                  onChange={(e) => setForm((prev) => ({ ...prev, country: e.target.value }))}
                   autoComplete="country"
-                  maxLength={2}
-                  className={`${inputClass} uppercase`}
-                />
+                  className="w-full px-0 py-3.5 bg-transparent border-b border-black/15 focus:border-black outline-none text-sm transition-colors appearance-none cursor-pointer"
+                >
+                  <option value="BE">Belgium</option>
+                  <option value="NL">Netherlands</option>
+                  <option value="FR">France</option>
+                  <option value="DE">Germany</option>
+                  <option value="LU">Luxembourg</option>
+                  <option value="GB">United Kingdom</option>
+                  <option value="IT">Italy</option>
+                  <option value="ES">Spain</option>
+                  <option value="PT">Portugal</option>
+                  <option value="CH">Switzerland</option>
+                  <option value="AT">Austria</option>
+                  <option value="PL">Poland</option>
+                  <option value="SE">Sweden</option>
+                  <option value="DK">Denmark</option>
+                  <option value="NO">Norway</option>
+                  <option value="FI">Finland</option>
+                  <option value="IE">Ireland</option>
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="AU">Australia</option>
+                </select>
               </div>
             </div>
           </div>

@@ -68,8 +68,8 @@ export default function ContactPage() {
                   {
                     icon: Mail,
                     label: 'EMAIL',
-                    value: 'info@antro.com',
-                    href: 'mailto:info@antro.com',
+                    value: 'info@giorgioantro.com',
+                    href: 'mailto:info@giorgioantro.com',
                   },
                   {
                     icon: Instagram,

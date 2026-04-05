@@ -153,7 +153,7 @@ export default function ProductClient({ product }: { product: Product }) {
 <h1 className="font-display font-light text-4xl md:text-5xl leading-tight mb-4">
                   {product.name}
                 </h1>
-                <p className="text-2xl font-light tabular-nums">${product.price.toFixed(2)}</p>
+                <p className="text-2xl font-light tabular-nums">€{product.price.toFixed(2)}</p>
               </div>
 
               {/* Description */}

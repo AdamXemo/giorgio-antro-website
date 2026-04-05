@@ -7,7 +7,7 @@ const MARQUEE_ITEMS = [
   'FREE SHIPPING ON ALL ORDERS',
   'LIMITED RELEASE — CLASSIC HOODIE',
   'CRAFTED FOR THE MODERN INDIVIDUAL',
-  'SECURE CHECKOUT VIA SHOPIFY',
+  'SECURE CHECKOUT VIA STRIPE',
   'EASY 30-DAY RETURNS',
 ]
 const DOUBLED_MARQUEE = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS]
@@ -89,7 +89,7 @@ export default function Home() {
                 <h2 className="font-display font-light text-4xl md:text-5xl leading-tight mb-4">
                   {mainProduct.name}
                 </h2>
-                <p className="text-2xl font-light tabular-nums">${mainProduct.price}</p>
+                <p className="text-2xl font-light tabular-nums">€{mainProduct.price}</p>
               </div>
 
               <p className="text-sm leading-loose text-black/55">
@@ -117,7 +117,7 @@ export default function Home() {
                 href={`/product/${mainProduct.id}`}
                 className="block w-full text-center bg-black text-white py-4 text-[10px] tracking-[0.28em] border border-black hover:bg-white hover:text-black transition-colors duration-300"
               >
-                VIEW &amp; PURCHASE — ${mainProduct.price}
+                VIEW &amp; PURCHASE — €{mainProduct.price}
               </Link>
             </div>
           </div>
