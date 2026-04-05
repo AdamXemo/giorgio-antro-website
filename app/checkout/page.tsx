@@ -42,19 +42,17 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen pt-[73px]">
-      <div className="max-w-screen-lg mx-auto px-6 md:px-12 py-16">
+      <div className="max-w-screen-md mx-auto px-6 md:px-12 pt-6 pb-16">
 
-        <div className="mb-12">
-          <Link
-            href="/cart"
-            className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.15em] text-black/35 hover:text-black transition-colors mb-8"
-          >
-            <ChevronLeft size={12} strokeWidth={1.5} />
-            BACK TO CART
-          </Link>
-          <p className="text-[10px] tracking-[0.3em] text-black/35 mb-3">CHECKOUT</p>
-          <h1 className="font-display font-light text-4xl md:text-5xl">Complete your order.</h1>
-        </div>
+        {/* Slim back link */}
+        <Link
+          href="/cart"
+          className="inline-flex items-center gap-2 text-black/30 hover:text-black transition-colors mb-6 group"
+          aria-label="Back to cart"
+        >
+          <ChevronLeft size={16} strokeWidth={1.5} className="group-hover:-translate-x-0.5 transition-transform" />
+          <span className="text-[10px] tracking-[0.2em]">CART</span>
+        </Link>
 
         {initError ? (
           <div className="py-20 text-center">
