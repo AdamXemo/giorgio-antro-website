@@ -74,8 +74,8 @@ export default function ContactPage() {
                   {
                     icon: Instagram,
                     label: 'INSTAGRAM',
-                    value: '@antro',
-                    href: 'https://instagram.com/antro',
+                    value: '@giorgioantro',
+                    href: 'https://www.instagram.com/giorgioantro/',
                   },
                   {
                     icon: MapPin,
@@ -121,6 +121,7 @@ export default function ContactPage() {
             <p className="text-[10px] tracking-[0.25em] mb-10">SEND A MESSAGE</p>
             <form onSubmit={handleSubmit} className="space-y-8">
               <div>
+                <label htmlFor="name" className="sr-only">Name</label>
                 <input
                   type="text"
                   id="name"
@@ -134,6 +135,7 @@ export default function ContactPage() {
               </div>
 
               <div>
+                <label htmlFor="email" className="sr-only">Email address</label>
                 <input
                   type="email"
                   id="email"
@@ -147,6 +149,7 @@ export default function ContactPage() {
               </div>
 
               <div>
+                <label htmlFor="subject" className="sr-only">Subject</label>
                 <input
                   type="text"
                   id="subject"
@@ -160,6 +163,7 @@ export default function ContactPage() {
               </div>
 
               <div>
+                <label htmlFor="message" className="sr-only">Message</label>
                 <textarea
                   id="message"
                   name="message"

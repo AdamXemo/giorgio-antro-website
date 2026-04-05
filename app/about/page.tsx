@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 const VALUES = [
   {
     letter: 'Q',
@@ -22,12 +24,12 @@ export default function AboutPage() {
 
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative h-[60vh] min-h-[380px] flex items-end overflow-hidden bg-black">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-25"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80)',
-          }}
+        <Image
+          src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80"
+          alt="ANTRO fashion store"
+          fill
+          priority
+          className="object-cover object-center opacity-25"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
         <div className="relative z-10 px-6 md:px-12 pb-14 text-white">

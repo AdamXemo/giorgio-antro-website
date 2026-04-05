@@ -1,17 +1,9 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import type { CartItem } from '@/types/cart'
 
-export interface CartItem {
-  id: string
-  name: string
-  price: number
-  size: string
-  quantity: number
-  image: string
-  /** Shopify variant GID — required for Shopify cart sync, optional for local-only use */
-  variantId?: string
-}
+export type { CartItem }
 
 interface CartContextType {
   cart: CartItem[]

@@ -16,7 +16,7 @@ export interface Product {
 // Main product - ANTRO Classic Hoodie
 export const mainProduct: Product = {
   id: 'antro-classic-hoodie',
-  shopifyHandle: 'antro-classic-hoodie',
+  shopifyHandle: 'sailor-hooded-zip-jacket',
   name: 'ANTRO Classic Hoodie',
   price: 89.99,
   description: 'Our signature hoodie crafted from premium cotton blend. Designed for the modern individual who values both style and comfort. Features the iconic ANTRO branding with meticulous attention to detail.',
@@ -28,7 +28,7 @@ export const mainProduct: Product = {
     '/antro-hoodie.jpg',
     '/antro-hoodie.jpg',
     ],
-  sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  sizes: ['ONE SIZE'],
   category: 'Hoodies',
   inStock: true,
   features: [
