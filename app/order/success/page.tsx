@@ -1,13 +1,18 @@
+'use client'
+
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { CheckCircle, Package, Mail } from 'lucide-react'
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Order Confirmed — ANTRO',
-  description: 'Your order has been confirmed.',
-}
+import { useCart } from '@/components/CartContext'
 
 export default function OrderSuccessPage() {
+  const { clearCart } = useCart()
+
+  useEffect(() => {
+    // Clear the cart whenever a completed session lands here
+    clearCart()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="min-h-screen pt-[73px] flex items-center justify-center px-6 py-20">
       <div className="max-w-lg w-full">
