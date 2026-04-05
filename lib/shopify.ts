@@ -1,17 +1,29 @@
-const SHOPIFY_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN!
-const SHOPIFY_STOREFRONT_TOKEN = process.env.SHOPIFY_STOREFRONT_TOKEN!
 const SHOPIFY_API_VERSION = '2024-10'
-const SHOPIFY_API_URL = `https://${SHOPIFY_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`
+
+function getShopifyConfig(): { apiUrl: string; token: string } {
+  const domain = process.env.SHOPIFY_STORE_DOMAIN
+  const token  = process.env.SHOPIFY_STOREFRONT_TOKEN
+  if (!domain || !token) {
+    throw new Error(
+      '[lib/shopify.ts] SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_TOKEN must be set.'
+    )
+  }
+  return {
+    apiUrl: `https://${domain}/api/${SHOPIFY_API_VERSION}/graphql.json`,
+    token,
+  }
+}
 
 async function storefrontFetch<T>(
   query: string,
   variables?: Record<string, unknown>
 ): Promise<T> {
-  const res = await fetch(SHOPIFY_API_URL, {
+  const { apiUrl, token } = getShopifyConfig()
+  const res = await fetch(apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN,
+      'X-Shopify-Storefront-Access-Token': token,
     },
     body: JSON.stringify({ query, variables }),
     cache: 'no-store',

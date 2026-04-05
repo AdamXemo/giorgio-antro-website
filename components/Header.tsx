@@ -5,6 +5,14 @@ import { ShoppingCart, Menu, X, ChevronRight } from 'lucide-react'
 import { useCart } from './CartContext'
 import { useState } from 'react'
 
+const NAV_LINKS = [
+  { href: '/',         label: 'HOME',    mobileLabel: 'Home'    },
+  { href: '/products', label: 'SHOP',    mobileLabel: 'Shop'    },
+  { href: '/about',    label: 'ABOUT',   mobileLabel: 'About'   },
+  { href: '/contact',  label: 'CONTACT', mobileLabel: 'Contact' },
+  { href: '/cart',     label: 'CART',    mobileLabel: 'Cart'    },
+] as const
+
 export default function Header() {
   const { itemCount } = useCart()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -33,12 +41,7 @@ export default function Header() {
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-10">
-              {[
-                { href: '/',          label: 'HOME'    },
-                { href: '/products',  label: 'SHOP'    },
-                { href: '/about',     label: 'ABOUT'   },
-                { href: '/contact',   label: 'CONTACT' },
-              ].map(({ href, label }) => (
+              {NAV_LINKS.filter((l) => l.href !== '/cart').map(({ href, label }) => (
                 <Link
                   key={href}
                   href={href}
@@ -86,37 +89,17 @@ export default function Header() {
 
           <nav className="flex flex-col flex-1 px-6 pt-6">
             <div className="flex flex-col">
-              {[
-                { href: '/', label: 'Home' },
-                { href: '/products', label: 'Shop' },
-                { href: '/about', label: 'About' },
-                { href: '/contact', label: 'Contact' },
-                { href: '/cart', label: 'Cart' },
-              ].map(({ href, label }) => (
+              {NAV_LINKS.map(({ href, mobileLabel }) => (
                 <Link
                   key={href}
                   href={href}
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center justify-between border-b border-white/10 py-5 font-sans text-[18px] font-light"
                 >
-                  <span>{label}</span>
+                  <span>{mobileLabel}</span>
                   <ChevronRight size={16} strokeWidth={1.5} />
                 </Link>
               ))}
-            </div>
-
-            {/* Pin login to the bottom (placeholder link for now) */}
-            <div className="mt-auto border-t border-white/10 py-6">
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setMobileMenuOpen(false)
-                }}
-                className="block font-sans text-[18px] font-light tracking-[0.02em]"
-              >
-                LOGIN
-              </a>
             </div>
           </nav>
         </div>

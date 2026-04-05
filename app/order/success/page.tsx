@@ -25,7 +25,7 @@ export default function OrderSuccessPage() {
         <div className="border-t border-black/10 mt-10 py-8 space-y-5">
           <div className="flex gap-4 text-sm text-black/55">
             <Mail size={15} strokeWidth={1.5} className="flex-shrink-0 mt-0.5 text-black/25" />
-            <p>A confirmation email with your order details is on its way.</p>
+            <p>You will receive a confirmation email with your order details shortly.</p>
           </div>
           <div className="flex gap-4 text-sm text-black/55">
             <Package size={15} strokeWidth={1.5} className="flex-shrink-0 mt-0.5 text-black/25" />

@@ -1,14 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getProductById } from '@/data/products'
 import { getProductVariants, createShopifyCart } from '@/lib/shopify'
-
-interface CartItem {
-  id: string
-  name: string
-  size: string
-  quantity: number
-  price: number
-}
+import type { CartItem } from '@/types/cart'
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,18 +26,20 @@ export async function POST(req: NextRequest) {
       // Fetch all variants for this product from Shopify
       const variants = await getProductVariants(product.shopifyHandle)
 
-      // Find the variant matching the customer's selected size
-      const variant = variants.find((v) =>
-        v.selectedOptions.some(
-          (opt) =>
-            opt.name.toLowerCase() === 'size' &&
-            opt.value.toLowerCase() === item.size.toLowerCase()
-        )
-      )
+      // Try to match by size option. For ONE SIZE products that have no size option
+      // configured in Shopify, selectedOptions will be empty — fall back to variants[0].
+      const variant =
+        variants.find((v) =>
+          v.selectedOptions.some(
+            (opt) =>
+              opt.name.toLowerCase() === 'size' &&
+              opt.value.toLowerCase() === item.size.toLowerCase()
+          )
+        ) ?? variants[0]
 
       if (!variant) {
         return NextResponse.json(
-          { error: `Size "${item.size}" is not available for "${product.name}"` },
+          { error: `No variants found for "${product.name}" in Shopify` },
           { status: 400 }
         )
       }

@@ -66,26 +66,12 @@ body {
   to   { transform: translateX(-50%); }
 }
 
-/* Legacy keyframes (used by preserved animation classes) */
+/* Used by .animate-fade-in (cart page) */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeInScale {
-  from { opacity: 0; transform: scale(0.97); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-@keyframes slideInFromLeft {
-  from { opacity: 0; transform: translateX(-20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInFromRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
 
 @keyframes loading {
   0%   { background-position: 200% 0; }
@@ -113,11 +99,8 @@ body {
   will-change: transform;
 }
 
-/* Legacy classes kept for compatibility */
-.animate-fade-in        { animation: fadeIn 0.6s ease-out forwards; }
-.animate-fade-in-scale  { animation: fadeInScale 0.5s ease-out forwards; }
-.animate-slide-in-left  { animation: slideInFromLeft 0.7s ease-out forwards; }
-.animate-slide-in-right { animation: slideInFromRight 0.7s ease-out forwards; }
+/* Used in cart page */
+.animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
 
 .animate-delay-100 { animation-delay: 0.1s; }
 .animate-delay-200 { animation-delay: 0.2s; }

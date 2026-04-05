@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { mainProduct } from '@/data/products'
-import NewsletterForm from '@/components/NewsletterForm'
 
 const MARQUEE_ITEMS = [
   'PREMIUM HEAVYWEIGHT COTTON',
@@ -42,7 +41,7 @@ export default function Home() {
           </h1>
           <div className="mt-10 md:mt-14 flex flex-col items-center text-center sm:flex-row sm:items-end sm:justify-center gap-8">
             <p className="text-sm font-light text-white/45 max-w-xs leading-relaxed animate-reveal-fade animate-delay-200">
-              Ellegancy and technology
+              Elegance and technology
             </p>
             <Link
               href={`/product/${mainProduct.id}`}
@@ -137,17 +136,6 @@ export default function Home() {
             From concept to creation — quality you feel, style you live.
             Each ANTRO piece is crafted with intention for the modern individual.
           </p>
-        </div>
-      </section>
-
-      {/* ── Newsletter ────────────────────────────────────── */}
-      <section className="py-24 md:py-32 px-6 md:px-12 border-t border-black">
-        <div className="max-w-screen-sm mx-auto text-center">
-          <p className="text-[10px] tracking-[0.3em] text-black/35 mb-6">STAY INFORMED</p>
-          <h2 className="font-display font-light text-3xl md:text-4xl mb-10">
-            Exclusive drops.<br />Early access.
-          </h2>
-          <NewsletterForm />
         </div>
       </section>
 
