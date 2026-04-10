@@ -1,13 +1,14 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import type { Database } from '@/types/supabase'
 
-let _db: SupabaseClient | null = null
+let _db: SupabaseClient<Database> | null = null
 
 /**
  * Returns the server-side Supabase client, initializing it on first use.
  * Uses the service role key — bypasses Row Level Security.
  * Must ONLY be called from API routes / server components, never in the browser.
  */
-export function getDb(): SupabaseClient {
+export function getDb(): SupabaseClient<Database> {
   if (_db) return _db
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -19,6 +20,6 @@ export function getDb(): SupabaseClient {
     )
   }
 
-  _db = createClient(url, key, { auth: { persistSession: false } })
+  _db = createClient<Database>(url, key, { auth: { persistSession: false } })
   return _db
 }
