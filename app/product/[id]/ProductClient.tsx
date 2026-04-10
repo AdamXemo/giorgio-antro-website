@@ -70,7 +70,7 @@ export default function ProductClient({ product }: { product: Product }) {
             <div>
               <div
                 ref={containerRef}
-                className="relative aspect-[3/4] overflow-hidden bg-white select-none"
+                className="relative aspect-[3/4] overflow-hidden bg-white dark:bg-[#151515] select-none"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
@@ -105,7 +105,7 @@ export default function ProductClient({ product }: { product: Product }) {
                     <button
                       onClick={prev}
                       aria-label="Previous image"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-black/40 hover:text-black hover:shadow-lg transition-all duration-200"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-[#1c1c1c] dark:ring-1 dark:ring-white/10 shadow-md dark:shadow-none flex items-center justify-center text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white hover:shadow-lg transition-all duration-200"
                     >
                       <svg width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden>
                         <path d="M7 1L1 7L7 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -114,7 +114,7 @@ export default function ProductClient({ product }: { product: Product }) {
                     <button
                       onClick={next}
                       aria-label="Next image"
-                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-black/40 hover:text-black hover:shadow-lg transition-all duration-200"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-[#1c1c1c] dark:ring-1 dark:ring-white/10 shadow-md dark:shadow-none flex items-center justify-center text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white hover:shadow-lg transition-all duration-200"
                     >
                       <svg width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden>
                         <path d="M1 1L7 7L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -136,8 +136,8 @@ export default function ProductClient({ product }: { product: Product }) {
                       onClick={() => setSelectedImage(index)}
                       className={`rounded-full transition-all duration-300 ${
                         index === selectedImage
-                          ? 'w-2 h-2 bg-black'
-                          : 'w-[7px] h-[7px] bg-black/15 hover:bg-black/35'
+                          ? 'w-2 h-2 bg-black dark:bg-white'
+                          : 'w-[7px] h-[7px] bg-black/15 dark:bg-white/15 hover:bg-black/35 dark:hover:bg-white/35'
                       }`}
                     />
                   ))}
@@ -150,19 +150,19 @@ export default function ProductClient({ product }: { product: Product }) {
 
               {/* Name & Price */}
               <div>
-<h1 className="font-display font-light text-4xl md:text-5xl leading-tight mb-4">
+                <h1 className="font-display font-light text-4xl md:text-5xl leading-tight mb-4">
                   {product.name}
                 </h1>
                 <p className="text-2xl font-light tabular-nums">€{product.price.toFixed(2)}</p>
               </div>
 
               {/* Description */}
-              <p className="text-sm leading-loose text-black/55">
+              <p className="font-body text-sm leading-loose text-black/55 dark:text-white/55">
                 {product.description}
               </p>
 
               {/* Size */}
-              <p className="text-[10px] tracking-[0.25em] text-black/40">ONE SIZE — FITS ALL</p>
+              <p className="text-[10px] tracking-[0.25em] text-black/40 dark:text-white/40">ONE SIZE — FITS ALL</p>
 
               {/* Quantity */}
               <div>
@@ -170,7 +170,7 @@ export default function ProductClient({ product }: { product: Product }) {
                 <div className="flex items-center">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-11 h-11 border border-black/20 hover:border-black text-base transition-colors"
+                    className="w-11 h-11 border border-black/20 dark:border-white/20 hover:border-black dark:hover:border-white text-base transition-colors"
                     aria-label="Decrease quantity"
                   >
                     −
@@ -178,7 +178,7 @@ export default function ProductClient({ product }: { product: Product }) {
                   <span className="w-14 text-center text-sm tabular-nums">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-11 h-11 border border-black/20 hover:border-black text-base transition-colors"
+                    className="w-11 h-11 border border-black/20 dark:border-white/20 hover:border-black dark:hover:border-white text-base transition-colors"
                     aria-label="Increase quantity"
                   >
                     +
@@ -192,10 +192,10 @@ export default function ProductClient({ product }: { product: Product }) {
                 disabled={!product.inStock || addedToCart}
                 className={`w-full py-4 text-[10px] tracking-[0.28em] flex items-center justify-center gap-3 border transition-colors duration-300 ${
                   !product.inStock
-                    ? 'border-black/15 text-black/25 cursor-not-allowed'
+                    ? 'border-black/15 text-black/25 dark:border-white/15 dark:text-white/25 cursor-not-allowed'
                     : addedToCart
-                      ? 'bg-black text-white border-black'
-                      : 'bg-black text-white border-black hover:bg-white hover:text-black'
+                      ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                      : 'bg-black text-white border-black hover:bg-white hover:text-black dark:bg-white dark:text-black dark:border-white dark:hover:bg-transparent dark:hover:text-white'
                 }`}
               >
                 {addedToCart ? (
@@ -209,18 +209,18 @@ export default function ProductClient({ product }: { product: Product }) {
               </button>
 
               {/* Trust indicators */}
-              <div className="flex items-center justify-between py-5 border-t border-b border-black/[0.08]">
+              <div className="flex items-center justify-between py-5 border-t border-b border-black/[0.08] dark:border-white/[0.08]">
                 <div className="flex flex-col items-center gap-2">
                   <Truck size={16} strokeWidth={1.5} />
-                  <p className="text-[9px] tracking-[0.15em] text-black/40">FREE SHIPPING</p>
+                  <p className="text-[9px] tracking-[0.15em] text-black/40 dark:text-white/40">FREE SHIPPING</p>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <Shield size={16} strokeWidth={1.5} />
-                  <p className="text-[9px] tracking-[0.15em] text-black/40">SECURE CHECKOUT</p>
+                  <p className="text-[9px] tracking-[0.15em] text-black/40 dark:text-white/40">SECURE CHECKOUT</p>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <RotateCcw size={16} strokeWidth={1.5} />
-                  <p className="text-[9px] tracking-[0.15em] text-black/40">EASY RETURNS</p>
+                  <p className="text-[9px] tracking-[0.15em] text-black/40 dark:text-white/40">EASY RETURNS</p>
                 </div>
               </div>
 
@@ -231,12 +231,12 @@ export default function ProductClient({ product }: { product: Product }) {
                   {product.features.map((feature, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-5 py-3.5 border-b border-black/[0.07]"
+                      className="flex items-center gap-5 py-3.5 border-b border-black/[0.07] dark:border-white/[0.07]"
                     >
-                      <span className="text-[10px] text-black/25 tabular-nums w-5 flex-shrink-0">
+                      <span className="text-[10px] text-black/25 dark:text-white/25 tabular-nums w-5 flex-shrink-0">
                         {String(idx + 1).padStart(2, '0')}
                       </span>
-                      <span className="text-sm text-black/65">{feature}</span>
+                      <span className="text-sm text-black/65 dark:text-white/65">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -245,7 +245,7 @@ export default function ProductClient({ product }: { product: Product }) {
               {/* Shipping */}
               <div>
                 <p className="text-[10px] tracking-[0.25em] mb-3">SHIPPING</p>
-                <p className="text-sm text-black/55 leading-relaxed">{product.shippingInfo}</p>
+                <p className="text-sm text-black/55 dark:text-white/55 leading-relaxed">{product.shippingInfo}</p>
               </div>
 
             </div>

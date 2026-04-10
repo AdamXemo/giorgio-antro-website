@@ -47,7 +47,7 @@ export default function CheckoutPage() {
         {/* Slim back link */}
         <Link
           href="/cart"
-          className="inline-flex items-center gap-2 text-black/30 hover:text-black transition-colors mb-6 group"
+          className="inline-flex items-center gap-2 text-black/30 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors mb-6 group"
           aria-label="Back to cart"
         >
           <ChevronLeft size={16} strokeWidth={1.5} className="group-hover:-translate-x-0.5 transition-transform" />
@@ -56,12 +56,12 @@ export default function CheckoutPage() {
 
         {initError ? (
           <div className="py-20 text-center">
-            <p className="text-sm text-black/45 mb-6">{initError}</p>
+            <p className="text-sm text-black/45 dark:text-white/45 mb-6">{initError}</p>
             <Link href="/cart" className="btn-primary">RETURN TO CART</Link>
           </div>
         ) : !clientSecret ? (
           <div className="py-20 flex items-center justify-center">
-            <div className="w-5 h-5 border border-black border-t-transparent rounded-full animate-spin" />
+            <div className="w-5 h-5 border border-black dark:border-white border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           <EmbeddedCheckoutProvider

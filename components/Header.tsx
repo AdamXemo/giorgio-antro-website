@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ShoppingCart, Menu, X, ChevronRight } from 'lucide-react'
 import { useCart } from './CartContext'
 import { useState } from 'react'
+import { ThemeToggle } from './ThemeToggle'
 
 const NAV_LINKS = [
   { href: '/',         label: 'HOME',    mobileLabel: 'Home'    },
@@ -19,7 +20,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-black">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-black dark:bg-[#0f0f0f] dark:border-white/15 transition-colors duration-400">
         <nav className="px-6 md:px-12 py-[15px]">
           <div className="flex items-center">
             {/* Mobile: Hamburger */}
@@ -50,25 +51,29 @@ export default function Header() {
                   {label}
                 </Link>
               ))}
+              <ThemeToggle />
               <Link href="/cart" className="relative ml-2" aria-label="Cart">
                 <ShoppingCart size={18} strokeWidth={1.5} />
                 {itemCount > 0 && (
-                  <span className="absolute -top-1.5 -right-2 bg-black text-white text-[8px] w-4 h-4 flex items-center justify-center leading-none">
+                  <span className="absolute -top-1.5 -right-2 bg-black text-white dark:bg-white dark:text-black text-[8px] w-4 h-4 flex items-center justify-center leading-none">
                     {itemCount}
                   </span>
                 )}
               </Link>
             </div>
 
-            {/* Mobile: Cart */}
-            <Link href="/cart" className="md:hidden relative ml-auto" aria-label="Cart">
-              <ShoppingCart size={20} strokeWidth={1.5} />
-              {itemCount > 0 && (
-                <span className="absolute -top-1.5 -right-2 bg-black text-white text-[8px] w-4 h-4 flex items-center justify-center leading-none">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
+            {/* Mobile: ThemeToggle + Cart */}
+            <div className="md:hidden flex items-center gap-2 ml-auto">
+              <ThemeToggle />
+              <Link href="/cart" className="relative p-1" aria-label="Cart">
+                <ShoppingCart size={20} strokeWidth={1.5} />
+                {itemCount > 0 && (
+                  <span className="absolute top-0 right-0 bg-black text-white dark:bg-white dark:text-black text-[8px] w-4 h-4 flex items-center justify-center leading-none">
+                    {itemCount}
+                  </span>
+                )}
+              </Link>
+            </div>
           </div>
         </nav>
       </header>

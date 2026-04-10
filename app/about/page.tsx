@@ -44,9 +44,9 @@ export default function AboutPage() {
       {/* ── Story ────────────────────────────────────────── */}
       <section className="py-24 md:py-32 px-6 md:px-12">
         <div className="max-w-screen-lg mx-auto">
-          <p className="text-[10px] tracking-[0.3em] text-black/35 mb-14">OUR STORY</p>
+          <p className="text-[10px] tracking-[0.3em] text-black/35 dark:text-white/35 mb-14">OUR STORY</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
-            <div className="space-y-6 text-sm leading-loose text-black/60">
+            <div className="space-y-6 text-sm leading-loose text-black/60 dark:text-white/60">
               <p>
                 ANTRO was born from a simple vision: to create streetwear that doesn&apos;t
                 compromise on quality, design, or authenticity. We believe that what you wear
@@ -58,7 +58,7 @@ export default function AboutPage() {
                 we&apos;re crafting experiences.
               </p>
             </div>
-            <div className="space-y-6 text-sm leading-loose text-black/60">
+            <div className="space-y-6 text-sm leading-loose text-black/60 dark:text-white/60">
               <p>
                 Our commitment goes beyond fashion. We&apos;re building a community of individuals
                 who value self-expression, creativity, and quality. Each ANTRO piece tells a
@@ -92,13 +92,13 @@ export default function AboutPage() {
       </section>
 
       {/* ── Mission ──────────────────────────────────────── */}
-      <section className="py-24 md:py-32 px-6 md:px-12 border-t border-black">
+      <section className="py-24 md:py-32 px-6 md:px-12 border-t border-black dark:border-white/15">
         <div className="max-w-screen-md mx-auto text-center">
-          <p className="text-[10px] tracking-[0.3em] text-black/35 mb-10">MISSION</p>
+          <p className="text-[10px] tracking-[0.3em] text-black/35 dark:text-white/35 mb-10">MISSION</p>
           <h2 className="font-display font-light italic text-3xl md:text-5xl leading-snug mb-10">
             Redefining fashion for<br />the modern generation.
           </h2>
-          <p className="text-sm text-black/45 leading-loose">
+          <p className="text-sm text-black/45 dark:text-white/45 leading-loose">
             To empower individuals through premium streetwear that combines timeless design
             with contemporary style — one piece at a time.
           </p>

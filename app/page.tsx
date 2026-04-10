@@ -73,7 +73,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
             {/* Image */}
-            <div className="relative aspect-[3/4] overflow-hidden group bg-[#f0f0f0]">
+            <div className="relative aspect-[3/4] overflow-hidden group bg-[#f0f0f0] dark:bg-[#1c1c1c]">
               <Image
                 src={mainProduct.images[0]}
                 alt={mainProduct.name}
@@ -85,14 +85,14 @@ export default function Home() {
             {/* Details */}
             <div className="lg:sticky lg:top-28 space-y-10">
               <div>
-                <p className="text-[10px] tracking-[0.3em] text-black/35 mb-5">THE CLASSIC</p>
+                <p className="text-[10px] tracking-[0.3em] text-black/35 dark:text-white/35 mb-5">THE CLASSIC</p>
                 <h2 className="font-display font-light text-4xl md:text-5xl leading-tight mb-4">
                   {mainProduct.name}
                 </h2>
                 <p className="text-2xl font-light tabular-nums">€{mainProduct.price}</p>
               </div>
 
-              <p className="text-sm leading-loose text-black/55">
+              <p className="font-body text-sm leading-loose text-black/55 dark:text-white/55">
                 {mainProduct.description}
               </p>
 
@@ -102,12 +102,12 @@ export default function Home() {
                   {mainProduct.features.slice(0, 6).map((feature, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-5 py-3.5 border-b border-black/[0.07]"
+                      className="flex items-center gap-5 py-3.5 border-b border-black/[0.07] dark:border-white/[0.07]"
                     >
-                      <span className="text-[10px] text-black/25 tabular-nums w-5 flex-shrink-0">
+                      <span className="text-[10px] text-black/25 dark:text-white/25 tabular-nums w-5 flex-shrink-0">
                         {String(idx + 1).padStart(2, '0')}
                       </span>
-                      <span className="text-sm text-black/65">{feature}</span>
+                      <span className="text-sm text-black/65 dark:text-white/65">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -115,7 +115,7 @@ export default function Home() {
 
               <Link
                 href={`/product/${mainProduct.id}`}
-                className="block w-full text-center bg-black text-white py-4 text-[10px] tracking-[0.28em] border border-black hover:bg-white hover:text-black transition-colors duration-300"
+                className="block w-full text-center bg-black text-white py-4 text-[10px] tracking-[0.28em] border border-black hover:bg-white hover:text-black dark:bg-white dark:text-black dark:border-white dark:hover:bg-transparent dark:hover:text-white transition-colors duration-300"
               >
                 VIEW &amp; PURCHASE — €{mainProduct.price}
               </Link>
