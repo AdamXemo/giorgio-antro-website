@@ -7,6 +7,11 @@
   --foreground: #000000;
 }
 
+html.dark {
+  --background: #0f0f0f;
+  --foreground: #f0f0f0;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -24,6 +29,7 @@ body {
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 @layer utilities {
@@ -116,10 +122,20 @@ body {
            hover:bg-white hover:text-black transition-colors duration-300;
   }
 
+  html.dark .btn-primary {
+    @apply bg-white text-black border-white
+           hover:bg-transparent hover:text-white;
+  }
+
   .btn-ghost {
     @apply inline-block bg-white text-black text-[10px] tracking-[0.25em]
            py-4 px-10 border border-black
            hover:bg-black hover:text-white transition-colors duration-300;
+  }
+
+  html.dark .btn-ghost {
+    @apply bg-transparent text-white border-white
+           hover:bg-white hover:text-black;
   }
 
   .underline-reveal {
@@ -151,6 +167,17 @@ body {
   animation: loading 1.5s infinite;
 }
 
+html.dark .image-loading {
+  background: linear-gradient(90deg, #1c1c1c 25%, #252525 50%, #1c1c1c 75%);
+  background-size: 200% 100%;
+}
+
+/* ─── Font optical sizing ──────────────────────────────── */
+
+.font-body {
+  font-optical-sizing: auto;
+}
+
 /* ─── Smooth transition helper ─────────────────────────── */
 
 .transition-smooth {
@@ -167,8 +194,17 @@ textarea:focus-visible {
   outline-offset: 3px;
 }
 
+html.dark button:focus-visible,
+html.dark a:focus-visible,
+html.dark input:focus-visible,
+html.dark textarea:focus-visible {
+  outline-color: #fff;
+}
+
 /* ─── Scrollbar ────────────────────────────────────────── */
 
 ::-webkit-scrollbar       { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #000; }
+
+html.dark ::-webkit-scrollbar-thumb { background: #444; }

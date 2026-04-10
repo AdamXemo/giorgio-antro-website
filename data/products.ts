@@ -19,7 +19,7 @@ export const mainProduct: Product = {
   shopifyHandle: 'sailor-hooded-zip-jacket',
   name: 'ANTRO Classic Hoodie',
   price: 89.99,
-  description: 'Our signature hoodie crafted from premium cotton blend. Designed for the modern individual who values both style and comfort. Features the iconic ANTRO branding with meticulous attention to detail.',
+  description: 'Antro Sailor Hooded Jacket is a modern adaptation of a zip hoodie. This jacket features a unique cut that can be styled in various ways. The hood itself is one large pattern piece that is integrated into the jacket. The garment is crafted from 100% cotton, designed with a fluid and relaxed unisex silhouette. It is a versatile designer piece that reflects understated luxury and contemporary elegance.',
   images: [
     '/antro-hoodie.jpg',
     '/antro-hoodie.jpg',

@@ -1,24 +1,11 @@
 import type { Metadata } from 'next'
-import { Inter, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
-import { Toaster } from 'sonner'
 import { CartProvider } from '@/components/CartContext'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemedToaster } from '@/components/ThemedToaster'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-})
-
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['300', '400', '600'],
-  style: ['normal', 'italic'],
-  variable: '--font-display',
-  display: 'swap',
-})
+import { fontSans, fontDisplay, fontBody } from '@/lib/fonts'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
@@ -32,16 +19,26 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
+    <html lang="en" className={`${fontSans.variable} ${fontDisplay.variable} ${fontBody.variable}`} suppressHydrationWarning>
+      {/* Prevents flash of wrong theme on load */}
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(t===null&&d))document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body>
-        <CartProvider>
-          <Header />
-          <main className="min-h-screen">
-            {children}
-          </main>
-          <Footer />
-          <Toaster position="bottom-right" />
-        </CartProvider>
+        <ThemeProvider>
+          <CartProvider>
+            <Header />
+            <main className="min-h-screen">
+              {children}
+            </main>
+            <Footer />
+            <ThemedToaster />
+          </CartProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
