@@ -14,50 +14,57 @@ export default function OrderSuccessPage() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="min-h-screen pt-[73px] flex items-center justify-center px-6 py-20">
-      <div className="max-w-lg w-full">
+    <div className="pt-[73px]">
+      <div className="max-w-sm mx-auto px-6 pt-12 pb-24 text-center">
 
-        <CheckCircle size={28} strokeWidth={1} className="mb-10" />
-
-        <p className="text-[10px] tracking-[0.3em] text-black/35 mb-4">ORDER CONFIRMED</p>
-        <h1 className="font-display font-light text-4xl md:text-5xl leading-tight mb-6">
-          Thank you for<br />your purchase.
-        </h1>
-        <p className="text-sm text-black/45 leading-loose">
-          Your ANTRO order has been received and is being prepared with care.
-        </p>
-
-        <div className="border-t border-black/10 mt-10 py-8 space-y-5">
-          <div className="flex gap-4 text-sm text-black/55">
-            <Mail size={15} strokeWidth={1.5} className="flex-shrink-0 mt-0.5 text-black/25" />
-            <p>You will receive a confirmation email with your order details shortly.</p>
-          </div>
-          <div className="flex gap-4 text-sm text-black/55">
-            <Package size={15} strokeWidth={1.5} className="flex-shrink-0 mt-0.5 text-black/25" />
-            <p>Your order will be processed and shipped within 1–2 business days.</p>
+        {/* Check icon */}
+        <div className="flex items-center justify-center mb-10">
+          <div className="w-12 h-12 rounded-full border border-black/12 dark:border-white/12 flex items-center justify-center">
+            <CheckCircle size={18} strokeWidth={1} className="text-black/40 dark:text-white/40" />
           </div>
         </div>
 
-        <div className="border-t border-black/10 py-10">
-          <p className="text-[10px] tracking-[0.25em] text-black/35 mb-8">WHAT HAPPENS NEXT</p>
+        <p className="text-[9px] tracking-[0.35em] text-black/28 dark:text-white/28 mb-4">ORDER CONFIRMED</p>
+        <h1 className="font-display font-light text-4xl md:text-5xl leading-[1.1] mb-5">
+          Thank you for<br />your purchase.
+        </h1>
+        <div className="w-6 h-px bg-black/18 dark:bg-white/18 mx-auto mb-5" />
+        <p className="text-sm text-black/40 dark:text-white/40 leading-relaxed">
+          Your ANTRO order has been received<br className="hidden sm:block" /> and is being prepared with care.
+        </p>
+
+        {/* Info rows */}
+        <div className="mt-8 pt-8 border-t border-black/[0.07] dark:border-white/[0.07] space-y-4 text-left">
+          <div className="flex items-start gap-3 text-sm text-black/45 dark:text-white/45">
+            <Mail size={13} strokeWidth={1.5} className="flex-shrink-0 mt-[3px] text-black/22 dark:text-white/22" />
+            <p>A confirmation email with your order details is on its way.</p>
+          </div>
+          <div className="flex items-start gap-3 text-sm text-black/45 dark:text-white/45">
+            <Package size={13} strokeWidth={1.5} className="flex-shrink-0 mt-[3px] text-black/22 dark:text-white/22" />
+            <p>Processed and shipped within 1–2 business days.</p>
+          </div>
+        </div>
+
+        {/* Steps */}
+        <div className="mt-8 pt-8 border-t border-black/[0.07] dark:border-white/[0.07]">
+          <p className="text-[9px] tracking-[0.3em] text-black/22 dark:text-white/22 mb-6">WHAT HAPPENS NEXT</p>
           <div className="space-y-0">
             {[
-              { n: '01', label: 'Processing', body: "We'll prepare your order with care." },
-              { n: '02', label: 'Shipping',   body: "You'll receive tracking information by email." },
-              { n: '03', label: 'Delivery',   body: 'Your ANTRO piece arrives in 3–5 days.' },
+              { n: '01', label: 'Processing', body: "We prepare your order with care." },
+              { n: '02', label: 'Shipping',   body: "Tracking information sent by email." },
+              { n: '03', label: 'Delivery',   body: 'Your piece arrives in 3–5 days.' },
             ].map(({ n, label, body }) => (
-              <div key={n} className="flex gap-5 py-4 border-b border-black/[0.07]">
-                <span className="text-[10px] text-black/22 tabular-nums flex-shrink-0 mt-0.5">{n}</span>
-                <div>
-                  <p className="text-sm font-medium mb-1">{label}</p>
-                  <p className="text-xs text-black/45">{body}</p>
-                </div>
+              <div key={n} className="flex items-baseline gap-4 py-3 border-b border-black/[0.06] dark:border-white/[0.06] last:border-0 text-left">
+                <span className="text-[9px] text-black/18 dark:text-white/18 tabular-nums w-5 flex-shrink-0">{n}</span>
+                <span className="text-xs font-medium w-20 flex-shrink-0">{label}</span>
+                <span className="text-xs text-black/38 dark:text-white/38">{body}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row gap-3 mt-10">
           <Link href="/" className="btn-primary flex-1 text-center">
             CONTINUE SHOPPING
           </Link>
