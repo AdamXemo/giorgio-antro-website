@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { loadStripe } from '@stripe/stripe-js'
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe-js'
-import { useCart } from '@/components/CartContext'
+import { useCart } from '@/components/cart/CartContext'
 import { ChevronLeft } from 'lucide-react'
 import { useCheckoutSession } from '@/hooks/useCheckoutSession'
 

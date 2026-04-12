@@ -2,9 +2,9 @@
 
 import Link from 'next/link'
 import { ShoppingCart, Menu } from 'lucide-react'
-import { useCart } from './CartContext'
+import { useCart } from '@/components/cart/CartContext'
 import { useState } from 'react'
-import { ThemeToggle } from './ThemeToggle'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import CartBadge from '@/components/ui/CartBadge'
 import MobileMenu from '@/components/layout/MobileMenu'
 import { NAV_LINKS } from '@/data/nav-links'

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { CartProvider } from '@/components/CartContext'
-import { ThemeProvider } from '@/components/ThemeProvider'
-import { ThemedToaster } from '@/components/ThemedToaster'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import { CartProvider } from '@/components/cart/CartContext'
+import { ThemeProvider } from '@/components/theme/ThemeProvider'
+import { ThemedToaster } from '@/components/theme/ThemedToaster'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import { fontSans, fontDisplay, fontBody } from '@/lib/fonts'
 
 export const metadata: Metadata = {

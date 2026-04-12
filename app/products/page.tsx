@@ -1,5 +1,5 @@
 import { products } from '@/data/products'
-import ProductGrid from '@/components/ProductGrid'
+import ProductGrid from '@/components/product/ProductGrid'
 
 export const metadata = {
   title: 'Shop — ANTRO',
