@@ -1,29 +1,17 @@
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
-
-function TikTokIcon({ size = 17 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z" />
-    </svg>
-  )
-}
+import TikTokIcon from '@/components/icons/TikTokIcon'
+import { SOCIAL_LINKS } from '@/data/social-links'
 
 export default function Footer() {
+  const instagram = SOCIAL_LINKS.find(l => l.platform === 'instagram')!
+  const tiktok = SOCIAL_LINKS.find(l => l.platform === 'tiktok')!
+
   return (
     <footer className="bg-black text-white py-10 px-6 md:px-12">
       <div className="max-w-screen-xl mx-auto">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
-          <Link
-            href="/"
-            className="font-display font-light text-xl tracking-[0.3em]"
-          >
+          <Link href="/" className="font-display font-light text-xl tracking-[0.3em]">
             ANTRO
           </Link>
 
@@ -34,19 +22,19 @@ export default function Footer() {
 
           <div className="flex items-center gap-5">
             <a
-              href="https://www.instagram.com/giorgioantro/"
+              href={instagram.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Instagram"
+              aria-label={instagram.label}
               className="text-white/60 hover:text-white transition-colors"
             >
               <Instagram size={17} strokeWidth={1.5} />
             </a>
             <a
-              href="https://www.tiktok.com/@g.antro"
+              href={tiktok.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="TikTok"
+              aria-label={tiktok.label}
               className="text-white/60 hover:text-white transition-colors"
             >
               <TikTokIcon size={17} />

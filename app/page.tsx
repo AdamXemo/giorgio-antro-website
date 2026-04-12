@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { mainProduct } from '@/data/products'
+import FeaturesList from '@/components/product/FeaturesList'
 
 const MARQUEE_ITEMS = [
   'PREMIUM HEAVYWEIGHT COTTON',
@@ -98,19 +99,7 @@ export default function Home() {
 
               <div>
                 <p className="text-[10px] tracking-[0.25em] mb-4">DETAILS</p>
-                <div>
-                  {mainProduct.features.slice(0, 6).map((feature, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center gap-5 py-3.5 border-b border-black/[0.07] dark:border-white/[0.07]"
-                    >
-                      <span className="text-[10px] text-black/25 dark:text-white/25 tabular-nums w-5 flex-shrink-0">
-                        {String(idx + 1).padStart(2, '0')}
-                      </span>
-                      <span className="text-sm text-black/65 dark:text-white/65">{feature}</span>
-                    </div>
-                  ))}
-                </div>
+                <FeaturesList features={mainProduct.features.slice(0, 6)} />
               </div>
 
               <Link
