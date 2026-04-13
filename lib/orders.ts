@@ -99,7 +99,7 @@ export async function createOrder(
       subtotal:             orderData.subtotal,
       shipping:             orderData.shipping,
       total:                orderData.total,
-      items:                        orderData.items,
+      items:                        orderData.items as unknown as import('../types/supabase').Json,
       stripe_payment_intent_id:     orderData.stripePaymentIntentId ?? null,
     })
     .select()
