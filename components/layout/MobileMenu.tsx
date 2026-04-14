@@ -13,15 +13,16 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black text-white flex flex-col animate-slide-down">
+    <div className="fixed inset-0 z-[130] bg-black text-white flex flex-col animate-slide-down">
       <div className="relative flex items-center justify-center px-6 py-[15px] border-b border-white/10">
         <span className="font-display font-semibold tracking-[0.3em] text-lg">ANTRO</span>
         <button
+          type="button"
           onClick={onClose}
           aria-label="Close menu"
-          className="p-2 -m-2 absolute right-6"
+          className="absolute right-6 -m-2 p-2 touch-manipulation"
         >
-          <X size={20} strokeWidth={1.5} />
+          <X size={20} strokeWidth={1.5} className="pointer-events-none" />
         </button>
       </div>
 
@@ -35,7 +36,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               className="flex items-center justify-between border-b border-white/10 py-5 font-sans text-[18px] font-light"
             >
               <span>{mobileLabel}</span>
-              <ChevronRight size={16} strokeWidth={1.5} />
+              <ChevronRight size={16} strokeWidth={1.5} className="pointer-events-none" />
             </Link>
           ))}
         </div>
