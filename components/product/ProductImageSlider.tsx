@@ -44,6 +44,7 @@ export default function ProductImageSlider({ images, productName }: ProductImage
                 src={image}
                 alt={`${productName} — view ${index + 1}`}
                 fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-contain object-center"
                 priority={index === 0}
               />
@@ -54,6 +55,7 @@ export default function ProductImageSlider({ images, productName }: ProductImage
         {total > 1 && (
           <>
             <button
+              type="button"
               onClick={prev}
               aria-label="Previous image"
               className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-[#1c1c1c] dark:ring-1 dark:ring-white/10 shadow-md dark:shadow-none flex items-center justify-center text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white hover:shadow-lg transition-all duration-200"
@@ -63,6 +65,7 @@ export default function ProductImageSlider({ images, productName }: ProductImage
               </svg>
             </button>
             <button
+              type="button"
               onClick={next}
               aria-label="Next image"
               className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-[#1c1c1c] dark:ring-1 dark:ring-white/10 shadow-md dark:shadow-none flex items-center justify-center text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white hover:shadow-lg transition-all duration-200"
@@ -84,6 +87,7 @@ export default function ProductImageSlider({ images, productName }: ProductImage
           {images.map((_, index) => (
             <button
               key={index}
+              type="button"
               role="tab"
               aria-selected={index === selectedImage}
               aria-label={`Image ${index + 1}`}

@@ -28,6 +28,7 @@ export default function AboutPage() {
           src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80"
           alt="ANTRO fashion store"
           fill
+          sizes="100vw"
           priority
           className="object-cover object-center opacity-25"
         />

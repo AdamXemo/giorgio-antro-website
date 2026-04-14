@@ -17,7 +17,13 @@ export default function CartItem({ item, index, onUpdateQuantity, onRemove }: Ca
       style={{ animationDelay: `${index * 0.05}s` }}
     >
       <div className="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 bg-[#f2f2f2] dark:bg-[#1c1c1c] overflow-hidden">
-        <Image src={item.image} alt={item.name} fill className="object-cover" />
+        <Image
+          src={item.image}
+          alt={item.name}
+          fill
+          sizes="(min-width: 768px) 96px, 80px"
+          className="object-cover"
+        />
       </div>
 
       <div className="flex flex-1 flex-col justify-between min-w-0">
@@ -41,6 +47,7 @@ export default function CartItem({ item, index, onUpdateQuantity, onRemove }: Ca
             size="sm"
           />
           <button
+            type="button"
             onClick={() => onRemove(item.id, item.size)}
             className="inline-flex items-center gap-1.5 text-[9px] tracking-[0.15em] text-black/30 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors"
             aria-label="Remove item"
