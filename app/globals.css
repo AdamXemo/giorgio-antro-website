@@ -78,10 +78,46 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-
 @keyframes loading {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+/* ─── New keyframes ─────────────────────────────────────── */
+
+/* Letter-by-letter hero reveal — clips upward from below */
+@keyframes charReveal {
+  from {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Very slow hero background zoom for atmosphere */
+@keyframes kenBurns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.07); }
+}
+
+/* Short horizontal accent line draws left to right */
+@keyframes drawLine {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes scrollReveal {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ─── Animation classes ────────────────────────────────── */
@@ -108,34 +144,197 @@ body {
 /* Used in cart page */
 .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
 
+/* Per-character hero reveal */
+.animate-char-reveal {
+  display: inline-block;
+  animation: charReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Hero background Ken Burns — no will-change to avoid compositing layer on mobile */
+.animate-ken-burns {
+  animation: kenBurns 22s ease-out forwards;
+}
+
+/* Horizontal accent line — 'both' applies the from-frame during delay so line starts invisible */
+.animate-draw-line {
+  transform-origin: left center;
+  animation: drawLine 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.sr-hidden {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.sr-hidden-mobile {
+  opacity: 0;
+  transform: translateY(44px);
+}
+
+.animate-scroll-reveal {
+  animation: scrollReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-scroll-reveal-mobile {
+  animation: scrollReveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  .animate-reveal-up {
+    animation-duration: 1.55s;
+  }
+
+  .animate-reveal-fade {
+    animation-duration: 1.45s;
+  }
+
+  .animate-slide-down {
+    animation-duration: 0.55s;
+  }
+
+  .animate-fade-in {
+    animation-duration: 1.2s;
+  }
+
+  .animate-char-reveal {
+    animation-duration: 1.55s;
+  }
+
+  .animate-draw-line {
+    animation-duration: 1.45s;
+  }
+
+  .animate-delay-100 { animation-delay: 0.16s; }
+  .animate-delay-200 { animation-delay: 0.32s; }
+  .animate-delay-300 { animation-delay: 0.48s; }
+  .animate-delay-400 { animation-delay: 0.64s; }
+  .animate-delay-500 { animation-delay: 0.8s; }
+  .animate-delay-600 { animation-delay: 0.96s; }
+  .animate-delay-700 { animation-delay: 1.12s; }
+  .animate-delay-800 { animation-delay: 1.28s; }
+  .animate-delay-900 { animation-delay: 1.44s; }
+  .animate-delay-1000 { animation-delay: 1.6s; }
+  .animate-delay-1200 { animation-delay: 1.92s; }
+  .animate-delay-1500 { animation-delay: 2.4s; }
+}
+
+/* Animation delays */
 .animate-delay-100 { animation-delay: 0.1s; }
 .animate-delay-200 { animation-delay: 0.2s; }
 .animate-delay-300 { animation-delay: 0.3s; }
 .animate-delay-400 { animation-delay: 0.4s; }
+.animate-delay-500 { animation-delay: 0.5s; }
+.animate-delay-600 { animation-delay: 0.6s; }
+.animate-delay-700 { animation-delay: 0.7s; }
+.animate-delay-800 { animation-delay: 0.8s; }
+.animate-delay-900 { animation-delay: 0.9s; }
+.animate-delay-1000 { animation-delay: 1.0s; }
+.animate-delay-1200 { animation-delay: 1.2s; }
+.animate-delay-1500 { animation-delay: 1.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-reveal-up,
+  .animate-reveal-fade,
+  .animate-slide-down,
+  .animate-marquee,
+  .animate-fade-in,
+  .animate-char-reveal,
+  .animate-ken-burns,
+  .animate-draw-line,
+  .animate-scroll-reveal,
+  .animate-scroll-reveal-mobile {
+    animation: none !important;
+  }
+
+  .animate-marquee {
+    transform: none !important;
+  }
+
+  .sr-hidden,
+  .sr-hidden-mobile {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 
 /* ─── Component patterns ───────────────────────────────── */
 
 @layer components {
   .btn-primary {
-    @apply inline-block bg-black text-white text-[10px] tracking-[0.25em]
-           py-4 px-10 border border-black
-           hover:bg-white hover:text-black transition-colors duration-300;
+    @apply relative overflow-hidden inline-block bg-black text-white text-[10px]
+           tracking-[0.25em] py-4 px-10 border border-black transition-colors duration-300;
+  }
+
+  .btn-primary span {
+    @apply relative z-10;
+  }
+
+  .btn-primary::before {
+    content: '';
+    @apply absolute inset-0 bg-white translate-y-full transition-transform duration-300;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-primary:hover::before {
+    @apply translate-y-0;
+  }
+
+  .btn-primary:hover {
+    @apply text-black;
   }
 
   html.dark .btn-primary {
-    @apply bg-white text-black border-white
-           hover:bg-transparent hover:text-white;
+    @apply bg-white text-black border-white;
+  }
+
+  html.dark .btn-primary::before {
+    @apply bg-black;
+  }
+
+  html.dark .btn-primary:hover {
+    @apply text-white;
   }
 
   .btn-ghost {
-    @apply inline-block bg-white text-black text-[10px] tracking-[0.25em]
-           py-4 px-10 border border-black
-           hover:bg-black hover:text-white transition-colors duration-300;
+    @apply relative overflow-hidden inline-block bg-white text-black text-[10px]
+           tracking-[0.25em] py-4 px-10 border border-black transition-colors duration-300;
+  }
+
+  .btn-ghost span {
+    @apply relative z-10;
+  }
+
+  .btn-ghost::before {
+    content: '';
+    @apply absolute inset-0 bg-black translate-y-full transition-transform duration-300;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-ghost:hover::before {
+    @apply translate-y-0;
+  }
+
+  .btn-ghost:hover {
+    @apply text-white;
   }
 
   html.dark .btn-ghost {
-    @apply bg-transparent text-white border-white
-           hover:bg-white hover:text-black;
+    @apply bg-transparent text-white border-white;
+  }
+
+  html.dark .btn-ghost::before {
+    @apply bg-white;
+  }
+
+  html.dark .btn-ghost:hover {
+    @apply text-black;
   }
 
   .underline-reveal {
