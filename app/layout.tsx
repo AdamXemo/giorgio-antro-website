@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import { ThemedToaster } from '@/components/theme/ThemedToaster'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import ScrollProgress from '@/components/ui/ScrollProgress'
 import { fontSans, fontDisplay, fontBody } from '@/lib/fonts'
 
 export const metadata: Metadata = {
@@ -19,7 +20,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${fontSans.variable} ${fontDisplay.variable} ${fontBody.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${fontSans.variable} ${fontDisplay.variable} ${fontBody.variable}`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       {/* Prevents flash of wrong theme on load */}
       <head>
         <script
@@ -31,6 +37,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <CartProvider>
+            <ScrollProgress />
             <Header />
             <main className="min-h-screen">
               {children}
