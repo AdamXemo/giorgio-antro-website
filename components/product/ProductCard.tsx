@@ -36,7 +36,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         )}
       </div>
       <div className="flex items-baseline justify-between">
-        <h3 className="text-sm font-medium group-hover:opacity-40 transition-opacity duration-300">
+        <h3 className="text-sm font-medium">
           {product.name}
         </h3>
         <p className="text-sm text-black/45 dark:text-white/45 tabular-nums shrink-0 ml-4">
