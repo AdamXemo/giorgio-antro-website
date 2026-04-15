@@ -358,6 +358,18 @@ body {
   }
 }
 
+/* ─── Add-to-cart confirmation pulse ──────────────────── */
+
+@keyframes btnConfirm {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.018); }
+  100% { transform: scale(1); }
+}
+
+.animate-btn-confirm {
+  animation: btnConfirm 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* ─── Contact form — animated focus border ────────────── */
 
 /* Wrapper div around each form field.
