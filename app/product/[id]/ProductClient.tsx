@@ -11,6 +11,14 @@ import QuantitySelector from '@/components/ui/QuantitySelector'
 import TrustIndicators from '@/components/product/TrustIndicators'
 import FeaturesList from '@/components/product/FeaturesList'
 
+// Stagger helpers — each row in the right column gets its own delay
+function reveal(delayS: number) {
+  return {
+    className: 'animate-reveal-up',
+    style: { animationDelay: `${delayS}s` },
+  }
+}
+
 export default function ProductClient({ product }: { product: Product }) {
   const router = useRouter()
   const { addToCart } = useCart()
@@ -49,28 +57,47 @@ export default function ProductClient({ product }: { product: Product }) {
             <ProductImageSlider images={product.images} productName={product.name} />
 
             {/* ── Right: Product Info ── */}
-            <div className="lg:sticky lg:top-28 space-y-10">
+            <div className="lg:sticky lg:top-28 space-y-8">
 
-              {/* Name & Price */}
-              <div>
-                <h1 className="font-display font-light text-4xl md:text-5xl leading-tight mb-4">
-                  {product.name}
-                </h1>
-                <p className="text-2xl font-light tabular-nums">€{product.price.toFixed(2)}</p>
+              {/* Name + availability */}
+              <div {...reveal(0.05)}>
+                <div className="mb-3">
+                  <h1 className="font-display font-light text-4xl md:text-5xl leading-tight">
+                    {product.name}
+                  </h1>
+                </div>
+
+                {/* Price — larger, more weight */}
+                <p className="text-3xl font-light tabular-nums">
+                  €{product.price.toFixed(2)}
+                </p>
+              </div>
+
+              {/* Divider */}
+              <div {...reveal(0.12)}>
+                <div className="h-px bg-black/8 dark:bg-white/8" />
               </div>
 
               {/* Description */}
-              <p className="font-body text-sm leading-loose text-black/55 dark:text-white/55">
+              <p
+                className="animate-reveal-up font-body text-sm leading-loose text-black/55 dark:text-white/55"
+                style={{ animationDelay: '0.18s' }}
+              >
                 {product.description}
               </p>
 
               {/* Size */}
-              <p className="text-[10px] tracking-[0.25em] text-black/40 dark:text-white/40">
-                ONE SIZE — FITS ALL
-              </p>
+              <div {...reveal(0.25)}>
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] tracking-[0.25em]">SIZE</p>
+                  <p className="text-[10px] tracking-[0.15em] text-black/40 dark:text-white/40">
+                    ONE SIZE — FITS ALL
+                  </p>
+                </div>
+              </div>
 
               {/* Quantity */}
-              <div>
+              <div {...reveal(0.3)}>
                 <p className="text-[10px] tracking-[0.25em] mb-4">QUANTITY</p>
                 <QuantitySelector
                   value={quantity}
@@ -80,37 +107,45 @@ export default function ProductClient({ product }: { product: Product }) {
               </div>
 
               {/* Add to Cart */}
-              <button
-                onClick={handleAddToCart}
-                disabled={!product.inStock || addedToCart}
-                className={`w-full py-4 text-[10px] tracking-[0.28em] flex items-center justify-center gap-3 border transition-colors duration-300 ${
-                  !product.inStock
-                    ? 'border-black/15 text-black/25 dark:border-white/15 dark:text-white/25 cursor-not-allowed'
-                    : addedToCart
-                      ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                      : 'bg-black text-white border-black hover:bg-white hover:text-black dark:bg-white dark:text-black dark:border-white dark:hover:bg-transparent dark:hover:text-white'
-                }`}
-              >
-                {addedToCart ? (
-                  <>
-                    <Check size={13} strokeWidth={2} />
-                    ADDED TO CART
-                  </>
-                ) : (
-                  product.inStock ? 'ADD TO CART' : 'OUT OF STOCK'
-                )}
-              </button>
+              <div {...reveal(0.36)}>
+                <button
+                  onClick={handleAddToCart}
+                  disabled={!product.inStock || addedToCart}
+                  className={[
+                    'w-full py-4 text-[10px] tracking-[0.28em] flex items-center justify-center gap-3',
+                    'border transition-colors duration-300',
+                    addedToCart ? 'animate-btn-confirm' : '',
+                    !product.inStock
+                      ? 'border-black/15 text-black/25 dark:border-white/15 dark:text-white/25 cursor-not-allowed'
+                      : addedToCart
+                        ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                        : 'bg-black text-white border-black hover:bg-white hover:text-black dark:bg-white dark:text-black dark:border-white dark:hover:bg-transparent dark:hover:text-white',
+                  ].join(' ')}
+                >
+                  {addedToCart ? (
+                    <>
+                      <Check size={13} strokeWidth={2} />
+                      ADDED TO CART
+                    </>
+                  ) : (
+                    product.inStock ? `ADD TO CART — €${product.price.toFixed(2)}` : 'OUT OF STOCK'
+                  )}
+                </button>
+              </div>
 
-              <TrustIndicators />
+              {/* Trust indicators */}
+              <div className="animate-reveal-fade" style={{ animationDelay: '0.42s' }}>
+                <TrustIndicators />
+              </div>
 
               {/* Details */}
-              <div>
+              <div {...reveal(0.5)}>
                 <p className="text-[10px] tracking-[0.25em] mb-4">DETAILS</p>
                 <FeaturesList features={product.features} />
               </div>
 
               {/* Shipping */}
-              <div>
+              <div {...reveal(0.58)}>
                 <p className="text-[10px] tracking-[0.25em] mb-3">SHIPPING</p>
                 <p className="text-sm text-black/55 dark:text-white/55 leading-relaxed">
                   {product.shippingInfo}
