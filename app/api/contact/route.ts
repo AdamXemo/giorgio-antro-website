@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
     }
 
     const safeName    = escapeHtml(String(name))
-    const safeEmail   = escapeHtml(String(email))
     const safeSubject = escapeHtml(String(subject))
     const safeMessage = escapeHtml(String(message)).replace(/\n/g, '<br>')
 

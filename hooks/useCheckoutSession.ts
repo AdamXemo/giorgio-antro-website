@@ -14,7 +14,10 @@ export function useCheckoutSession(cart: CartItem[]): UseCheckoutSessionReturn {
   const [mounted, setMounted] = useState(false)
   const [initError, setInitError] = useState<string | null>(null)
 
-  useEffect(() => { setMounted(true) }, [])
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (!mounted) return
@@ -24,6 +27,7 @@ export function useCheckoutSession(cart: CartItem[]): UseCheckoutSessionReturn {
     }
 
     const controller = new AbortController()
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setInitError(null)
     setClientSecret(null)
 

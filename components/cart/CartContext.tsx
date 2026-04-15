@@ -55,6 +55,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Rehydrate from localStorage on mount
   useEffect(() => {
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCart(parseStoredCart(localStorage.getItem(CART_STORAGE_KEY)))
     } catch {
       // ignore corrupted storage

@@ -42,7 +42,10 @@ export function useProductImageGallery(totalImages: number): UseProductImageGall
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStart === null) return
     const delta = touchStart - e.changedTouches[0].clientX
-    if (Math.abs(delta) > 48) delta > 0 ? next() : prev()
+    if (Math.abs(delta) > 48) {
+      if (delta > 0) next()
+      else prev()
+    }
     setTouchStart(null)
     setIsDragging(false)
     setDragOffset(0)
