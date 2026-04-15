@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
-import type { CartItem } from '@/types/cart'
+import {
+  calculateCheckoutTotals,
+  CheckoutValidationError,
+  validateCheckoutItems,
+} from '@/lib/checkout'
 
 export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
   try {
-    const { items }: { items: CartItem[] } = await req.json()
-
-    if (!items?.length) {
-      return NextResponse.json({ error: 'No items provided' }, { status: 400 })
-    }
-
-    const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-    const shipping = subtotal >= 100 ? 0 : 10
-    const total = subtotal + shipping
+    const body: unknown = await req.json()
+    const items = validateCheckoutItems(
+      typeof body === 'object' && body !== null ? (body as { items?: unknown }).items : undefined
+    )
+    const { subtotal, shipping, total } = calculateCheckoutTotals(items)
     const amountInCents = Math.round(total * 100)
 
     const paymentIntent = await getStripe().paymentIntents.create({
@@ -41,6 +41,9 @@ export async function POST(req: NextRequest) {
       paymentIntentId: paymentIntent.id,
     })
   } catch (err) {
+    if (err instanceof CheckoutValidationError) {
+      return NextResponse.json({ error: err.message }, { status: 400 })
+    }
     console.error('[create-payment-intent]', err)
     return NextResponse.json({ error: 'Failed to create payment intent' }, { status: 500 })
   }

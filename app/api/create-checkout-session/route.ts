@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
-import type { CartItem } from '@/types/cart'
+import {
+  calculateCheckoutTotals,
+  CheckoutValidationError,
+  validateCheckoutItems,
+} from '@/lib/checkout'
 
 export const runtime = 'nodejs'
 
@@ -11,15 +15,11 @@ const ALLOWED_COUNTRIES = [
 
 export async function POST(req: NextRequest) {
   try {
-    const { items }: { items: CartItem[] } = await req.json()
-
-    if (!items?.length) {
-      return NextResponse.json({ error: 'No items provided' }, { status: 400 })
-    }
-
-    const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-    const shipping = subtotal >= 100 ? 0 : 10
-    const total = subtotal + shipping
+    const body: unknown = await req.json()
+    const items = validateCheckoutItems(
+      typeof body === 'object' && body !== null ? (body as { items?: unknown }).items : undefined
+    )
+    const { subtotal, shipping, total } = calculateCheckoutTotals(items)
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
 
@@ -86,6 +86,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ clientSecret: session.client_secret })
   } catch (err) {
+    if (err instanceof CheckoutValidationError) {
+      return NextResponse.json({ error: err.message }, { status: 400 })
+    }
     console.error('[create-checkout-session]', err)
     return NextResponse.json({ error: 'Failed to create checkout session' }, { status: 500 })
   }
