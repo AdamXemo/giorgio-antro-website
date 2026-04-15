@@ -23,6 +23,30 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined)
 const CART_STORAGE_KEY = 'antro_cart'
 
+function isCartItem(value: unknown): value is CartItem {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as CartItem).id === 'string' &&
+    typeof (value as CartItem).name === 'string' &&
+    typeof (value as CartItem).price === 'number' &&
+    typeof (value as CartItem).size === 'string' &&
+    typeof (value as CartItem).quantity === 'number' &&
+    typeof (value as CartItem).image === 'string'
+  )
+}
+
+function parseStoredCart(value: string | null): CartItem[] {
+  if (!value) return []
+
+  const parsed: unknown = JSON.parse(value)
+  if (!Array.isArray(parsed) || !parsed.every(isCartItem)) {
+    throw new Error('Invalid cart storage payload')
+  }
+
+  return parsed
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([])
   const [hydrated, setHydrated] = useState(false)
@@ -31,15 +55,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Rehydrate from localStorage on mount
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(CART_STORAGE_KEY)
-      if (stored) {
-        setCart(JSON.parse(stored))
-      }
+      setCart(parseStoredCart(localStorage.getItem(CART_STORAGE_KEY)))
     } catch {
       // ignore corrupted storage
+      localStorage.removeItem(CART_STORAGE_KEY)
     }
     setHydrated(true)
   }, [])
+
+  useEffect(() => {
+    if (!hydrated) return
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== CART_STORAGE_KEY) return
+
+      try {
+        setCart(parseStoredCart(event.newValue))
+      } catch {
+        setCart([])
+        localStorage.removeItem(CART_STORAGE_KEY)
+      }
+    }
+
+    window.addEventListener('storage', handleStorage)
+    return () => window.removeEventListener('storage', handleStorage)
+  }, [hydrated])
 
   // Persist cart to localStorage whenever it changes
   useEffect(() => {
