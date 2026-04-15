@@ -3,20 +3,25 @@ import Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
 import { createOrder, getOrderByStripePaymentIntentId } from '@/lib/orders'
 import { sendOrderConfirmation } from '@/lib/email'
-import type { OrderItem } from '@/lib/orders'
+import { CheckoutValidationError, parseOrderItemsFromMetadata } from '@/lib/checkout'
 
 export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const sig = req.headers.get('stripe-signature') ?? ''
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
   let event: Stripe.Event
   try {
+    if (!webhookSecret) {
+      throw new Error('STRIPE_WEBHOOK_SECRET must be set.')
+    }
+
     event = getStripe().webhooks.constructEvent(
       body,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      webhookSecret
     )
   } catch (err) {
     console.error('[stripe-webhook] Signature verification failed:', err)
@@ -65,40 +70,47 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing address' }, { status: 400 })
   }
 
-  // Parse items from metadata
-  let items: OrderItem[] = []
+  let items
   try {
-    items = JSON.parse(session.metadata?.items ?? '[]') as OrderItem[]
-  } catch {
-    console.error('[stripe-webhook] Failed to parse items metadata for session:', session.id)
-    return NextResponse.json({ error: 'Invalid items metadata' }, { status: 400 })
+    items = parseOrderItemsFromMetadata(session.metadata?.items)
+  } catch (err) {
+    const message =
+      err instanceof CheckoutValidationError ? err.message : 'Invalid items metadata'
+    console.error('[stripe-webhook] Failed to parse items metadata:', session.id, message)
+    return NextResponse.json({ error: message }, { status: 400 })
   }
 
-  const subtotal = parseFloat(session.metadata?.subtotal ?? '0')
-  const shippingCost = parseFloat(session.metadata?.shipping ?? '0')
-  const total = parseFloat(session.metadata?.total ?? '0')
+  const subtotal = (session.amount_subtotal ?? 0) / 100
+  const shippingCost = (session.total_details?.amount_shipping ?? 0) / 100
+  const total = (session.amount_total ?? 0) / 100
 
-  const order = await createOrder({
-    status: 'paid',
-    customerInfo: {
-      name:  customer.name,
-      email: customer.email,
-      phone: customer.phone ?? undefined,
-      address: {
-        line1:      addr.line1,
-        line2:      addr.line2 ?? undefined,
-        city:       addr.city,
-        state:      addr.state ?? '',
-        postalCode: addr.postal_code,
-        country:    addr.country,
+  let order
+  try {
+    order = await createOrder({
+      status: 'paid',
+      customerInfo: {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone ?? undefined,
+        address: {
+          line1: addr.line1,
+          line2: addr.line2 ?? undefined,
+          city: addr.city,
+          state: addr.state ?? '',
+          postalCode: addr.postal_code,
+          country: addr.country,
+        },
       },
-    },
-    items,
-    subtotal,
-    shipping: shippingCost,
-    total,
-    stripePaymentIntentId: paymentIntentId,
-  })
+      items,
+      subtotal,
+      shipping: shippingCost,
+      total,
+      stripePaymentIntentId: paymentIntentId,
+    })
+  } catch (err) {
+    console.error('[stripe-webhook] Failed to persist order:', session.id, err)
+    return NextResponse.json({ error: 'Failed to create order' }, { status: 500 })
+  }
 
   // Fire-and-forget email
   sendOrderConfirmation(order).catch((err) =>
