@@ -358,6 +358,51 @@ body {
   }
 }
 
+/* ─── Contact form — animated focus border ────────────── */
+
+/* Wrapper div around each form field.
+   ::before  → static base line (always visible, low opacity)
+   ::after   → full-colour line that draws left→right on focus */
+
+.input-field-wrapper {
+  position: relative;
+}
+
+.input-field-wrapper::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+html.dark .input-field-wrapper::before {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.input-field-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #000;
+  pointer-events: none;
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.dark .input-field-wrapper::after {
+  background: #fff;
+}
+
+.input-field-wrapper:focus-within::after {
+  width: 100%;
+}
+
 /* ─── Image skeleton ───────────────────────────────────── */
 
 .image-loading {
