@@ -2,16 +2,22 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { CheckCircle, Package, Mail } from 'lucide-react'
 import { useCart } from '@/components/cart/CartContext'
 
 export default function OrderSuccessPage() {
   const { clearCart } = useCart()
+  const searchParams = useSearchParams()
+  const sessionId = searchParams.get('session_id')
 
   useEffect(() => {
-    // Clear the cart whenever a completed session lands here
+    // TODO (human): Consider verifying the session server-side before clearing the cart.
+    if (!sessionId) return
+
+    // Clear the cart when Stripe sends the user back with a completed session id.
     clearCart()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [clearCart, sessionId])
 
   return (
     <div className="pt-[73px]">
