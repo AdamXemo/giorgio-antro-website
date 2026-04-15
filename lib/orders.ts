@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { v4 as uuidv4 } from 'uuid'
+import type { Json, Tables, TablesInsert } from '@/types/supabase'
 import { getDb } from './db'
 
 export interface OrderItem {
@@ -40,38 +41,69 @@ export interface Order {
 // ── Private helpers ───────────────────────────────────────────────────────────
 
 function generateOrderNumber(): string {
-  const timestamp = Date.now().toString().slice(-8)
-  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0')
+  const timestamp = new Date().toISOString().replace(/\D/g, '').slice(2, 14)
+  const random = Math.random().toString(36).slice(2, 6).toUpperCase()
   return `ANTRO-${timestamp}${random}`
 }
 
-type DbRow = Record<string, unknown>
+// TODO (human): Back this up with database UNIQUE constraints on both
+// `order_number` and `stripe_payment_intent_id` in Supabase migrations.
+type DbRow = Tables<'orders'>
+
+function isJsonObject(value: Json): value is { [key: string]: Json | undefined } {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function isOrderItem(value: Json): value is Json & { [key: string]: Json | undefined } {
+  return (
+    isJsonObject(value) &&
+    typeof value.productId === 'string' &&
+    typeof value.productName === 'string' &&
+    typeof value.size === 'string' &&
+    typeof value.quantity === 'number' &&
+    typeof value.price === 'number'
+  )
+}
+
+function parseOrderItems(value: Json): OrderItem[] {
+  if (!Array.isArray(value) || !value.every(isOrderItem)) {
+    throw new Error('[rowToOrder] Invalid order items payload in database.')
+  }
+
+  return value.map((item) => ({
+    productId: item.productId as string,
+    productName: item.productName as string,
+    size: item.size as string,
+    quantity: item.quantity as number,
+    price: item.price as number,
+  }))
+}
 
 function rowToOrder(row: DbRow): Order {
   return {
-    id:          row.id as string,
-    orderNumber: row.order_number as string,
-    items:       row.items as OrderItem[],
+    id: row.id,
+    orderNumber: row.order_number,
+    items: parseOrderItems(row.items),
     customerInfo: {
-      email: row.customer_email as string,
-      name:  row.customer_name as string,
-      phone: row.customer_phone as string | undefined,
+      email: row.customer_email,
+      name: row.customer_name,
+      phone: row.customer_phone ?? undefined,
       address: {
-        line1:      row.address_line1 as string,
-        line2:      row.address_line2 as string | undefined,
-        city:       row.address_city as string,
-        state:      row.address_state as string,
-        postalCode: row.address_postal as string,
-        country:    row.address_country as string,
+        line1: row.address_line1,
+        line2: row.address_line2 ?? undefined,
+        city: row.address_city,
+        state: row.address_state,
+        postalCode: row.address_postal,
+        country: row.address_country,
       },
     },
-    subtotal:           Number(row.subtotal),
-    shipping:           Number(row.shipping),
-    total:              Number(row.total),
-    status:                  row.status as Order['status'],
-    stripePaymentIntentId:   row.stripe_payment_intent_id as string | undefined,
-    createdAt:               row.created_at as string,
-    updatedAt:               row.updated_at as string,
+    subtotal: row.subtotal,
+    shipping: row.shipping,
+    total: row.total,
+    status: row.status as Order['status'],
+    stripePaymentIntentId: row.stripe_payment_intent_id ?? undefined,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
   }
 }
 
@@ -82,33 +114,34 @@ export async function createOrder(
 ): Promise<Order> {
   const id = uuidv4()
   const orderNumber = generateOrderNumber()
+  const insertData: TablesInsert<'orders'> = {
+    id,
+    order_number: orderNumber,
+    status: orderData.status,
+    customer_name: orderData.customerInfo.name,
+    customer_email: orderData.customerInfo.email,
+    customer_phone: orderData.customerInfo.phone ?? null,
+    address_line1: orderData.customerInfo.address.line1,
+    address_line2: orderData.customerInfo.address.line2 ?? null,
+    address_city: orderData.customerInfo.address.city,
+    address_state: orderData.customerInfo.address.state,
+    address_postal: orderData.customerInfo.address.postalCode,
+    address_country: orderData.customerInfo.address.country,
+    subtotal: orderData.subtotal,
+    shipping: orderData.shipping,
+    total: orderData.total,
+    items: orderData.items as unknown as Json,
+    stripe_payment_intent_id: orderData.stripePaymentIntentId ?? null,
+  }
 
   const { data, error } = await getDb()
     .from('orders')
-    .insert({
-      id,
-      order_number:         orderNumber,
-      status:               orderData.status,
-      customer_name:        orderData.customerInfo.name,
-      customer_email:       orderData.customerInfo.email,
-      customer_phone:       orderData.customerInfo.phone ?? null,
-      address_line1:        orderData.customerInfo.address.line1,
-      address_line2:        orderData.customerInfo.address.line2 ?? null,
-      address_city:         orderData.customerInfo.address.city,
-      address_state:        orderData.customerInfo.address.state,
-      address_postal:       orderData.customerInfo.address.postalCode,
-      address_country:      orderData.customerInfo.address.country,
-      subtotal:             orderData.subtotal,
-      shipping:             orderData.shipping,
-      total:                orderData.total,
-      items:                        orderData.items as unknown as import('../types/supabase').Json,
-      stripe_payment_intent_id:     orderData.stripePaymentIntentId ?? null,
-    })
+    .insert(insertData)
     .select()
     .single()
 
   if (error) throw new Error(`[createOrder] ${error.message}`)
-  return rowToOrder(data as DbRow)
+  return rowToOrder(data)
 }
 
 export async function getOrderById(id: string): Promise<Order | null> {
@@ -119,7 +152,7 @@ export async function getOrderById(id: string): Promise<Order | null> {
     .maybeSingle()
 
   if (error) throw new Error(`[getOrderById] ${error.message}`)
-  return data ? rowToOrder(data as DbRow) : null
+  return data ? rowToOrder(data) : null
 }
 
 export async function getOrderByStripePaymentIntentId(
@@ -132,7 +165,7 @@ export async function getOrderByStripePaymentIntentId(
     .maybeSingle()
 
   if (error) throw new Error(`[getOrderByStripePaymentIntentId] ${error.message}`)
-  return data ? rowToOrder(data as DbRow) : null
+  return data ? rowToOrder(data) : null
 }
 
 export async function updateOrderStatus(
@@ -147,5 +180,5 @@ export async function updateOrderStatus(
     .single()
 
   if (error) throw new Error(`[updateOrderStatus] ${error.message}`)
-  return data ? rowToOrder(data as DbRow) : null
+  return data ? rowToOrder(data) : null
 }
