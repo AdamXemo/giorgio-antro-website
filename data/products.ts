@@ -44,6 +44,8 @@ export const mainProduct: Product = {
     'Machine washable',
     'Embroidered ANTRO logo',
   ],
+  // TODO (human): Keep this copy aligned with the checkout shipping rule.
+  // The current flow charges EUR 10 below the free-shipping threshold.
   shippingInfo: 'Free shipping on all orders. Estimated delivery: 3–5 business days.',
 }
 

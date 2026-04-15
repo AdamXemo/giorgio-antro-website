@@ -1,5 +1,7 @@
 // Supports both NEXT_PUBLIC_ (client-side) and server-only env var names.
 // Storefront API tokens are designed to be public — using NEXT_PUBLIC_ is intentional.
+// TODO (human): Decide whether Shopify is the source of truth for catalog and pricing.
+// The live checkout flow currently validates against the static product catalog instead.
 const domain =
   process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN ??
   process.env.SHOPIFY_STORE_DOMAIN

@@ -12,6 +12,8 @@ export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
   try {
+    // TODO (human): This route is currently unused because checkout runs through
+    // Stripe Embedded Checkout. Decide whether to keep or retire this flow.
     const body: unknown = await req.json()
     const items = validateCheckoutItems(
       typeof body === 'object' && body !== null ? (body as { items?: unknown }).items : undefined
