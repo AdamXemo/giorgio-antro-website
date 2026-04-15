@@ -8,8 +8,24 @@ function getResend(): Resend {
   return new Resend(process.env.RESEND_API_KEY)
 }
 
-// Must be a Resend-verified sending domain before launch.
-// For local testing use 'onboarding@resend.dev' with your own email as recipient.
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-IE', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(amount)
+}
+
+// TODO (human): Replace the Resend onboarding sender with a verified ANTRO domain
+// before enabling production order emails.
 const FROM_ADDRESS = 'ANTRO <onboarding@resend.dev>'
 // Inbox that receives contact form submissions
 const CONTACT_TO = process.env.CONTACT_EMAIL ?? 'info@giorgioantro.com'
@@ -21,16 +37,16 @@ export async function sendOrderConfirmation(order: Order): Promise<boolean> {
     .map(
       (item) => `
       <tr>
-        <td style="padding:8px 0;border-bottom:1px solid #f0f0f0">${item.productName}</td>
-        <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:center">${item.size}</td>
+        <td style="padding:8px 0;border-bottom:1px solid #f0f0f0">${escapeHtml(item.productName)}</td>
+        <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:center">${escapeHtml(item.size)}</td>
         <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:center">${item.quantity}</td>
-        <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:right">$${(item.price * item.quantity).toFixed(2)}</td>
+        <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:right">${formatCurrency(item.price * item.quantity)}</td>
       </tr>`
     )
     .join('')
 
   const line2Row = order.customerInfo.address.line2
-    ? `<p style="margin:0">${order.customerInfo.address.line2}</p>`
+    ? `<p style="margin:0">${escapeHtml(order.customerInfo.address.line2)}</p>`
     : ''
 
   const html = `<!DOCTYPE html>
@@ -43,7 +59,7 @@ export async function sendOrderConfirmation(order: Order): Promise<boolean> {
     </div>
     <div style="padding:32px">
       <h2 style="font-weight:400;margin-top:0">Thank you for your order.</h2>
-      <p>Hi ${order.customerInfo.name},</p>
+      <p>Hi ${escapeHtml(order.customerInfo.name)},</p>
       <p>We have received your order and will begin preparing it shortly.</p>
 
       <div style="background:#f9f9f9;padding:20px;margin:24px 0">
@@ -60,18 +76,18 @@ export async function sendOrderConfirmation(order: Order): Promise<boolean> {
           <tbody>${itemRows}</tbody>
         </table>
         <div style="margin-top:16px;text-align:right;font-size:14px">
-          <p style="margin:4px 0">Subtotal: $${order.subtotal.toFixed(2)}</p>
-          <p style="margin:4px 0">Shipping: ${order.shipping === 0 ? 'FREE' : `$${order.shipping.toFixed(2)}`}</p>
-          <p style="margin:8px 0;font-weight:bold;font-size:16px">Total: $${order.total.toFixed(2)}</p>
+          <p style="margin:4px 0">Subtotal: ${formatCurrency(order.subtotal)}</p>
+          <p style="margin:4px 0">Shipping: ${order.shipping === 0 ? 'FREE' : formatCurrency(order.shipping)}</p>
+          <p style="margin:8px 0;font-weight:bold;font-size:16px">Total: ${formatCurrency(order.total)}</p>
         </div>
       </div>
 
       <div style="background:#f9f9f9;padding:20px;margin:24px 0;font-size:14px">
         <p style="margin:0 0 8px"><strong>Shipping to:</strong></p>
-        <p style="margin:0">${order.customerInfo.address.line1}</p>
+        <p style="margin:0">${escapeHtml(order.customerInfo.address.line1)}</p>
         ${line2Row}
-        <p style="margin:0">${order.customerInfo.address.city}, ${order.customerInfo.address.state} ${order.customerInfo.address.postalCode}</p>
-        <p style="margin:0">${order.customerInfo.address.country}</p>
+        <p style="margin:0">${escapeHtml(order.customerInfo.address.city)}, ${escapeHtml(order.customerInfo.address.state)} ${escapeHtml(order.customerInfo.address.postalCode)}</p>
+        <p style="margin:0">${escapeHtml(order.customerInfo.address.country)}</p>
       </div>
 
       <p>Questions? Visit <a href="${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://giorgioantro.com'}/contact">our contact page</a>.</p>
