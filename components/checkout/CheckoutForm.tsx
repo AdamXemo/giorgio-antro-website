@@ -314,7 +314,6 @@ export function CheckoutForm() {
               'google_pay',
               'paypal',
               'card',
-              'link',
               'bancontact',
               'ideal',
               'klarna',
@@ -322,7 +321,7 @@ export function CheckoutForm() {
             wallets: {
               applePay: 'auto',
               googlePay: 'auto',
-              link: 'auto',
+              link: 'never',
             },
             fields: {
               billingDetails: {
