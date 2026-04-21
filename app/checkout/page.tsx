@@ -1,47 +1,219 @@
 'use client'
 
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { loadStripe } from '@stripe/stripe-js'
-import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe-js'
-import { useCart } from '@/components/cart/CartContext'
+import { Elements } from '@stripe/react-stripe-js'
+import type { Appearance } from '@stripe/stripe-js'
 import { ChevronLeft } from 'lucide-react'
-import { useCheckoutSession } from '@/hooks/useCheckoutSession'
+import { useCart } from '@/components/cart/CartContext'
+import { CheckoutForm } from '@/components/checkout/CheckoutForm'
+import { CheckoutOrderSummary } from '@/components/checkout/CheckoutOrderSummary'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
+function buildAppearance(isDark: boolean): Appearance {
+  const border = isDark ? '1px solid rgba(240,240,240,0.15)' : '1px solid rgba(0,0,0,0.12)'
+  const borderFocus = isDark ? '1px solid rgba(240,240,240,0.55)' : '1px solid rgba(0,0,0,0.55)'
+  const borderSelected = isDark ? '1px solid rgba(240,240,240,0.7)' : '1px solid rgba(0,0,0,0.7)'
+  const textMuted = isDark ? 'rgba(240,240,240,0.4)' : 'rgba(0,0,0,0.4)'
+  const placeholder = isDark ? 'rgba(240,240,240,0.22)' : 'rgba(0,0,0,0.22)'
+
+  return {
+    theme: 'stripe',
+    variables: {
+      colorPrimary: isDark ? '#f0f0f0' : '#000000',
+      colorBackground: isDark ? '#0f0f0f' : '#ffffff',
+      colorText: isDark ? '#f0f0f0' : '#000000',
+      colorTextSecondary: textMuted,
+      colorTextPlaceholder: placeholder,
+      colorDanger: isDark ? '#f87171' : '#dc2626',
+      fontFamily: '"Inter", system-ui, sans-serif',
+      borderRadius: '0px',
+      spacingUnit: '4px',
+      fontSizeBase: '14px',
+      colorIconTab: isDark ? '#f0f0f0' : '#000000',
+      colorIconTabHover: isDark ? '#ffffff' : '#000000',
+      colorIconTabSelected: isDark ? '#ffffff' : '#000000',
+    },
+    rules: {
+      '.Input': {
+        border,
+        padding: '12px',
+        fontSize: '14px',
+        backgroundColor: 'transparent',
+        boxShadow: 'none',
+        outline: 'none',
+        transition: 'border-color 0.15s ease',
+      },
+      '.Input:focus': {
+        border: borderFocus,
+        boxShadow: 'none',
+        outline: 'none',
+      },
+      '.Input--invalid': {
+        border: isDark ? '1px solid #f87171' : '1px solid #dc2626',
+        boxShadow: 'none',
+      },
+      '.Label': {
+        fontSize: '10px',
+        letterSpacing: '0.2em',
+        textTransform: 'uppercase',
+        color: textMuted,
+        marginBottom: '6px',
+      },
+      '.Error': {
+        fontSize: '11px',
+        letterSpacing: '0.05em',
+        marginTop: '4px',
+      },
+      '.Tab': {
+        border,
+        backgroundColor: 'transparent',
+        boxShadow: 'none',
+        padding: '10px 12px',
+        transition: 'border-color 0.15s ease',
+      },
+      '.Tab:hover': {
+        border: borderFocus,
+        backgroundColor: 'transparent',
+        boxShadow: 'none',
+      },
+      '.Tab--selected': {
+        border: borderSelected,
+        backgroundColor: 'transparent',
+        boxShadow: 'none',
+      },
+      '.Tab--selected:focus': { boxShadow: 'none' },
+      '.TabIcon--selected': { fill: isDark ? '#f0f0f0' : '#000000' },
+      '.TabLabel--selected': { color: isDark ? '#f0f0f0' : '#000000' },
+      '.Block': { border, boxShadow: 'none', backgroundColor: 'transparent' },
+      '.PickerItem--selected': { border: borderSelected, boxShadow: 'none' },
+    },
+  }
+}
+
 export default function CheckoutPage() {
-  const { cart } = useCart()
-  const { clientSecret, initError } = useCheckoutSession(cart)
+  const router = useRouter()
+  const { cart, cartTotal } = useCart()
+
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [initError, setInitError] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+  const [isDark, setIsDark] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    setIsDark(document.documentElement.classList.contains('dark'))
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    if (cart.length === 0) {
+      router.replace('/cart')
+      return
+    }
+
+    fetch('/api/create-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: cart }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.clientSecret) setClientSecret(data.clientSecret)
+        else setInitError(data.error ?? 'Failed to initialize checkout.')
+      })
+      .catch(() => setInitError('Failed to initialize checkout. Please try again.'))
+  }, [mounted]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const shipping = cartTotal >= 100 ? 0 : 10
+  const total = cartTotal + shipping
+
+  const appearance = useMemo(() => buildAppearance(isDark), [isDark])
+  const elementsOptions = useMemo(
+    () => (clientSecret ? { clientSecret, appearance, loader: 'auto' as const } : null),
+    [clientSecret, appearance]
+  )
 
   return (
     <div className="min-h-screen pt-[73px]">
-      <div className="max-w-screen-md mx-auto px-6 md:px-12 pt-6 pb-16">
 
+      {/* ── Page header ─────────────────────────────────── */}
+      <div className="px-6 md:px-12 py-5 flex items-center justify-between border-b border-black/8 dark:border-white/8">
         <Link
           href="/cart"
-          className="inline-flex items-center gap-2 text-black/30 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors mb-6 group"
+          className="inline-flex items-center gap-2 text-black/30 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors group"
           aria-label="Back to cart"
         >
-          <ChevronLeft size={16} strokeWidth={1.5} className="group-hover:-translate-x-0.5 transition-transform" />
+          <ChevronLeft
+            size={14}
+            strokeWidth={1.5}
+            className="group-hover:-translate-x-0.5 transition-transform"
+          />
           <span className="text-[10px] tracking-[0.2em]">CART</span>
         </Link>
-
-        {initError ? (
-          <div className="py-20 text-center">
-            <p className="text-sm text-black/45 dark:text-white/45 mb-6">{initError}</p>
-            <Link href="/cart" className="btn-primary">RETURN TO CART</Link>
-          </div>
-        ) : !clientSecret ? (
-          <div className="py-20 flex items-center justify-center">
-            <div className="w-5 h-5 border border-black dark:border-white border-t-transparent rounded-full animate-spin" />
-          </div>
-        ) : (
-          <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
-            <EmbeddedCheckout />
-          </EmbeddedCheckoutProvider>
-        )}
-
+        <span className="text-[10px] tracking-[0.3em] text-black/25 dark:text-white/25">
+          ANTRO — CHECKOUT
+        </span>
       </div>
+
+      {/* ── Error state ─────────────────────────────────── */}
+      {initError && (
+        <div className="max-w-screen-md mx-auto px-6 md:px-12 py-20 text-center">
+          <p className="text-sm text-black/45 dark:text-white/45 mb-6">{initError}</p>
+          <Link href="/cart" className="btn-primary">
+            <span className="relative z-10">RETURN TO CART</span>
+          </Link>
+        </div>
+      )}
+
+      {/* ── Loading state ───────────────────────────────── */}
+      {!initError && !clientSecret && mounted && (
+        <div className="flex items-center justify-center py-32">
+          <div className="w-5 h-5 border border-black dark:border-white border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+
+      {/* ── Main layout (only when Stripe is ready) ─────── */}
+      {elementsOptions && (
+        <Elements stripe={stripePromise} options={elementsOptions}>
+          <div className="max-w-screen-lg mx-auto">
+
+            {/* Mobile summary strip — visible below lg */}
+            <div className="lg:hidden border-b border-black/8 dark:border-white/8">
+              <CheckoutOrderSummary
+                items={cart}
+                subtotal={cartTotal}
+                shipping={shipping}
+                total={total}
+              />
+            </div>
+
+            {/* Two-column grid */}
+            <div className="grid lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px]">
+
+              {/* Left: form */}
+              <div className="px-6 md:px-12 py-10 lg:border-r border-black/8 dark:border-white/8">
+                <CheckoutForm />
+              </div>
+
+              {/* Right: summary — desktop only */}
+              <div className="hidden lg:block px-8 xl:px-12 py-10">
+                <CheckoutOrderSummary
+                  items={cart}
+                  subtotal={cartTotal}
+                  shipping={shipping}
+                  total={total}
+                />
+              </div>
+
+            </div>
+          </div>
+        </Elements>
+      )}
+
     </div>
   )
 }
