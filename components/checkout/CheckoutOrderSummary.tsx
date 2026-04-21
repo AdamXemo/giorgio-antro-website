@@ -25,11 +25,6 @@ function ItemList({ items }: { items: CartItem[] }) {
               className="object-cover"
               sizes="60px"
             />
-            {item.quantity > 1 && (
-              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-black dark:bg-white text-white dark:text-black text-[9px] flex items-center justify-center font-medium tabular-nums">
-                {item.quantity}
-              </span>
-            )}
           </div>
           <div className="flex-1 flex flex-col justify-between py-0.5 min-w-0">
             <div>
@@ -39,7 +34,9 @@ function ItemList({ items }: { items: CartItem[] }) {
               </p>
             </div>
             <p className="text-sm text-black dark:text-white tabular-nums">
-              €{(item.price * item.quantity).toFixed(2)}
+              {item.quantity > 1
+                ? `${item.quantity} × €${item.price.toFixed(2)}`
+                : `€${item.price.toFixed(2)}`}
             </p>
           </div>
         </div>
