@@ -332,7 +332,7 @@ export function CheckoutForm() {
                   line1: 'never',
                   line2: 'never',
                   city: 'never',
-                  state: 'never',
+                  state: 'auto',
                   postalCode: 'never',
                   country: 'never',
                 },
