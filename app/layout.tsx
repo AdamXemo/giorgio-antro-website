@@ -4,8 +4,7 @@ import { CartProvider } from '@/components/cart/CartContext'
 import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import { ThemedToaster } from '@/components/theme/ThemedToaster'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
-import ScrollProgress from '@/components/ui/ScrollProgress'
+import ClientFooter from '@/components/layout/ClientFooter'
 import { fontSans, fontDisplay, fontBody } from '@/lib/fonts'
 
 export const metadata: Metadata = {
@@ -37,12 +36,11 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <CartProvider>
-            <ScrollProgress />
             <Header />
             <main className="min-h-screen">
               {children}
             </main>
-            <Footer />
+            <ClientFooter />
             <ThemedToaster />
           </CartProvider>
         </ThemeProvider>
