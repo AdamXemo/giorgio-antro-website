@@ -65,28 +65,36 @@ function buildAppearance(isDark: boolean): Appearance {
         letterSpacing: '0.05em',
         marginTop: '4px',
       },
-      '.Tab': {
+      '.Block': {
+        border,
+        boxShadow: 'none',
+        backgroundColor: 'transparent',
+        borderRadius: '2px',
+      },
+      '.AccordionItem': {
+        border: 'none',
+        borderBottom: border,
+      },
+      '.AccordionItem:first-child': { borderTop: border },
+      '.RadioInput': {
         border,
         backgroundColor: 'transparent',
         boxShadow: 'none',
-        padding: '10px 12px',
-        transition: 'border-color 0.15s ease',
       },
-      '.Tab:hover': {
-        border: borderFocus,
+      '.RadioInput--checked': {
+        backgroundColor: isDark ? '#f0f0f0' : '#000000',
+        border: isDark ? '1px solid #f0f0f0' : '1px solid #000000',
+      },
+      '.PickerItem': {
+        border: 'none',
+        boxShadow: 'none',
         backgroundColor: 'transparent',
+      },
+      '.PickerItem--selected': {
+        border: 'none',
+        backgroundColor: isDark ? 'rgba(240,240,240,0.04)' : 'rgba(0,0,0,0.03)',
         boxShadow: 'none',
       },
-      '.Tab--selected': {
-        border: borderSelected,
-        backgroundColor: 'transparent',
-        boxShadow: 'none',
-      },
-      '.Tab--selected:focus': { boxShadow: 'none' },
-      '.TabIcon--selected': { fill: isDark ? '#f0f0f0' : '#000000' },
-      '.TabLabel--selected': { color: isDark ? '#f0f0f0' : '#000000' },
-      '.Block': { border, boxShadow: 'none', backgroundColor: 'transparent' },
-      '.PickerItem--selected': { border: borderSelected, boxShadow: 'none' },
     },
   }
 }

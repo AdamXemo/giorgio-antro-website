@@ -323,7 +323,11 @@ export function CheckoutForm() {
         <SectionLabel number="03" title="Payment" />
         <PaymentElement
           options={{
-            layout: 'tabs',
+            layout: {
+              type: 'accordion',
+              defaultCollapsed: false,
+              spacedAccordionItems: false,
+            },
             fields: {
               billingDetails: {
                 name: 'never',
