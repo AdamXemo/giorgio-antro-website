@@ -356,21 +356,29 @@ export function CheckoutForm() {
         <button
           type="submit"
           disabled={!stripe || !elements || isSubmitting}
-          className="btn-primary block w-full disabled:opacity-40 disabled:cursor-not-allowed"
+          className={[
+            'w-full py-3.5 border rounded-[2px]',
+            'border-black dark:border-white',
+            'bg-black dark:bg-white',
+            'text-white dark:text-black',
+            'text-[10px] tracking-[0.45em] font-light',
+            'flex items-center justify-center gap-2.5',
+            'transition-colors duration-500',
+            'hover:bg-white hover:text-black dark:hover:bg-transparent dark:hover:text-white',
+            'disabled:opacity-30 disabled:cursor-not-allowed',
+          ].join(' ')}
         >
-          <span className="relative z-10 flex items-center justify-center gap-2.5">
-            {isSubmitting ? (
-              <div className="w-3.5 h-3.5 border border-current border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <>
-                <Lock size={11} strokeWidth={1.5} />
-                <span>PLACE ORDER</span>
-              </>
-            )}
-          </span>
+          {isSubmitting ? (
+            <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <>
+              <Lock size={10} strokeWidth={1.5} />
+              <span>PLACE ORDER</span>
+            </>
+          )}
         </button>
 
-        <p className="mt-4 text-center text-[10px] tracking-[0.15em] text-black/25 dark:text-white/25">
+        <p className="mt-4 text-center text-[10px] tracking-[0.15em] text-black/22 dark:text-white/22">
           SECURED BY STRIPE · SSL ENCRYPTED
         </p>
       </div>
