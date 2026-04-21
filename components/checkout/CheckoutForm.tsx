@@ -85,7 +85,7 @@ function SectionLabel({ number, title }: { number: string; title: string }) {
 }
 
 function Divider() {
-  return <div className="my-6" />
+  return <div className="my-10" />
 }
 
 export function CheckoutForm() {
