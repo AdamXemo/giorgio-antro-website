@@ -327,7 +327,7 @@ export function CheckoutForm() {
               billingDetails: {
                 name: 'never',
                 email: 'never',
-                phone: 'never',
+                phone: 'auto',
                 address: {
                   line1: 'never',
                   line2: 'never',
