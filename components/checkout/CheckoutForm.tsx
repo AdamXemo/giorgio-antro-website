@@ -305,7 +305,24 @@ export function CheckoutForm() {
             layout: {
               type: 'accordion',
               defaultCollapsed: false,
+              radios: 'if_multiple',
               spacedAccordionItems: false,
+            },
+            // Digital wallets first — best for mobile UX
+            paymentMethodOrder: [
+              'apple_pay',
+              'google_pay',
+              'paypal',
+              'card',
+              'link',
+              'bancontact',
+              'ideal',
+              'klarna',
+            ],
+            wallets: {
+              applePay: 'auto',
+              googlePay: 'auto',
+              link: 'auto',
             },
             fields: {
               billingDetails: {
@@ -322,7 +339,13 @@ export function CheckoutForm() {
                 },
               },
             },
-            terms: { card: 'never' },
+            terms: {
+              card: 'never',
+              applePay: 'never',
+              googlePay: 'never',
+              paypal: 'never',
+              klarna: 'never',
+            },
           }}
         />
       </section>
