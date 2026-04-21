@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
 import { Lock } from 'lucide-react'
 import { FormField } from './FormField'
+import { CountrySelect } from './CountrySelect'
 
 const COUNTRIES = [
   { code: 'BE', name: 'Belgium' },
@@ -280,38 +281,16 @@ export function CheckoutForm() {
           </div>
 
           <FormField label="Country" error={errors.country}>
-            <div className="relative">
-              <select
-                id="field-country"
-                autoComplete="country"
-                value={form.country}
-                onChange={field('country')}
-                className={`${inputBase} ${errors.country ? inputError : ''} appearance-none cursor-pointer pr-8`}
-              >
-                {COUNTRIES.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                <svg
-                  width="10"
-                  height="6"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  className="text-black/35 dark:text-white/35"
-                >
-                  <path
-                    d="M1 1l4 4 4-4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </div>
+            <CountrySelect
+              id="field-country"
+              value={form.country}
+              onChange={(code) => {
+                setForm((prev) => ({ ...prev, country: code }))
+                if (errors.country) setErrors((prev) => ({ ...prev, country: undefined }))
+              }}
+              options={COUNTRIES}
+              error={!!errors.country}
+            />
           </FormField>
         </div>
       </section>
