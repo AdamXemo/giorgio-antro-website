@@ -85,7 +85,7 @@ function SectionLabel({ number, title }: { number: string; title: string }) {
 }
 
 function Divider() {
-  return <div className="my-6 h-px bg-black/[0.06] dark:bg-white/[0.06]" />
+  return <div className="my-6" />
 }
 
 export function CheckoutForm() {
