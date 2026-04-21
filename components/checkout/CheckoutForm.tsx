@@ -60,18 +60,18 @@ function validate(form: FormState): FormErrors {
 }
 
 const inputBase =
-  'w-full border bg-transparent px-3 py-3 text-sm font-sans ' +
+  'w-full border rounded-[2px] bg-transparent px-3 py-2 text-[13px] font-sans ' +
   'text-black dark:text-white ' +
-  'border-black/12 dark:border-white/15 ' +
-  'placeholder:text-black/22 dark:placeholder:text-white/22 ' +
-  'focus:outline-none focus:border-black/55 dark:focus:border-white/55 ' +
+  'border-[#eaeaea] dark:border-white/10 ' +
+  'placeholder:text-black/20 dark:placeholder:text-white/18 ' +
+  'focus:outline-none focus:border-black dark:focus:border-white ' +
   'transition-colors duration-150'
 
-const inputError = 'border-red-400 dark:border-red-500 focus:border-red-500 dark:focus:border-red-400'
+const inputError = 'border-red-300 dark:border-red-500/70 focus:border-red-500 dark:focus:border-red-400'
 
 function SectionLabel({ number, title }: { number: string; title: string }) {
   return (
-    <div className="flex items-center gap-4 mb-6">
+    <div className="flex items-center gap-4 mb-5">
       <span className="text-[10px] tracking-[0.3em] text-black/25 dark:text-white/25 font-body tabular-nums">
         {number}
       </span>
@@ -84,7 +84,7 @@ function SectionLabel({ number, title }: { number: string; title: string }) {
 }
 
 function Divider() {
-  return <div className="my-8 h-px bg-black/8 dark:bg-white/8" />
+  return <div className="my-6 h-px bg-black/[0.06] dark:bg-white/[0.06]" />
 }
 
 export function CheckoutForm() {
@@ -179,7 +179,7 @@ export function CheckoutForm() {
       {/* ── 01 CONTACT ─────────────────────────────────── */}
       <section>
         <SectionLabel number="01" title="Contact" />
-        <div className="grid gap-4">
+        <div className="grid gap-3">
           <FormField label="Email address" error={errors.email}>
             <input
               id="field-email"
@@ -210,7 +210,7 @@ export function CheckoutForm() {
       <section>
         <SectionLabel number="02" title="Shipping" />
         <div className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <FormField label="First name" error={errors.firstName}>
               <input
                 id="field-firstName"
@@ -256,7 +256,7 @@ export function CheckoutForm() {
             />
           </FormField>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <FormField label="City" error={errors.city}>
               <input
                 id="field-city"

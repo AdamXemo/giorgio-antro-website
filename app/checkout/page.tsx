@@ -14,11 +14,11 @@ import { CheckoutOrderSummary } from '@/components/checkout/CheckoutOrderSummary
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
 function buildAppearance(isDark: boolean): Appearance {
-  const border = isDark ? '1px solid rgba(240,240,240,0.15)' : '1px solid rgba(0,0,0,0.12)'
-  const borderFocus = isDark ? '1px solid rgba(240,240,240,0.55)' : '1px solid rgba(0,0,0,0.55)'
-  const borderSelected = isDark ? '1px solid rgba(240,240,240,0.7)' : '1px solid rgba(0,0,0,0.7)'
+  const border = isDark ? '1px solid rgba(240,240,240,0.10)' : '1px solid #eaeaea'
+  const borderFocus = isDark ? '1px solid rgba(240,240,240,0.80)' : '1px solid #000000'
+  const borderSelected = isDark ? '1px solid rgba(240,240,240,0.7)' : '1px solid #000000'
   const textMuted = isDark ? 'rgba(240,240,240,0.4)' : 'rgba(0,0,0,0.4)'
-  const placeholder = isDark ? 'rgba(240,240,240,0.22)' : 'rgba(0,0,0,0.22)'
+  const placeholder = isDark ? 'rgba(240,240,240,0.18)' : 'rgba(0,0,0,0.20)'
 
   return {
     theme: 'stripe',
@@ -30,18 +30,15 @@ function buildAppearance(isDark: boolean): Appearance {
       colorTextPlaceholder: placeholder,
       colorDanger: isDark ? '#f87171' : '#dc2626',
       fontFamily: '"Inter", system-ui, sans-serif',
-      borderRadius: '0px',
-      spacingUnit: '4px',
-      fontSizeBase: '14px',
-      colorIconTab: isDark ? '#f0f0f0' : '#000000',
-      colorIconTabHover: isDark ? '#ffffff' : '#000000',
-      colorIconTabSelected: isDark ? '#ffffff' : '#000000',
+      borderRadius: '2px',
+      spacingUnit: '3px',
+      fontSizeBase: '13px',
     },
     rules: {
       '.Input': {
         border,
-        padding: '12px',
-        fontSize: '14px',
+        padding: '8px 12px',
+        fontSize: '13px',
         backgroundColor: 'transparent',
         boxShadow: 'none',
         outline: 'none',
