@@ -71,10 +71,6 @@ function buildAppearance(isDark: boolean): Appearance {
         backgroundColor: 'transparent',
         borderRadius: '2px',
       },
-      '.AccordionItem': {
-        border: 'none',
-        borderBottom: border,
-      },
       '.AccordionItem:first-child': { borderTop: border },
       '.RadioInput': {
         border,
