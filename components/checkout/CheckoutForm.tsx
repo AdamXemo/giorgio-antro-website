@@ -1,47 +1,21 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
+import { useStripe, useElements, PaymentElement, AddressElement } from '@stripe/react-stripe-js'
 import { Lock } from 'lucide-react'
 import { FormField } from './FormField'
-import { CountrySelect } from './CountrySelect'
 
-const COUNTRIES = [
-  { code: 'BE', name: 'Belgium' },
-  { code: 'NL', name: 'Netherlands' },
-  { code: 'DE', name: 'Germany' },
-  { code: 'FR', name: 'France' },
-  { code: 'LU', name: 'Luxembourg' },
-  { code: 'IT', name: 'Italy' },
-  { code: 'ES', name: 'Spain' },
-  { code: 'AT', name: 'Austria' },
-  { code: 'CH', name: 'Switzerland' },
-  { code: 'GB', name: 'United Kingdom' },
-  { code: 'US', name: 'United States' },
-  { code: 'CA', name: 'Canada' },
-  { code: 'AU', name: 'Australia' },
+const ALLOWED_COUNTRIES: string[] = [
+  'BE', 'NL', 'DE', 'FR', 'LU', 'IT', 'ES', 'AT', 'CH', 'GB', 'US', 'CA', 'AU',
 ]
 
 interface FormState {
   email: string
   phone: string
-  firstName: string
-  lastName: string
-  address: string
-  address2: string
-  city: string
-  postalCode: string
-  country: string
 }
 
 interface FormErrors {
   email?: string
-  firstName?: string
-  lastName?: string
-  address?: string
-  city?: string
-  postalCode?: string
-  country?: string
 }
 
 function validate(form: FormState): FormErrors {
@@ -51,12 +25,6 @@ function validate(form: FormState): FormErrors {
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
     e.email = 'Please enter a valid email'
   }
-  if (!form.firstName.trim()) e.firstName = 'First name is required'
-  if (!form.lastName.trim()) e.lastName = 'Last name is required'
-  if (!form.address.trim()) e.address = 'Address is required'
-  if (!form.city.trim()) e.city = 'City is required'
-  if (!form.postalCode.trim()) e.postalCode = 'Postal code is required'
-  if (!form.country) e.country = 'Country is required'
   return e
 }
 
@@ -92,24 +60,14 @@ export function CheckoutForm() {
   const stripe = useStripe()
   const elements = useElements()
 
-  const [form, setForm] = useState<FormState>({
-    email: '',
-    phone: '',
-    firstName: '',
-    lastName: '',
-    address: '',
-    address2: '',
-    city: '',
-    postalCode: '',
-    country: 'BE',
-  })
+  const [form, setForm] = useState<FormState>({ email: '', phone: '' })
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const field = useCallback(
     (key: keyof FormState) =>
-      (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm((prev) => ({ ...prev, [key]: e.target.value }))
         if (errors[key as keyof FormErrors]) {
           setErrors((prev) => ({ ...prev, [key]: undefined }))
@@ -125,15 +83,17 @@ export function CheckoutForm() {
     const validationErrors = validate(form)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
-      const firstErrorKey = Object.keys(validationErrors)[0]
-      document.getElementById(`field-${firstErrorKey}`)?.focus()
+      document.getElementById('field-email')?.focus()
       return
     }
 
     setIsSubmitting(true)
     setSubmitError(null)
 
-    const fullName = `${form.firstName.trim()} ${form.lastName.trim()}`
+    const addressElement = elements.getElement('address')
+    const addressResult = addressElement ? await addressElement.getValue() : null
+    const name = addressResult?.value?.name ?? ''
+    const addr = addressResult?.value?.address
 
     const { error } = await stripe.confirmPayment({
       elements,
@@ -141,29 +101,35 @@ export function CheckoutForm() {
         return_url: `${window.location.origin}/order/success`,
         payment_method_data: {
           billing_details: {
-            name: fullName,
+            name,
             email: form.email.trim(),
             phone: form.phone.trim() || undefined,
-            address: {
-              line1: form.address.trim(),
-              line2: form.address2.trim() || undefined,
-              city: form.city.trim(),
-              postal_code: form.postalCode.trim(),
-              country: form.country,
-            },
+            address: addr
+              ? {
+                  line1: addr.line1,
+                  line2: addr.line2 || undefined,
+                  city: addr.city,
+                  state: addr.state || undefined,
+                  postal_code: addr.postal_code,
+                  country: addr.country,
+                }
+              : undefined,
           },
         },
-        shipping: {
-          name: fullName,
-          phone: form.phone.trim() || undefined,
-          address: {
-            line1: form.address.trim(),
-            line2: form.address2.trim() || undefined,
-            city: form.city.trim(),
-            postal_code: form.postalCode.trim(),
-            country: form.country,
-          },
-        },
+        shipping: addr
+          ? {
+              name,
+              phone: form.phone.trim() || undefined,
+              address: {
+                line1: addr.line1,
+                line2: addr.line2 || undefined,
+                city: addr.city,
+                state: addr.state || undefined,
+                postal_code: addr.postal_code,
+                country: addr.country,
+              },
+            }
+          : undefined,
       },
     })
 
@@ -210,89 +176,14 @@ export function CheckoutForm() {
       {/* ── 02 SHIPPING ────────────────────────────────── */}
       <section>
         <SectionLabel number="02" title="Shipping" />
-        <div className="grid gap-4">
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="First name" error={errors.firstName}>
-              <input
-                id="field-firstName"
-                type="text"
-                autoComplete="given-name"
-                value={form.firstName}
-                onChange={field('firstName')}
-                className={`${inputBase} ${errors.firstName ? inputError : ''}`}
-              />
-            </FormField>
-            <FormField label="Last name" error={errors.lastName}>
-              <input
-                id="field-lastName"
-                type="text"
-                autoComplete="family-name"
-                value={form.lastName}
-                onChange={field('lastName')}
-                className={`${inputBase} ${errors.lastName ? inputError : ''}`}
-              />
-            </FormField>
-          </div>
-
-          <FormField label="Address" error={errors.address}>
-            <input
-              id="field-address"
-              type="text"
-              autoComplete="address-line1"
-              value={form.address}
-              onChange={field('address')}
-              placeholder="Street and number"
-              className={`${inputBase} ${errors.address ? inputError : ''}`}
-            />
-          </FormField>
-
-          <FormField label="Apartment, suite, etc. (optional)">
-            <input
-              type="text"
-              autoComplete="address-line2"
-              value={form.address2}
-              onChange={field('address2')}
-              placeholder="Apt, suite, floor..."
-              className={inputBase}
-            />
-          </FormField>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="City" error={errors.city}>
-              <input
-                id="field-city"
-                type="text"
-                autoComplete="address-level2"
-                value={form.city}
-                onChange={field('city')}
-                className={`${inputBase} ${errors.city ? inputError : ''}`}
-              />
-            </FormField>
-            <FormField label="Postal code" error={errors.postalCode}>
-              <input
-                id="field-postalCode"
-                type="text"
-                autoComplete="postal-code"
-                value={form.postalCode}
-                onChange={field('postalCode')}
-                className={`${inputBase} ${errors.postalCode ? inputError : ''}`}
-              />
-            </FormField>
-          </div>
-
-          <FormField label="Country" error={errors.country}>
-            <CountrySelect
-              id="field-country"
-              value={form.country}
-              onChange={(code) => {
-                setForm((prev) => ({ ...prev, country: code }))
-                if (errors.country) setErrors((prev) => ({ ...prev, country: undefined }))
-              }}
-              options={COUNTRIES}
-              error={!!errors.country}
-            />
-          </FormField>
-        </div>
+        <AddressElement
+          options={{
+            mode: 'shipping',
+            allowedCountries: ALLOWED_COUNTRIES,
+            fields: { phone: 'never' },
+            defaultValues: { address: { country: 'BE' } },
+          }}
+        />
       </section>
 
       <Divider />
