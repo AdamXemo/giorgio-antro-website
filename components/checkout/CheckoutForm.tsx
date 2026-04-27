@@ -27,7 +27,8 @@ function Divider() {
 export function CheckoutForm() {
   const stripe = useStripe()
   const elements = useElements()
-  const { form, errors, isSubmitting, submitError, field, handleSubmit } = useCheckoutFlow(stripe, elements)
+  
+  const { errors, isSubmitting, submitError, handleSubmit } = useCheckoutFlow(stripe, elements)
 
   return (
     <form onSubmit={handleSubmit} noValidate className="animate-fade-in">
@@ -39,22 +40,21 @@ export function CheckoutForm() {
           <FormField label="Email address" error={errors.email}>
             <input
               id="field-email"
+              name="email"
               type="email"
               autoComplete="email"
-              value={form.email}
-              onChange={field('email')}
               placeholder="you@example.com"
               className={`${inputBase} ${errors.email ? inputError : ''}`}
             />
           </FormField>
-          <FormField label="Phone number (optional)">
+          <FormField label="Phone number (optional)" error={errors.phone}>
             <input
+              id="field-phone"
+              name="phone"
               type="tel"
               autoComplete="tel"
-              value={form.phone}
-              onChange={field('phone')}
               placeholder="+32 ..."
-              className={inputBase}
+              className={`${inputBase} ${errors.phone ? inputError : ''}`}
             />
           </FormField>
         </div>
@@ -76,7 +76,7 @@ export function CheckoutForm() {
         <PaymentElement options={stripePaymentOptions} />
       </section>
 
-      {/* Error message */}
+      {/* Submission-level errors only — card/validation errors are shown inline by Stripe */}
       {submitError && (
         <div className="mt-6 px-4 py-3 border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/20">
           <p className="text-[13px] text-red-600 dark:text-red-400">{submitError}</p>
