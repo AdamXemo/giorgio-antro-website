@@ -66,10 +66,10 @@ export default function OrderSuccessPage() {
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 mt-10">
           <Link href="/" className="btn-primary flex-1 text-center">
-            CONTINUE SHOPPING
+            <span>CONTINUE SHOPPING</span>
           </Link>
           <Link href="/contact" className="btn-ghost flex-1 text-center">
-            CONTACT US
+            <span>CONTACT US</span>
           </Link>
         </div>
 
