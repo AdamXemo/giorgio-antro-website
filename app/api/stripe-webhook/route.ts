@@ -23,81 +23,74 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
 
-  if (event.type !== 'checkout.session.completed') {
+  if (event.type !== 'payment_intent.succeeded') {
     return NextResponse.json({ received: true })
   }
 
-  const session = event.data.object as Stripe.Checkout.Session
-
-  // Only process paid sessions (could also be 'unpaid' for async methods)
-  if (session.payment_status !== 'paid') {
-    console.log(`[stripe-webhook] Session ${session.id} not yet paid, skipping`)
-    return NextResponse.json({ received: true })
-  }
-
-  const paymentIntentId = typeof session.payment_intent === 'string'
-    ? session.payment_intent
-    : session.payment_intent?.id ?? null
-
-  if (!paymentIntentId) {
-    console.error('[stripe-webhook] No payment_intent on session:', session.id)
-    return NextResponse.json({ error: 'Missing payment intent' }, { status: 400 })
-  }
+  const piEvent = event.data.object as Stripe.PaymentIntent
 
   // Idempotency: skip if we already created this order
-  const existing = await getOrderByStripePaymentIntentId(paymentIntentId)
+  const existing = await getOrderByStripePaymentIntentId(piEvent.id)
   if (existing) {
-    console.log(`[stripe-webhook] Order already exists for PI ${paymentIntentId}, skipping`)
+    console.log(`[stripe-webhook] Order already exists for PI ${piEvent.id}, skipping`)
     return NextResponse.json({ received: true })
   }
 
-  const customer = session.customer_details
-  const shipping = session.collected_information?.shipping_details
+  // Re-retrieve the PI with the charge expanded so we get billing details
+  const pi = await getStripe().paymentIntents.retrieve(piEvent.id, {
+    expand: ['latest_charge'],
+  })
 
-  if (!customer?.name || !customer?.email) {
-    console.error('[stripe-webhook] Missing customer details on session:', session.id)
+  const charge = pi.latest_charge as Stripe.Charge | null
+  const billing = charge?.billing_details
+
+  const customerName = billing?.name ?? pi.shipping?.name ?? null
+  const customerEmail = billing?.email ?? null
+  const customerPhone = billing?.phone ?? pi.shipping?.phone ?? null
+
+  if (!customerName || !customerEmail) {
+    console.error('[stripe-webhook] Missing customer details on PI:', pi.id)
     return NextResponse.json({ error: 'Missing customer details' }, { status: 400 })
   }
 
-  const addr = shipping?.address ?? customer.address
+  const addr = pi.shipping?.address
   if (!addr?.line1 || !addr?.city || !addr?.postal_code || !addr?.country) {
-    console.error('[stripe-webhook] Missing address on session:', session.id)
-    return NextResponse.json({ error: 'Missing address' }, { status: 400 })
+    console.error('[stripe-webhook] Missing shipping address on PI:', pi.id)
+    return NextResponse.json({ error: 'Missing shipping address' }, { status: 400 })
   }
 
-  // Parse items from metadata
   let items: OrderItem[] = []
   try {
-    items = JSON.parse(session.metadata?.items ?? '[]') as OrderItem[]
+    items = JSON.parse(pi.metadata?.items ?? '[]') as OrderItem[]
   } catch {
-    console.error('[stripe-webhook] Failed to parse items metadata for session:', session.id)
+    console.error('[stripe-webhook] Failed to parse items metadata for PI:', pi.id)
     return NextResponse.json({ error: 'Invalid items metadata' }, { status: 400 })
   }
 
-  const subtotal = parseFloat(session.metadata?.subtotal ?? '0')
-  const shippingCost = parseFloat(session.metadata?.shipping ?? '0')
-  const total = parseFloat(session.metadata?.total ?? '0')
+  const subtotal = parseFloat(pi.metadata?.subtotal ?? '0')
+  const shippingCost = parseFloat(pi.metadata?.shipping ?? '0')
+  const total = parseFloat(pi.metadata?.total ?? '0')
 
   const order = await createOrder({
     status: 'paid',
     customerInfo: {
-      name:  customer.name,
-      email: customer.email,
-      phone: customer.phone ?? undefined,
+      name: customerName,
+      email: customerEmail,
+      phone: customerPhone ?? undefined,
       address: {
-        line1:      addr.line1,
-        line2:      addr.line2 ?? undefined,
-        city:       addr.city,
-        state:      addr.state ?? '',
+        line1: addr.line1,
+        line2: addr.line2 ?? undefined,
+        city: addr.city,
+        state: addr.state ?? '',
         postalCode: addr.postal_code,
-        country:    addr.country,
+        country: addr.country,
       },
     },
     items,
     subtotal,
     shipping: shippingCost,
     total,
-    stripePaymentIntentId: paymentIntentId,
+    stripePaymentIntentId: pi.id,
   })
 
   // Fire-and-forget email
@@ -105,6 +98,6 @@ export async function POST(req: NextRequest) {
     console.error('[stripe-webhook] sendOrderConfirmation failed:', err)
   )
 
-  console.log(`[stripe-webhook] Order ${order.orderNumber} created for session ${session.id}`)
+  console.log(`[stripe-webhook] Order ${order.orderNumber} created for PI ${pi.id}`)
   return NextResponse.json({ received: true })
 }
