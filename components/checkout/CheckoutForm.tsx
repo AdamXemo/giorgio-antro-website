@@ -1,42 +1,10 @@
 'use client'
 
-import { useState, useCallback } from 'react'
 import { useStripe, useElements, PaymentElement, AddressElement } from '@stripe/react-stripe-js'
 import { Lock } from 'lucide-react'
 import { FormField } from './FormField'
-
-const ALLOWED_COUNTRIES: string[] = [
-  'BE', 'NL', 'DE', 'FR', 'LU', 'IT', 'ES', 'AT', 'CH', 'GB', 'US', 'CA', 'AU',
-]
-
-interface FormState {
-  email: string
-  phone: string
-}
-
-interface FormErrors {
-  email?: string
-}
-
-function validate(form: FormState): FormErrors {
-  const e: FormErrors = {}
-  if (!form.email.trim()) {
-    e.email = 'Email is required'
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-    e.email = 'Please enter a valid email'
-  }
-  return e
-}
-
-const inputBase =
-  'w-full border rounded-[2px] bg-transparent px-3 py-2 text-[13px] font-sans ' +
-  'text-black dark:text-white ' +
-  'border-[#eaeaea] dark:border-white/10 ' +
-  'placeholder:text-black/20 dark:placeholder:text-white/18 ' +
-  'focus:outline-none focus:border-black dark:focus:border-white ' +
-  'transition-colors duration-150'
-
-const inputError = 'border-red-300 dark:border-red-500/70 focus:border-red-500 dark:focus:border-red-400'
+import { useCheckoutFlow } from './useCheckoutFlow'
+import { inputBase, inputError, stripeAddressOptions, stripePaymentOptions } from './checkout.config'
 
 function SectionLabel({ number, title }: { number: string; title: string }) {
   return (
@@ -59,91 +27,12 @@ function Divider() {
 export function CheckoutForm() {
   const stripe = useStripe()
   const elements = useElements()
-
-  const [form, setForm] = useState<FormState>({ email: '', phone: '' })
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-
-  const field = useCallback(
-    (key: keyof FormState) =>
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm((prev) => ({ ...prev, [key]: e.target.value }))
-        if (errors[key as keyof FormErrors]) {
-          setErrors((prev) => ({ ...prev, [key]: undefined }))
-        }
-      },
-    [errors]
-  )
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!stripe || !elements) return
-
-    const validationErrors = validate(form)
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors)
-      document.getElementById('field-email')?.focus()
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitError(null)
-
-    const addressElement = elements.getElement('address')
-    const addressResult = addressElement ? await addressElement.getValue() : null
-    const name = addressResult?.value?.name ?? ''
-    const addr = addressResult?.value?.address
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/order/success`,
-        payment_method_data: {
-          billing_details: {
-            name,
-            email: form.email.trim(),
-            phone: form.phone.trim() || undefined,
-            address: addr
-              ? {
-                  line1: addr.line1,
-                  line2: addr.line2 || undefined,
-                  city: addr.city,
-                  state: addr.state || undefined,
-                  postal_code: addr.postal_code,
-                  country: addr.country,
-                }
-              : undefined,
-          },
-        },
-        shipping: addr
-          ? {
-              name,
-              phone: form.phone.trim() || undefined,
-              address: {
-                line1: addr.line1,
-                line2: addr.line2 || undefined,
-                city: addr.city,
-                state: addr.state || undefined,
-                postal_code: addr.postal_code,
-                country: addr.country,
-              },
-            }
-          : undefined,
-      },
-    })
-
-    // Only reached if Stripe did NOT redirect (i.e. there was an error)
-    if (error) {
-      setSubmitError(error.message ?? 'Payment failed. Please try again.')
-      setIsSubmitting(false)
-    }
-  }
+  const { form, errors, isSubmitting, submitError, field, handleSubmit } = useCheckoutFlow(stripe, elements)
 
   return (
     <form onSubmit={handleSubmit} noValidate className="animate-fade-in">
 
-      {/* ── 01 CONTACT ─────────────────────────────────── */}
+      {/* 01 CONTACT */}
       <section>
         <SectionLabel number="01" title="Contact" />
         <div className="grid gap-3">
@@ -173,81 +62,28 @@ export function CheckoutForm() {
 
       <Divider />
 
-      {/* ── 02 SHIPPING ────────────────────────────────── */}
+      {/* 02 SHIPPING */}
       <section>
         <SectionLabel number="02" title="Shipping" />
-        <AddressElement
-          options={{
-            mode: 'shipping',
-            allowedCountries: ALLOWED_COUNTRIES,
-            fields: { phone: 'never' },
-            defaultValues: { address: { country: 'BE' } },
-          }}
-        />
+        <AddressElement options={stripeAddressOptions} />
       </section>
 
       <Divider />
 
-      {/* ── 03 PAYMENT ─────────────────────────────────── */}
+      {/* 03 PAYMENT */}
       <section>
         <SectionLabel number="03" title="Payment" />
-        <PaymentElement
-          options={{
-            layout: {
-              type: 'accordion',
-              defaultCollapsed: false,
-              radios: 'if_multiple',
-              spacedAccordionItems: false,
-            },
-            // Digital wallets first — best for mobile UX
-            paymentMethodOrder: [
-              'apple_pay',
-              'google_pay',
-              'paypal',
-              'card',
-              'bancontact',
-              'ideal',
-              'klarna',
-            ],
-            wallets: {
-              applePay: 'auto',
-              googlePay: 'auto',
-              link: 'never',
-            },
-            fields: {
-              billingDetails: {
-                name: 'never',
-                email: 'never',
-                phone: 'auto',
-                address: {
-                  line1: 'never',
-                  line2: 'never',
-                  city: 'never',
-                  state: 'auto',
-                  postalCode: 'never',
-                  country: 'never',
-                },
-              },
-            },
-            terms: {
-              card: 'never',
-              applePay: 'never',
-              googlePay: 'never',
-              paypal: 'never',
-              klarna: 'never',
-            },
-          }}
-        />
+        <PaymentElement options={stripePaymentOptions} />
       </section>
 
-      {/* ── Error message ───────────────────────────────── */}
+      {/* Error message */}
       {submitError && (
         <div className="mt-6 px-4 py-3 border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/20">
           <p className="text-[13px] text-red-600 dark:text-red-400">{submitError}</p>
         </div>
       )}
 
-      {/* ── Submit ──────────────────────────────────────── */}
+      {/* Submit */}
       <div className="mt-8">
         <button
           type="submit"
