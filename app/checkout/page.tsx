@@ -1,117 +1,44 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { Suspense, useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
-import type { Appearance } from '@stripe/stripe-js'
 import { ChevronLeft } from 'lucide-react'
 import { useCart } from '@/components/cart/CartContext'
+import { useTheme } from '@/components/theme/ThemeProvider'
 import { CheckoutForm } from '@/components/checkout/CheckoutForm'
 import { CheckoutOrderSummary } from '@/components/checkout/CheckoutOrderSummary'
+import { buildAppearance } from '@/components/checkout/checkout.config'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
-function buildAppearance(isDark: boolean): Appearance {
-  const border = isDark ? '1px solid rgba(240,240,240,0.10)' : '1px solid #eaeaea'
-  const borderFocus = isDark ? '1px solid rgba(240,240,240,0.80)' : '1px solid #000000'
-  const borderSelected = isDark ? '1px solid rgba(240,240,240,0.7)' : '1px solid #000000'
-  const textMuted = isDark ? 'rgba(240,240,240,0.4)' : 'rgba(0,0,0,0.4)'
-  const placeholder = isDark ? 'rgba(240,240,240,0.18)' : 'rgba(0,0,0,0.20)'
-
-  return {
-    theme: 'stripe',
-    variables: {
-      colorPrimary: isDark ? '#f0f0f0' : '#000000',
-      colorBackground: isDark ? '#0f0f0f' : '#ffffff',
-      colorText: isDark ? '#f0f0f0' : '#000000',
-      colorTextSecondary: textMuted,
-      colorTextPlaceholder: placeholder,
-      colorDanger: isDark ? '#f87171' : '#dc2626',
-      fontFamily: '"Inter", system-ui, sans-serif',
-      borderRadius: '2px',
-      spacingUnit: '3px',
-      fontSizeBase: '13px',
-    },
-    rules: {
-      '.Input': {
-        border,
-        padding: '8px 12px',
-        fontSize: '13px',
-        backgroundColor: 'transparent',
-        boxShadow: 'none',
-        outline: 'none',
-        transition: 'border-color 0.15s ease',
-      },
-      '.Input:focus': {
-        border: borderFocus,
-        boxShadow: 'none',
-        outline: 'none',
-      },
-      '.Input--invalid': {
-        border: isDark ? '1px solid #f87171' : '1px solid #dc2626',
-        boxShadow: 'none',
-      },
-      '.Label': {
-        fontSize: '10px',
-        letterSpacing: '0.2em',
-        textTransform: 'uppercase',
-        color: textMuted,
-        marginBottom: '6px',
-      },
-      '.Error': {
-        fontSize: '11px',
-        letterSpacing: '0.05em',
-        marginTop: '4px',
-      },
-      '.Block': {
-        border,
-        boxShadow: 'none',
-        backgroundColor: 'transparent',
-        borderRadius: '2px',
-      },
-      '.AccordionItem:first-child': { borderTop: border },
-      '.RadioInput': {
-        border,
-        backgroundColor: 'transparent',
-        boxShadow: 'none',
-      },
-      '.RadioInput--checked': {
-        backgroundColor: isDark ? '#f0f0f0' : '#000000',
-        border: isDark ? '1px solid #f0f0f0' : '1px solid #000000',
-      },
-      '.PickerItem': {
-        border: 'none',
-        boxShadow: 'none',
-        backgroundColor: 'transparent',
-      },
-      '.PickerItem--selected': {
-        border: 'none',
-        backgroundColor: isDark ? 'rgba(240,240,240,0.04)' : 'rgba(0,0,0,0.03)',
-        boxShadow: 'none',
-      },
-    },
-  }
-}
-
-export default function CheckoutPage() {
+function CheckoutContent() {
   const router = useRouter()
   const { cart, cartTotal } = useCart()
+  const { theme } = useTheme()
 
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [initError, setInitError] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
-  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional SSR guard: forces re-render after CartProvider hydrates from localStorage
     setMounted(true)
-    setIsDark(document.documentElement.classList.contains('dark'))
   }, [])
+
+  const isDark = theme === 'dark'
+
+  // Stable string that changes only when cart contents actually change
+  const cartKey = useMemo(
+    () => cart.map((i) => `${i.id}:${i.size}:${i.quantity}`).join(','),
+    [cart]
+  )
 
   useEffect(() => {
     if (!mounted) return
-    if (cart.length === 0) {
+    if (!cartKey) {
       router.replace('/cart')
       return
     }
@@ -127,7 +54,7 @@ export default function CheckoutPage() {
         else setInitError(data.error ?? 'Failed to initialize checkout.')
       })
       .catch(() => setInitError('Failed to initialize checkout. Please try again.'))
-  }, [mounted]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mounted, cartKey, router]) // eslint-disable-line react-hooks/exhaustive-deps -- `cart` intentionally omitted; `cartKey` captures its identity
 
   const shipping = cartTotal >= 100 ? 0 : 10
   const total = cartTotal + shipping
@@ -216,5 +143,21 @@ export default function CheckoutPage() {
       )}
 
     </div>
+  )
+}
+
+function CheckoutFallback() {
+  return (
+    <div className="min-h-screen pt-[73px] flex items-center justify-center">
+      <div className="w-5 h-5 border border-black dark:border-white border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<CheckoutFallback />}>
+      <CheckoutContent />
+    </Suspense>
   )
 }
