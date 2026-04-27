@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
-import { CheckCircle, Package, Mail } from 'lucide-react'
+import { Package, Mail } from 'lucide-react'
 import { useCart } from '@/components/cart/CartContext'
 
 export default function OrderSuccessPage() {
@@ -17,11 +17,21 @@ export default function OrderSuccessPage() {
     <div className="pt-[73px]">
       <div className="max-w-sm mx-auto px-6 pt-12 pb-24 text-center">
 
-        {/* Check icon */}
+        {/* Check icon — circle fades in, checkmark draws itself after a short delay */}
         <div className="flex items-center justify-center mb-10 animate-reveal-fade">
-          <div className="w-12 h-12 rounded-full border border-black/12 dark:border-white/12 flex items-center justify-center">
-            <CheckCircle size={18} strokeWidth={1} className="text-black/40 dark:text-white/40" />
-          </div>
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle
+              cx="24" cy="24" r="22"
+              stroke="currentColor" strokeWidth="0.75"
+              className="text-black/12 dark:text-white/12"
+            />
+            <path
+              d="M 15 24 L 21 30 L 33 18"
+              stroke="currentColor" strokeWidth="1"
+              strokeLinecap="round" strokeLinejoin="round"
+              className="text-black/40 dark:text-white/40 animate-draw-check animate-delay-300"
+            />
+          </svg>
         </div>
 
         <p className="text-[9px] tracking-[0.35em] text-black/28 dark:text-white/28 mb-4 animate-reveal-fade animate-delay-100">ORDER CONFIRMED</p>

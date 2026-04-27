@@ -109,6 +109,12 @@ body {
   to   { transform: scaleX(1); }
 }
 
+/* Checkmark stroke draw-in */
+@keyframes drawCheck {
+  from { stroke-dashoffset: 26; opacity: 0; }
+  to   { stroke-dashoffset: 0;  opacity: 1; }
+}
+
 @keyframes scrollReveal {
   from {
     opacity: 0;
@@ -161,6 +167,12 @@ body {
 .animate-draw-line {
   transform-origin: left center;
   animation: drawLine 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-draw-check {
+  stroke-dasharray: 26;
+  stroke-dashoffset: 26;
+  animation: drawCheck 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .sr-hidden {
@@ -247,9 +259,15 @@ body {
   .animate-char-reveal,
   .animate-ken-burns,
   .animate-draw-line,
+  .animate-draw-check,
   .animate-scroll-reveal,
   .animate-scroll-reveal-mobile {
     animation: none !important;
+  }
+
+  .animate-draw-check {
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
   }
 
   .animate-marquee {
