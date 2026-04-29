@@ -24,7 +24,7 @@ export async function sendOrderConfirmation(order: Order): Promise<boolean> {
         <td style="padding:8px 0;border-bottom:1px solid #f0f0f0">${item.productName}</td>
         <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:center">${item.size}</td>
         <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:center">${item.quantity}</td>
-        <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:right">$${(item.price * item.quantity).toFixed(2)}</td>
+        <td style="padding:8px 0;border-bottom:1px solid #f0f0f0;text-align:right">€${(item.price * item.quantity).toFixed(2)}</td>
       </tr>`
     )
     .join('')
@@ -60,9 +60,9 @@ export async function sendOrderConfirmation(order: Order): Promise<boolean> {
           <tbody>${itemRows}</tbody>
         </table>
         <div style="margin-top:16px;text-align:right;font-size:14px">
-          <p style="margin:4px 0">Subtotal: $${order.subtotal.toFixed(2)}</p>
-          <p style="margin:4px 0">Shipping: ${order.shipping === 0 ? 'FREE' : `$${order.shipping.toFixed(2)}`}</p>
-          <p style="margin:8px 0;font-weight:bold;font-size:16px">Total: $${order.total.toFixed(2)}</p>
+          <p style="margin:4px 0">Subtotal: €${order.subtotal.toFixed(2)}</p>
+          <p style="margin:4px 0">Shipping: ${order.shipping === 0 ? 'FREE' : `€${order.shipping.toFixed(2)}`}</p>
+          <p style="margin:8px 0;font-weight:bold;font-size:16px">Total: €${order.total.toFixed(2)}</p>
         </div>
       </div>
 
