@@ -9,14 +9,11 @@ export interface Product {
   inStock: boolean
   features: string[]
   shippingInfo: string
-  /** Must match the product handle (slug) in your Shopify store. */
-  shopifyHandle: string
 }
 
 // Main product - ANTRO Classic Hoodie
 export const mainProduct: Product = {
   id: 'antro-classic-hoodie',
-  shopifyHandle: 'sailor-hooded-zip-jacket',
   name: 'ANTRO Classic Hoodie',
   price: 120,
   description:
