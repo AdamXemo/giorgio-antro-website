@@ -1,17 +1,62 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Package, Mail } from 'lucide-react'
+import { Package, Mail, AlertCircle } from 'lucide-react'
 import { useCart } from '@/components/cart/CartContext'
 
-export default function OrderSuccessPage() {
+function OrderSuccessContent() {
   const { clearCart } = useCart()
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  const paymentIntent = searchParams.get('payment_intent')
+  const redirectStatus = searchParams.get('redirect_status')
 
   useEffect(() => {
-    // Clear the cart whenever a completed session lands here
-    clearCart()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    if (!paymentIntent) {
+      router.replace('/')
+      return
+    }
+    if (redirectStatus === 'succeeded') {
+      clearCart()
+    }
+  }, [paymentIntent, redirectStatus]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!paymentIntent) return null
+
+  if (redirectStatus === 'failed' || redirectStatus === 'requires_action') {
+    return (
+      <div className="pt-[73px] min-h-screen flex flex-col">
+        <div className="flex-1 flex items-center justify-center">
+        <div className="max-w-sm w-full px-6 py-12 text-center">
+          <div className="flex items-center justify-center mb-10 animate-reveal-fade">
+            <AlertCircle size={48} strokeWidth={0.75} className="text-black/30 dark:text-white/30" />
+          </div>
+          <p className="text-[9px] tracking-[0.35em] text-black/28 dark:text-white/28 mb-4 animate-reveal-fade animate-delay-100">PAYMENT {redirectStatus === 'failed' ? 'FAILED' : 'INCOMPLETE'}</p>
+          <h1 className="font-display font-light text-4xl md:text-5xl leading-[1.1] mb-5 animate-reveal-up animate-delay-200">
+            {redirectStatus === 'failed' ? 'Payment could not be processed.' : 'Additional action required.'}
+          </h1>
+          <div className="w-6 h-px bg-black/18 dark:bg-white/18 mx-auto mb-5 animate-reveal-fade animate-delay-300" />
+          <p className="text-sm text-black/40 dark:text-white/40 leading-relaxed animate-reveal-fade animate-delay-300">
+            {redirectStatus === 'failed'
+              ? 'Your card was declined. Please try again with a different payment method.'
+              : 'Your payment requires additional verification. Please return and complete the process.'}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 mt-10 animate-reveal-fade animate-delay-400">
+            <Link href="/checkout" className="btn-primary flex-1 text-center">
+              <span>TRY AGAIN</span>
+            </Link>
+            <Link href="/contact" className="btn-ghost flex-1 text-center">
+              <span>CONTACT US</span>
+            </Link>
+          </div>
+        </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="pt-[73px]">
@@ -85,5 +130,13 @@ export default function OrderSuccessPage() {
 
       </div>
     </div>
+  )
+}
+
+export default function OrderSuccessPage() {
+  return (
+    <Suspense>
+      <OrderSuccessContent />
+    </Suspense>
   )
 }
