@@ -286,7 +286,7 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply relative overflow-hidden inline-block bg-black text-white text-[10px]
+    @apply relative overflow-hidden inline-flex items-center justify-center bg-black text-white text-[10px]
            tracking-[0.25em] py-4 px-10 border border-black transition-colors duration-300;
   }
 
@@ -321,7 +321,7 @@ body {
   }
 
   .btn-ghost {
-    @apply relative overflow-hidden inline-block bg-white text-black text-[10px]
+    @apply relative overflow-hidden inline-flex items-center justify-center bg-white text-black text-[10px]
            tracking-[0.25em] py-4 px-10 border border-black transition-colors duration-300;
   }
 
