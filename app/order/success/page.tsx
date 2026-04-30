@@ -28,8 +28,9 @@ function OrderSuccessContent() {
 
   if (redirectStatus === 'failed' || redirectStatus === 'requires_action') {
     return (
-      <div className="pt-[73px]">
-        <div className="max-w-sm mx-auto px-6 pt-12 pb-24 text-center">
+      <div className="pt-[73px] min-h-screen flex flex-col">
+        <div className="flex-1 flex items-center justify-center">
+        <div className="max-w-sm w-full px-6 py-12 text-center">
           <div className="flex items-center justify-center mb-10 animate-reveal-fade">
             <AlertCircle size={48} strokeWidth={0.75} className="text-black/30 dark:text-white/30" />
           </div>
@@ -51,6 +52,7 @@ function OrderSuccessContent() {
               <span>CONTACT US</span>
             </Link>
           </div>
+        </div>
         </div>
       </div>
     )
