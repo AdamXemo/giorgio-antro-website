@@ -72,21 +72,23 @@ export default function ProductInfo({ product, addedToCart, onAddToCart, onOpenD
           onClick={onAddToCart}
           disabled={!product.inStock || addedToCart}
           className={[
-            'w-full py-4 text-[10px] tracking-[0.28em] flex items-center justify-center gap-3 transition-colors duration-300',
+            'w-full tracking-[0.28em]',
             addedToCart ? 'animate-btn-confirm' : '',
             !product.inStock
-              ? 'bg-black/10 text-black/25 dark:bg-white/10 dark:text-white/25 cursor-not-allowed'
-              : 'bg-black text-white dark:bg-white dark:text-black',
+              ? 'py-4 flex items-center justify-center text-[10px] bg-black/10 text-black/25 dark:bg-white/10 dark:text-white/25 cursor-not-allowed'
+              : 'btn-primary !px-0',
           ].join(' ')}
         >
-          {addedToCart ? (
-            <>
-              <Check size={13} strokeWidth={2} />
-              ADDED TO CART
-            </>
-          ) : (
-            product.inStock ? `ADD TO CART — €${product.price.toFixed(2)}` : 'OUT OF STOCK'
-          )}
+          <span className="relative z-10 flex items-center gap-3">
+            {addedToCart ? (
+              <>
+                <Check size={13} strokeWidth={2} />
+                ADDED TO CART
+              </>
+            ) : (
+              product.inStock ? `ADD TO CART — €${product.price.toFixed(2)}` : 'OUT OF STOCK'
+            )}
+          </span>
         </button>
       </div>
 
