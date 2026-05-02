@@ -24,36 +24,50 @@ export default function SideDrawer({ isOpen, onClose, title, children }: SideDra
   }, [])
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-hidden={!isOpen}
-      aria-label={title}
-      className={[
-        'fixed top-[69px] right-0 w-1/2 h-[calc(100vh-69px)]',
-        'bg-[var(--background)] border-l border-black/[0.08] dark:border-white/[0.08]',
-        'z-40 overflow-y-auto',
-        'transition-transform duration-500',
-        isOpen ? 'translate-x-0' : 'translate-x-full',
-      ].join(' ')}
-      style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
-    >
-      <div className="px-12 xl:px-16 py-12">
+    <>
+      {/* Backdrop — dims the left panel while the drawer is open */}
+      <div
+        aria-hidden="true"
+        onClick={onClose}
+        className={[
+          'fixed inset-0',
+          'bg-black/60 dark:bg-black/70',
+          'z-[140] transition-opacity duration-500',
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
+        ].join(' ')}
+      />
+
+      {/* Drawer panel */}
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!isOpen}
+        aria-label={title}
+        className={[
+          'fixed top-0 right-0 w-1/2 h-screen',
+          'bg-[var(--background)] border-l border-black/[0.08] dark:border-white/[0.08]',
+          'z-[150] overflow-y-auto',
+          'transition-transform duration-500',
+          isOpen ? 'translate-x-0' : 'translate-x-full',
+        ].join(' ')}
+        style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+      >
+        {/* Close — top-right corner X */}
         <button
           onClick={onClose}
           aria-label="Close"
-          className="flex items-center gap-3 mb-14 text-[9px] tracking-[0.2em] text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors duration-200"
+          className="absolute top-5 right-6 p-1 text-black dark:text-white hover:opacity-60 transition-opacity duration-200"
         >
-          <X size={14} strokeWidth={1.5} />
-          CLOSE
+          <X size={26} strokeWidth={1.25} />
         </button>
 
-        {title && (
-          <p className="text-[10px] tracking-[0.25em] mb-8">{title}</p>
-        )}
-
-        {children}
+        <div className="px-20 xl:px-28 pt-[117px] pb-12">
+          {title && (
+            <p className="text-[9px] tracking-[0.25em] mb-8">{title}</p>
+          )}
+          {children}
+        </div>
       </div>
-    </div>
+    </>
   )
 }

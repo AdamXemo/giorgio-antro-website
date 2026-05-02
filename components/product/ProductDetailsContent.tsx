@@ -12,7 +12,7 @@ export default function ProductDetailsContent({ type, product, variant }: Produc
   if (type === 'details') {
     return variant === 'drawer' ? (
       <>
-        <p className="font-body text-sm text-black/55 dark:text-white/55 leading-loose mb-10">
+        <p className="font-body text-[13px] text-black/55 dark:text-white/55 leading-loose mb-10">
           {product.description}
         </p>
         <div className="border-t border-black/[0.07] dark:border-white/[0.07]">
@@ -24,7 +24,7 @@ export default function ProductDetailsContent({ type, product, variant }: Produc
               <span className="text-[10px] text-black/25 dark:text-white/25 tabular-nums w-5 flex-shrink-0">
                 {String(idx + 1).padStart(2, '0')}
               </span>
-              <span className="text-sm text-black/65 dark:text-white/65">{feature}</span>
+              <span className="text-[13px] text-black/65 dark:text-white/65">{feature}</span>
             </div>
           ))}
         </div>
@@ -52,12 +52,12 @@ export default function ProductDetailsContent({ type, product, variant }: Produc
   // type === 'shipping'
   return variant === 'drawer' ? (
     <>
-      <p className="text-sm text-black/55 dark:text-white/55 leading-loose mb-10">
+      <p className="text-[13px] text-black/55 dark:text-white/55 leading-loose mb-10">
         {product.shippingInfo}
       </p>
       <div className="pt-8 border-t border-black/[0.07] dark:border-white/[0.07]">
-        <p className="text-[10px] tracking-[0.25em] mb-5">RETURNS</p>
-        <p className="text-sm text-black/55 dark:text-white/55 leading-loose">
+        <p className="text-[9px] tracking-[0.25em] mb-5">RETURNS</p>
+        <p className="text-[13px] text-black/55 dark:text-white/55 leading-loose">
           We accept returns within 14 days of delivery. Items must be unworn, in original packaging,
           and accompanied by proof of purchase. Contact us to initiate your return.
         </p>
