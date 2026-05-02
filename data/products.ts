@@ -19,12 +19,10 @@ export const mainProduct: Product = {
   description:
     'A modern adaptation of the zip hoodie — the ANTRO Classic is crafted from 100% cotton with a fluid, relaxed unisex silhouette. The hood is one large integrated pattern piece, creating a clean architectural line. Lightweight yet structured, waterproof and wrinkle resistant. A versatile designer piece that reflects understated luxury and contemporary elegance.',
   images: [
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
+    '/g_antro_hoodie.png',
+    '/g_antro_hoodie.png',
+    '/g_antro_hoodie.png',
+    '/g_antro_hoodie.png',
   ],
   sizes: ['ONE SIZE'],
   category: 'Coats & Jackets',

@@ -374,6 +374,12 @@ body {
   .underline-reveal:hover::after {
     width: 100%;
   }
+
+  /* Trigger underline-reveal on a child span when the parent button is hovered */
+  button:hover > .underline-reveal::after,
+  a:hover > .underline-reveal::after {
+    width: 100%;
+  }
 }
 
 /* ─── Add-to-cart confirmation pulse ──────────────────── */
@@ -431,6 +437,16 @@ html.dark .input-field-wrapper::after {
 
 .input-field-wrapper:focus-within::after {
   width: 100%;
+}
+
+/* ─── Product image: studio-style gradient background ─────── */
+
+.studio-bg {
+  background: radial-gradient(ellipse at 50% 38%, #f2f2f2 0%, #e6e6e6 55%, #dcdcdc 100%);
+}
+
+html.dark .studio-bg {
+  background: radial-gradient(ellipse at 50% 38%, #2c2c2c 0%, #1e1e1e 55%, #141414 100%);
 }
 
 /* ─── Image skeleton ───────────────────────────────────── */

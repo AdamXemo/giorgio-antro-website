@@ -23,7 +23,7 @@ export default function ProductImageSlider({ images, productName }: ProductImage
   return (
     <div>
       <div
-        className="relative aspect-[3/4] overflow-hidden bg-white dark:bg-[#151515] select-none"
+        className="relative aspect-[3/4] overflow-hidden studio-bg select-none"
         {...touchHandlers}
       >
         <div
