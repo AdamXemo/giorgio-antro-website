@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { COLLAPSED_PEEK } from '@/hooks/useMobileBottomSheet'
 
@@ -17,12 +17,14 @@ export default function MobileProductHero({ images, productName }: MobileProduct
   const [touchStartY, setTouchStartY] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState(0)
+  const touchStartTime = useRef<number | null>(null)
 
   const prev = useCallback(() => setSelectedImage(i => Math.max(0, i - 1)), [])
   const next = useCallback(() => setSelectedImage(i => Math.min(total - 1, i + 1)), [total])
 
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchStartY(e.touches[0].clientY)
+    touchStartTime.current = Date.now()
     setIsDragging(true)
   }
 
@@ -34,8 +36,11 @@ export default function MobileProductHero({ images, productName }: MobileProduct
   const onTouchEnd = (e: React.TouchEvent) => {
     if (touchStartY === null) return
     const delta = touchStartY - e.changedTouches[0].clientY
-    if (Math.abs(delta) > 48) delta > 0 ? next() : prev()
+    const elapsed = touchStartTime.current !== null ? Date.now() - touchStartTime.current : Infinity
+    const velocity = Math.abs(delta) / elapsed
+    if (Math.abs(delta) > 48 || velocity > 0.5) delta > 0 ? next() : prev()
     setTouchStartY(null)
+    touchStartTime.current = null
     setIsDragging(false)
     setDragOffset(0)
   }
