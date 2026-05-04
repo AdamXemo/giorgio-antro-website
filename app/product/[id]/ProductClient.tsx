@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useCart } from '@/components/cart/CartContext'
@@ -23,6 +23,22 @@ export default function ProductClient({ product }: { product: Product }) {
   const { addToCart } = useCart()
   const [addedToCart, setAddedToCart] = useState(false)
   const [activeDrawer, setActiveDrawer] = useState<DrawerType | null>(null)
+  const [activeDesktopImage, setActiveDesktopImage] = useState(0)
+  const imageRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  useEffect(() => {
+    if (product.images.length < 2) return
+    const observers = imageRefs.current.map((el, index) => {
+      if (!el) return null
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveDesktopImage(index) },
+        { threshold: 0.5 },
+      )
+      obs.observe(el)
+      return obs
+    })
+    return () => observers.forEach(obs => obs?.disconnect())
+  }, [product.images.length])
 
   const handleAddToCart = () => {
     addToCart({
@@ -52,6 +68,7 @@ export default function ProductClient({ product }: { product: Product }) {
           {product.images.map((image, index) => (
             <div
               key={index}
+              ref={el => { imageRefs.current[index] = el }}
               className="relative w-full h-[calc(100vh-69px)] studio-bg"
             >
               <Image
@@ -64,6 +81,25 @@ export default function ProductClient({ product }: { product: Product }) {
               />
             </div>
           ))}
+
+          {/* Dot indicators — mirrors mobile, only shown when multiple images */}
+          {product.images.length > 1 && (
+            <div className="fixed left-4 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5">
+              {product.images.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => imageRefs.current[index]?.scrollIntoView({ behavior: 'smooth' })}
+                  aria-label={`View image ${index + 1}`}
+                  className={`rounded-full transition-all duration-300 ${
+                    index === activeDesktopImage
+                      ? 'w-2 h-2 bg-black dark:bg-white'
+                      : 'w-1.5 h-1.5 bg-black/25 dark:bg-white/25'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Right: sticky product info + slide-in drawer */}
