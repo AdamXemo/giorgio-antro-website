@@ -1,4 +1,6 @@
-import { useState, useRef, useLayoutEffect, useCallback } from 'react'
+import { useState, useRef, useLayoutEffect, useEffect, useCallback } from 'react'
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 export const COLLAPSED_PEEK = 165
 
@@ -11,7 +13,7 @@ export function useMobileBottomSheet() {
   const touchStartY = useRef<number | null>(null)
   const dragStartExpanded = useRef(false)
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (sheetRef.current) {
       setCollapsedY(sheetRef.current.offsetHeight - COLLAPSED_PEEK)
     }
