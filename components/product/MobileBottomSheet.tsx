@@ -31,27 +31,27 @@ export default function MobileBottomSheet({ product, addedToCart, onAddToCart }:
         transition: isDragging ? 'none' : 'transform 350ms cubic-bezier(0.32, 0.72, 0, 1)',
       }}
     >
-      {/* Drag handle — tap or drag to expand/collapse */}
+      {/* Drag area — handle pill + title + price, full-width for easy swiping */}
       <div
-        className="flex-none flex justify-center pt-3 pb-3 cursor-grab active:cursor-grabbing touch-none"
+        className="flex-none px-6 pt-3 pb-4 cursor-grab active:cursor-grabbing touch-none select-none"
         onClick={toggle}
         {...dragHandlers}
       >
-        <div className="w-10 h-[3px] rounded-full bg-black/[0.12] dark:bg-white/[0.12]" />
-      </div>
-
-      {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-6 pb-10">
-
-        {/* ── Always visible in collapsed state ── */}
+        <div className="flex justify-center mb-3">
+          <div className="w-10 h-[3px] rounded-full bg-black/[0.12] dark:bg-white/[0.12]" />
+        </div>
         <h1 className="font-display font-light text-xl leading-tight tracking-tight">
           {product.name}
         </h1>
         <p className="text-sm font-light tabular-nums mt-1 text-black/60 dark:text-white/60">
           €{product.price.toFixed(2)}
         </p>
+      </div>
 
-        <div className="mt-4">
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto px-6 pb-10">
+
+        <div className="mt-0">
           <button
             onClick={onAddToCart}
             disabled={!product.inStock || addedToCart}
