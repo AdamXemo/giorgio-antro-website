@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useCart } from '@/components/cart/CartContext'
@@ -10,6 +10,8 @@ import ProductImageSlider from '@/components/product/ProductImageSlider'
 import ProductInfo, { type DrawerType } from '@/components/product/ProductInfo'
 import SideDrawer from '@/components/ui/SideDrawer'
 import ProductDetailsContent from '@/components/product/ProductDetailsContent'
+import MobileProductHero from '@/components/product/MobileProductHero'
+import MobileBottomSheet from '@/components/product/MobileBottomSheet'
 
 const DRAWER_TITLES: Record<DrawerType, string> = {
   details: 'PRODUCT DETAILS',
@@ -21,6 +23,14 @@ export default function ProductClient({ product }: { product: Product }) {
   const { addToCart } = useCart()
   const [addedToCart, setAddedToCart] = useState(false)
   const [activeDrawer, setActiveDrawer] = useState<DrawerType | null>(null)
+
+  useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 1023px)').matches
+    if (!isMobile) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [])
 
   const handleAddToCart = () => {
     addToCart({
@@ -95,16 +105,14 @@ export default function ProductClient({ product }: { product: Product }) {
         </div>
       </div>
 
-      {/* ── Mobile: single column ───────────────────────────────────── */}
-      <div className="lg:hidden px-6 pt-8 pb-24">
-        <ProductImageSlider images={product.images} productName={product.name} />
-        <div className="mt-10">
-          <ProductInfo
-            product={product}
-            addedToCart={addedToCart}
-            onAddToCart={handleAddToCart}
-          />
-        </div>
+      {/* ── Mobile: full-bleed hero + floating bottom sheet ─────────── */}
+      <div className="lg:hidden relative h-[calc(100dvh-69px)] overflow-hidden">
+        <MobileProductHero images={product.images} productName={product.name} />
+        <MobileBottomSheet
+          product={product}
+          addedToCart={addedToCart}
+          onAddToCart={handleAddToCart}
+        />
       </div>
 
     </div>
