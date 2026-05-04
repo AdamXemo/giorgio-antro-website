@@ -37,6 +37,23 @@ export function useMobileBottomSheet() {
 
   const onTouchMove = useCallback((e: React.TouchEvent) => {
     if (touchStartY.current === null) return
+
+    // Walk up from the touch target to the sheet boundary. If any ancestor is a
+    // scrollable container with content already scrolled, yield to native scroll.
+    const sheet = sheetRef.current
+    if (sheet) {
+      let node: HTMLElement | null = e.target as HTMLElement
+      while (node && node !== sheet) {
+        if (node.scrollHeight > node.clientHeight && node.scrollTop > 0) {
+          touchStartY.current = null
+          setIsDragging(false)
+          setDragY(0)
+          return
+        }
+        node = node.parentElement
+      }
+    }
+
     setDragY(e.touches[0].clientY - touchStartY.current)
   }, [])
 
