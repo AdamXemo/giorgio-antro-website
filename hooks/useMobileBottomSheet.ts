@@ -9,6 +9,7 @@ export function useMobileBottomSheet() {
   const [dragY, setDragY] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const touchStartY = useRef<number | null>(null)
+  const touchStartTime = useRef<number | null>(null)
   const dragStartExpanded = useRef(false)
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export function useMobileBottomSheet() {
   const onTouchStart = useCallback(
     (e: React.TouchEvent) => {
       touchStartY.current = e.touches[0].clientY
+      touchStartTime.current = Date.now()
       dragStartExpanded.current = isExpanded
       setIsDragging(true)
     },
@@ -61,15 +63,20 @@ export function useMobileBottomSheet() {
     (e: React.TouchEvent) => {
       if (touchStartY.current === null) return
       const delta = e.changedTouches[0].clientY - touchStartY.current
+      const elapsed = touchStartTime.current !== null ? Date.now() - touchStartTime.current : Infinity
+      const velocity = delta / elapsed  // px/ms, positive = downward
       const threshold = collapsedY * 0.3
 
       if (dragStartExpanded.current) {
-        setIsExpanded(delta <= threshold)
+        const fastFlickDown = velocity > 0.3 && delta > 0
+        setIsExpanded(!fastFlickDown && delta <= threshold)
       } else {
-        setIsExpanded(delta < -threshold)
+        const fastFlickUp = velocity < -0.3 && delta < 0
+        setIsExpanded(fastFlickUp || delta < -threshold)
       }
 
       touchStartY.current = null
+      touchStartTime.current = null
       setIsDragging(false)
       setDragY(0)
     },
