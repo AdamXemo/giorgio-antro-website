@@ -48,38 +48,39 @@ export default function MobileBottomSheet({ product, addedToCart, onAddToCart }:
         </p>
       </div>
 
+      {/* Sticky Add to Cart — pinned below the drag area, never scrolls away */}
+      <div className="flex-none px-6 pb-4">
+        <button
+          onClick={onAddToCart}
+          disabled={!product.inStock || addedToCart}
+          className={[
+            'w-full tracking-[0.28em]',
+            addedToCart ? 'animate-btn-confirm' : '',
+            !product.inStock
+              ? 'py-4 flex items-center justify-center text-[10px] bg-black/10 text-black/25 dark:bg-white/10 dark:text-white/25 cursor-not-allowed'
+              : 'btn-primary !px-0',
+          ].join(' ')}
+        >
+          <span className="relative z-10 flex items-center justify-center gap-3">
+            {addedToCart ? (
+              <>
+                <Check size={13} strokeWidth={2} />
+                ADDED TO CART
+              </>
+            ) : product.inStock ? (
+              `ADD TO CART — €${product.price.toFixed(2)}`
+            ) : (
+              'OUT OF STOCK'
+            )}
+          </span>
+        </button>
+      </div>
+
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto px-6 pb-10">
 
-        <div className="mt-0">
-          <button
-            onClick={onAddToCart}
-            disabled={!product.inStock || addedToCart}
-            className={[
-              'w-full tracking-[0.28em]',
-              addedToCart ? 'animate-btn-confirm' : '',
-              !product.inStock
-                ? 'py-4 flex items-center justify-center text-[10px] bg-black/10 text-black/25 dark:bg-white/10 dark:text-white/25 cursor-not-allowed'
-                : 'btn-primary !px-0',
-            ].join(' ')}
-          >
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              {addedToCart ? (
-                <>
-                  <Check size={13} strokeWidth={2} />
-                  ADDED TO CART
-                </>
-              ) : product.inStock ? (
-                `ADD TO CART — €${product.price.toFixed(2)}`
-              ) : (
-                'OUT OF STOCK'
-              )}
-            </span>
-          </button>
-        </div>
-
         {/* ── Expanded content — naturally below the collapsed fold ── */}
-        <div className="mt-7 pt-6 border-t border-black/[0.07] dark:border-white/[0.07]">
+        <div className="pt-6 border-t border-black/[0.07] dark:border-white/[0.07]">
 
           {/* Color */}
           <div>
