@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useCart } from '@/components/cart/CartContext'
@@ -23,14 +23,6 @@ export default function ProductClient({ product }: { product: Product }) {
   const { addToCart } = useCart()
   const [addedToCart, setAddedToCart] = useState(false)
   const [activeDrawer, setActiveDrawer] = useState<DrawerType | null>(null)
-
-  useEffect(() => {
-    const isMobile = window.matchMedia('(max-width: 1023px)').matches
-    if (!isMobile) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = prev }
-  }, [])
 
   const handleAddToCart = () => {
     addToCart({
