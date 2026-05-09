@@ -76,7 +76,7 @@ export default function ProductClient({ product }: { product: Product }) {
                 alt={`${product.name} — view ${index + 1}`}
                 fill
                 sizes="50vw"
-                className="object-contain object-center"
+                className="object-cover object-center"
                 priority={index === 0}
               />
             </div>
