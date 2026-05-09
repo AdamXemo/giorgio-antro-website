@@ -4,6 +4,7 @@ export interface Product {
   price: number
   description: string
   images: string[]
+  desktopImages?: string[]
   sizes: string[]
   category: string
   inStock: boolean
@@ -14,17 +15,28 @@ export interface Product {
 // Main product - ANTRO Classic Hoodie
 export const mainProduct: Product = {
   id: 'antro-classic-hoodie',
-  name: 'ANTRO Classic Hoodie',
+  name: 'Sailor Hooded Jacket',
   price: 120,
   description:
-    'A modern adaptation of the zip hoodie — the ANTRO Classic is crafted from 100% cotton with a fluid, relaxed unisex silhouette. The hood is one large integrated pattern piece, creating a clean architectural line. Lightweight yet structured, waterproof and wrinkle resistant. A versatile designer piece that reflects understated luxury and contemporary elegance.',
+    'The Sailor Hooded Jacket is a modern adaptation of a zip hoodie. This jacket features a unique cut that can be styled in various ways. The hood itself is one large pattern piece that is integrated into the jacket. The garment is crafted from 100% cotton, designed with a fluid and relaxed unisex silhouette. It is a versatile designer piece that reflects understated luxury and contemporary elegance.',
   images: [
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
+    '/SG-59.jpg',
+    '/SG-56.jpg',
+    '/SG-53.jpg',
+    '/SG-48.jpg',
+    '/SG-45.jpg',
+    '/SG-43.jpg',
+    '/SG-42.jpg',
+    '/SG-39.jpg',
+    '/SG-36.jpg',
+    '/SG-33.jpg',
+  ],
+  desktopImages: [
+    '/IMG_8258.JPG',
+    '/IMG_8258.JPG',
+    '/IMG_8258.JPG',
+    '/IMG_8258.JPG',
+    '/IMG_8258.JPG',
   ],
   sizes: ['ONE SIZE'],
   category: 'Coats & Jackets',

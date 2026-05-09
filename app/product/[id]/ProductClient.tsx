@@ -1,44 +1,55 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Check } from 'lucide-react'
 import { toast } from 'sonner'
 import { useCart } from '@/components/cart/CartContext'
 import type { Product } from '@/data/products'
+import Image from 'next/image'
 import ProductImageSlider from '@/components/product/ProductImageSlider'
-import QuantitySelector from '@/components/ui/QuantitySelector'
-import TrustIndicators from '@/components/product/TrustIndicators'
-import FeaturesList from '@/components/product/FeaturesList'
+import ProductInfo, { type DrawerType } from '@/components/product/ProductInfo'
+import SideDrawer from '@/components/ui/SideDrawer'
+import ProductDetailsContent from '@/components/product/ProductDetailsContent'
+import MobileProductHero from '@/components/product/MobileProductHero'
+import MobileBottomSheet from '@/components/product/MobileBottomSheet'
 
-// Stagger helpers — each row in the right column gets its own delay
-function reveal(delayS: number) {
-  return {
-    className: 'animate-reveal-up',
-    style: { animationDelay: `${delayS}s` },
-  }
+const DRAWER_TITLES: Record<DrawerType, string> = {
+  details: 'PRODUCT DETAILS',
+  shipping: 'SHIPPING AND RETURNS',
 }
 
 export default function ProductClient({ product }: { product: Product }) {
   const router = useRouter()
   const { addToCart } = useCart()
-
-  const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [activeDrawer, setActiveDrawer] = useState<DrawerType | null>(null)
+  const [activeDesktopImage, setActiveDesktopImage] = useState(0)
+  const imageRefs = useRef<(HTMLDivElement | null)[]>([])
+  const desktopImages = product.desktopImages ?? product.images
 
-  const decrement = useCallback(() => setQuantity(q => Math.max(1, q - 1)), [])
-  const increment = useCallback(() => setQuantity(q => q + 1), [])
+  useEffect(() => {
+    if (desktopImages.length < 2) return
+    const observers = imageRefs.current.map((el, index) => {
+      if (!el) return null
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveDesktopImage(index) },
+        { threshold: 0.5 },
+      )
+      obs.observe(el)
+      return obs
+    })
+    return () => observers.forEach(obs => obs?.disconnect())
+  }, [desktopImages.length])
 
   const handleAddToCart = () => {
     addToCart({
       id: product.id,
       name: product.name,
       price: product.price,
-      size: 'ONE SIZE',
-      quantity,
+      size: product.sizes[0] ?? 'ONE SIZE',
+      quantity: 1,
       image: product.images[0],
     })
-
     setAddedToCart(true)
     toast.success(`${product.name} added to cart`)
     setTimeout(() => {
@@ -48,114 +59,91 @@ export default function ProductClient({ product }: { product: Product }) {
   }
 
   return (
-    <div className="pt-[73px]">
-      <div className="pt-8 pb-24 md:pb-36 px-6 md:px-12">
-        <div className="max-w-screen-xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+    <div className="pt-[69px]">
 
-            {/* ── Left: Image Slider ── */}
-            <ProductImageSlider images={product.images} productName={product.name} />
+      {/* ── Desktop: 50/50 split-screen ─────────────────────────────── */}
+      <div className="hidden lg:flex">
 
-            {/* ── Right: Product Info ── */}
-            <div className="lg:sticky lg:top-28 space-y-8">
+        {/* Left: stacked images, each capped to viewport height */}
+        <div className="w-1/2">
+          {desktopImages.map((image, index) => (
+            <div
+              key={index}
+              ref={el => { imageRefs.current[index] = el }}
+              className="relative w-full h-[calc(100vh-69px)] studio-bg"
+            >
+              <Image
+                src={image}
+                alt={`${product.name} — view ${index + 1}`}
+                fill
+                sizes="50vw"
+                className="object-cover object-center"
+                priority={index === 0}
+              />
+            </div>
+          ))}
 
-              {/* Name + availability */}
-              <div {...reveal(0.05)}>
-                <div className="mb-3">
-                  <h1 className="font-display font-light text-4xl md:text-5xl leading-tight">
-                    {product.name}
-                  </h1>
-                </div>
+          {/* Dot indicators — mirrors mobile, only shown when multiple images */}
+          {desktopImages.length > 1 && (
+            <div className="fixed left-4 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5">
+              {desktopImages.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => imageRefs.current[index]?.scrollIntoView({ behavior: 'smooth' })}
+                  aria-label={`View image ${index + 1}`}
+                  className={`rounded-full transition-all duration-300 ${
+                    index === activeDesktopImage
+                      ? 'w-2 h-2 bg-black dark:bg-white'
+                      : 'w-1.5 h-1.5 bg-black/25 dark:bg-white/25'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
 
-                {/* Price — larger, more weight */}
-                <p className="text-3xl font-light tabular-nums">
-                  €{product.price.toFixed(2)}
-                </p>
-              </div>
-
-              {/* Divider */}
-              <div {...reveal(0.12)}>
-                <div className="h-px bg-black/8 dark:bg-white/8" />
-              </div>
-
-              {/* Description */}
-              <p
-                className="animate-reveal-up font-body text-sm leading-loose text-black/55 dark:text-white/55"
-                style={{ animationDelay: '0.18s' }}
-              >
-                {product.description}
-              </p>
-
-              {/* Size */}
-              <div {...reveal(0.25)}>
-                <div className="flex items-center justify-between">
-                  <p className="text-[10px] tracking-[0.25em]">SIZE</p>
-                  <p className="text-[10px] tracking-[0.15em] text-black/40 dark:text-white/40">
-                    ONE SIZE — FITS ALL
-                  </p>
-                </div>
-              </div>
-
-              {/* Quantity */}
-              <div {...reveal(0.3)}>
-                <p className="text-[10px] tracking-[0.25em] mb-4">QUANTITY</p>
-                <QuantitySelector
-                  value={quantity}
-                  onDecrement={decrement}
-                  onIncrement={increment}
+        {/* Right: sticky product info + slide-in drawer */}
+        <div className="w-1/2 relative border-l border-black/[0.06] dark:border-white/[0.06]">
+          <div className="sticky top-[69px] h-[calc(100vh-69px)] overflow-y-auto">
+            <div className="min-h-full flex items-center py-16">
+              <div className="px-16 xl:px-24 w-full">
+                <ProductInfo
+                  product={product}
+                  addedToCart={addedToCart}
+                  onAddToCart={handleAddToCart}
+                  onOpenDrawer={setActiveDrawer}
                 />
               </div>
-
-              {/* Add to Cart */}
-              <div {...reveal(0.36)}>
-                <button
-                  onClick={handleAddToCart}
-                  disabled={!product.inStock || addedToCart}
-                  className={[
-                    'w-full py-4 text-[10px] tracking-[0.28em] flex items-center justify-center gap-3',
-                    'border transition-colors duration-300',
-                    addedToCart ? 'animate-btn-confirm' : '',
-                    !product.inStock
-                      ? 'border-black/15 text-black/25 dark:border-white/15 dark:text-white/25 cursor-not-allowed'
-                      : addedToCart
-                        ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                        : 'bg-black text-white border-black hover:bg-white hover:text-black dark:bg-white dark:text-black dark:border-white dark:hover:bg-transparent dark:hover:text-white',
-                  ].join(' ')}
-                >
-                  {addedToCart ? (
-                    <>
-                      <Check size={13} strokeWidth={2} />
-                      ADDED TO CART
-                    </>
-                  ) : (
-                    product.inStock ? `ADD TO CART — €${product.price.toFixed(2)}` : 'OUT OF STOCK'
-                  )}
-                </button>
-              </div>
-
-              {/* Trust indicators */}
-              <div className="animate-reveal-fade" style={{ animationDelay: '0.42s' }}>
-                <TrustIndicators />
-              </div>
-
-              {/* Details */}
-              <div {...reveal(0.5)}>
-                <p className="text-[10px] tracking-[0.25em] mb-4">DETAILS</p>
-                <FeaturesList features={product.features} />
-              </div>
-
-              {/* Shipping */}
-              <div {...reveal(0.58)}>
-                <p className="text-[10px] tracking-[0.25em] mb-3">SHIPPING</p>
-                <p className="text-sm text-black/55 dark:text-white/55 leading-relaxed">
-                  {product.shippingInfo}
-                </p>
-              </div>
-
             </div>
           </div>
+
+          <SideDrawer
+            isOpen={activeDrawer !== null}
+            onClose={() => setActiveDrawer(null)}
+            title={activeDrawer ? DRAWER_TITLES[activeDrawer] : undefined}
+          >
+            {activeDrawer && (
+              <ProductDetailsContent
+                type={activeDrawer}
+                product={product}
+                variant="drawer"
+              />
+            )}
+          </SideDrawer>
         </div>
       </div>
+
+      {/* ── Mobile: full-bleed hero + floating bottom sheet ─────────── */}
+      <div className="lg:hidden relative h-[calc(100dvh-69px)] overflow-hidden">
+        <MobileProductHero images={product.images} productName={product.name} />
+        <MobileBottomSheet
+          product={product}
+          addedToCart={addedToCart}
+          onAddToCart={handleAddToCart}
+        />
+      </div>
+
     </div>
   )
 }
