@@ -25,9 +25,10 @@ export default function ProductClient({ product }: { product: Product }) {
   const [activeDrawer, setActiveDrawer] = useState<DrawerType | null>(null)
   const [activeDesktopImage, setActiveDesktopImage] = useState(0)
   const imageRefs = useRef<(HTMLDivElement | null)[]>([])
+  const desktopImages = product.desktopImages ?? product.images
 
   useEffect(() => {
-    if (product.images.length < 2) return
+    if (desktopImages.length < 2) return
     const observers = imageRefs.current.map((el, index) => {
       if (!el) return null
       const obs = new IntersectionObserver(
@@ -38,7 +39,7 @@ export default function ProductClient({ product }: { product: Product }) {
       return obs
     })
     return () => observers.forEach(obs => obs?.disconnect())
-  }, [product.images.length])
+  }, [desktopImages.length])
 
   const handleAddToCart = () => {
     addToCart({
@@ -65,7 +66,7 @@ export default function ProductClient({ product }: { product: Product }) {
 
         {/* Left: stacked images, each capped to viewport height */}
         <div className="w-1/2">
-          {product.images.map((image, index) => (
+          {desktopImages.map((image, index) => (
             <div
               key={index}
               ref={el => { imageRefs.current[index] = el }}
@@ -83,9 +84,9 @@ export default function ProductClient({ product }: { product: Product }) {
           ))}
 
           {/* Dot indicators — mirrors mobile, only shown when multiple images */}
-          {product.images.length > 1 && (
+          {desktopImages.length > 1 && (
             <div className="fixed left-4 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5">
-              {product.images.map((_, index) => (
+              {desktopImages.map((_, index) => (
                 <button
                   key={index}
                   type="button"
