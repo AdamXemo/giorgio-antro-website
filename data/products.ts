@@ -4,6 +4,7 @@ export interface Product {
   price: number
   description: string
   images: string[]
+  desktopImages?: string[]
   sizes: string[]
   category: string
   inStock: boolean
@@ -18,8 +19,8 @@ export const mainProduct: Product = {
   price: 120,
   description:
     'The Sailor Hooded Jacket is a modern adaptation of a zip hoodie. This jacket features a unique cut that can be styled in various ways. The hood itself is one large pattern piece that is integrated into the jacket. The garment is crafted from 100% cotton, designed with a fluid and relaxed unisex silhouette. It is a versatile designer piece that reflects understated luxury and contemporary elegance.',
-    images: [
-    '/IMG_8258.JPG',
+  images: [
+    '/SG-59.jpg',
     '/SG-56.jpg',
     '/SG-53.jpg',
     '/SG-48.jpg',
@@ -29,6 +30,13 @@ export const mainProduct: Product = {
     '/SG-39.jpg',
     '/SG-36.jpg',
     '/SG-33.jpg',
+  ],
+  desktopImages: [
+    '/IMG_8258.JPG',
+    '/IMG_8258.JPG',
+    '/IMG_8258.JPG',
+    '/IMG_8258.JPG',
+    '/IMG_8258.JPG',
   ],
   sizes: ['ONE SIZE'],
   category: 'Coats & Jackets',
