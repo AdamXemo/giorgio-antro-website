@@ -73,7 +73,7 @@ export default function MobileProductHero({ images, productName }: MobileProduct
               alt={`${productName} — view ${index + 1}`}
               fill
               sizes="100vw"
-              className="object-contain object-center"
+              className="object-cover object-center"
               priority={index === 0}
             />
           </div>
