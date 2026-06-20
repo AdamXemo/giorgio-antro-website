@@ -106,12 +106,12 @@ function CheckoutContent() {
             <div className="grid lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px]">
 
               {/* Left: form */}
-              <div className="px-6 md:px-12 py-10 lg:border-r border-black/8 dark:border-white/8">
+              <div className="px-6 md:px-12 pt-2 pb-12 lg:border-r border-black/8 dark:border-white/8">
                 <CheckoutForm />
               </div>
 
               {/* Right: summary — desktop only */}
-              <div className="hidden lg:block px-8 xl:px-12 py-10">
+              <div className="hidden lg:block px-8 xl:px-12 pt-2 pb-12 lg:sticky lg:top-[88px] self-start">
                 <CheckoutOrderSummary
                   items={cart}
                   subtotal={cartTotal}
