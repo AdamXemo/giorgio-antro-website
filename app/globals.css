@@ -5,6 +5,9 @@
 :root {
   --background: #ffffff;
   --foreground: #000000;
+  /* Fixed header height — single source of truth for the layout offset.
+     Pages offset their content by this value (e.g. pt-[var(--header-height)]). */
+  --header-height: 70px;
 }
 
 html.dark {

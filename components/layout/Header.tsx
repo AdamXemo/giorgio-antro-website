@@ -37,9 +37,9 @@ export default function Header() {
         />
       )}
 
-      <header className="fixed top-0 left-0 right-0 z-[120] isolate bg-white dark:bg-[#0f0f0f] border-b border-black/20 dark:border-white/15 transition-colors duration-[400ms]">
-        <nav className="relative z-10 px-6 md:px-12 py-[15px]">
-          <div className="relative flex items-center">
+      <header className="fixed top-0 left-0 right-0 z-[120] isolate h-[var(--header-height)] bg-white dark:bg-[#0f0f0f] border-b border-black/20 dark:border-white/15 transition-colors duration-[400ms]">
+        <nav className="relative z-10 h-full px-6 md:px-12">
+          <div className="relative flex h-full items-center">
 
             {/* Left slot */}
             <div className="flex items-center md:hidden">
