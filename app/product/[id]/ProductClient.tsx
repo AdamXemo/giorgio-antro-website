@@ -59,7 +59,7 @@ export default function ProductClient({ product }: { product: Product }) {
   }
 
   return (
-    <div className="pt-[69px]">
+    <div className="pt-[var(--header-height)]">
 
       {/* ── Desktop: 50/50 split-screen ─────────────────────────────── */}
       <div className="hidden lg:flex">
@@ -70,7 +70,7 @@ export default function ProductClient({ product }: { product: Product }) {
             <div
               key={index}
               ref={el => { imageRefs.current[index] = el }}
-              className="relative w-full h-[calc(100vh-69px)] studio-bg"
+              className="relative w-full h-[calc(100vh_-_var(--header-height))] studio-bg"
             >
               <Image
                 src={image}
@@ -105,7 +105,7 @@ export default function ProductClient({ product }: { product: Product }) {
 
         {/* Right: sticky product info + slide-in drawer */}
         <div className="w-1/2 relative border-l border-black/[0.06] dark:border-white/[0.06]">
-          <div className="sticky top-[69px] h-[calc(100vh-69px)] overflow-y-auto">
+          <div className="sticky top-[var(--header-height)] h-[calc(100vh_-_var(--header-height))] overflow-y-auto">
             <div className="min-h-full flex items-center py-16">
               <div className="px-16 xl:px-24 w-full">
                 <ProductInfo
@@ -135,7 +135,7 @@ export default function ProductClient({ product }: { product: Product }) {
       </div>
 
       {/* ── Mobile: full-bleed hero + floating bottom sheet ─────────── */}
-      <div className="lg:hidden relative h-[calc(100dvh-69px)] overflow-hidden">
+      <div className="lg:hidden relative h-[calc(100dvh_-_var(--header-height))] overflow-hidden">
         <MobileProductHero images={product.images} productName={product.name} />
         <MobileBottomSheet
           product={product}
