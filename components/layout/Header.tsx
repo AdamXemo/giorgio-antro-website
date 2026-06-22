@@ -107,7 +107,7 @@ export default function Header() {
             `}
           >
             <div className="overflow-hidden">
-              <div className="bg-white dark:bg-[#0f0f0f] border-b border-black/20 dark:border-white/15 px-6 py-5">
+              <div className="bg-white dark:bg-[#0f0f0f] border-t border-b border-black/20 dark:border-white/15 px-6 py-5">
                 <ItemList items={summary.items} />
                 <div className="mt-5 pt-5 border-t border-black/8 dark:border-white/8">
                   <Totals
