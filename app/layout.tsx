@@ -6,6 +6,7 @@ import { ThemedToaster } from '@/components/theme/ThemedToaster'
 import Header from '@/components/layout/Header'
 import ClientFooter from '@/components/layout/ClientFooter'
 import { fontSans, fontDisplay, fontBody } from '@/lib/fonts'
+import { CheckoutSummaryProvider } from '@/components/checkout/CheckoutSummaryContext'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
@@ -36,12 +37,14 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <CartProvider>
-            <Header />
-            <main className="min-h-screen">
-              {children}
-            </main>
-            <ClientFooter />
-            <ThemedToaster />
+            <CheckoutSummaryProvider>
+              <Header />
+              <main className="min-h-screen">
+                {children}
+              </main>
+              <ClientFooter />
+              <ThemedToaster />
+            </CheckoutSummaryProvider>
           </CartProvider>
         </ThemeProvider>
       </body>

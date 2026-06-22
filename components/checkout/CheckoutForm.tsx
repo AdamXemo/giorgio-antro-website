@@ -93,7 +93,7 @@ export function CheckoutForm() {
             'border-black dark:border-white',
             'bg-black dark:bg-white',
             'text-white dark:text-black',
-            'text-[10px] tracking-[0.45em] font-light',
+            'text-[10px] tracking-[0.3em] font-light',
             'flex items-center justify-center gap-2.5',
             'transition-colors duration-500',
             'hover:bg-white hover:text-black dark:hover:bg-transparent dark:hover:text-white',
