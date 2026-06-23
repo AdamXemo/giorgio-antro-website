@@ -50,7 +50,7 @@ export default function AboutPage() {
         {/* Ken Burns background — more visible than home since this is the brand page */}
         <div aria-hidden className="absolute inset-0 pointer-events-none select-none">
           <Image
-            src="https://mobileImages.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80"
+            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80"
             alt="ANTRO fashion store"
             fill
             sizes="100vw"
