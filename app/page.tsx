@@ -1,18 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { mainProduct } from '@/data/products'
-import FeaturesList from '@/components/product/FeaturesList'
 import ScrollReveal from '@/components/ui/ScrollReveal'
-
-const MARQUEE_ITEMS = [
-  'PREMIUM HEAVYWEIGHT COTTON',
-  'FREE SHIPPING ON ALL ORDERS',
-  'LIMITED RELEASE — CLASSIC HOODIE',
-  'CRAFTED FOR THE MODERN INDIVIDUAL',
-  'SECURE CHECKOUT VIA STRIPE',
-  'EASY 30-DAY RETURNS',
-]
-const DOUBLED_MARQUEE = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS]
 
 const HERO_LETTERS = ['A', 'N', 'T', 'R', 'O']
 
@@ -84,75 +73,6 @@ export default function Home() {
           </div>
         </div>
 
-      </section>
-
-      {/* ── Marquee Strip ────────────────────────────────── */}
-      <div className="bg-black text-white py-3 overflow-hidden">
-        <div className="flex whitespace-nowrap animate-marquee">
-          {DOUBLED_MARQUEE.map((item, i) => (
-            <span key={i} className="text-[9px] tracking-[0.28em] mx-8">
-              {item}
-              <span className="mx-7 opacity-25">·</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Product Showcase ──────────────────────────────── */}
-      <section className="py-24 md:py-36 px-6 md:px-12">
-        <div className="max-w-screen-xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-
-            {/* Image — reveal from left */}
-            <ScrollReveal>
-              <div className="relative aspect-[3/4] overflow-hidden group bg-[#f0f0f0] dark:bg-[#1c1c1c]">
-                <Image
-                  src={mainProduct.mobileImages[0]}
-                  alt={mainProduct.name}
-                  fill
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                  className="object-cover object-center group-hover:scale-[1.04] transition-transform duration-700 ease-out"
-                />
-              </div>
-            </ScrollReveal>
-
-            {/* Details — staggered reveal */}
-            <div className="lg:sticky lg:top-28 space-y-10">
-              <ScrollReveal delay={80}>
-                <div>
-                  <p className="text-[10px] tracking-[0.3em] text-black/35 dark:text-white/35 mb-5">THE CLASSIC</p>
-                  <h2 className="font-display font-light text-4xl md:text-5xl leading-tight mb-4">
-                    {mainProduct.name}
-                  </h2>
-                  <p className="text-2xl font-light tabular-nums">€{mainProduct.price}</p>
-                </div>
-              </ScrollReveal>
-
-              <ScrollReveal delay={160}>
-                <p className="font-body text-sm leading-loose text-black/55 dark:text-white/55">
-                  {mainProduct.description}
-                </p>
-              </ScrollReveal>
-
-              <ScrollReveal delay={240}>
-                <div>
-                  <p className="text-[10px] tracking-[0.25em] mb-4">DETAILS</p>
-                  <FeaturesList features={mainProduct.features.slice(0, 6)} />
-                </div>
-              </ScrollReveal>
-
-              <ScrollReveal delay={320}>
-                <Link
-                  href={`/product/${mainProduct.id}`}
-                  className="block w-full text-center bg-black text-white py-4 text-[10px] tracking-[0.28em] border border-black hover:bg-white hover:text-black dark:bg-white dark:text-black dark:border-white dark:hover:bg-transparent dark:hover:text-white transition-colors duration-300 relative overflow-hidden group"
-                >
-                  <span className="relative z-10">VIEW &amp; PURCHASE — €{mainProduct.price}</span>
-                  <span className="absolute inset-0 bg-white dark:bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300" style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                </Link>
-              </ScrollReveal>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* ── Brand Statement ───────────────────────────────── */}
