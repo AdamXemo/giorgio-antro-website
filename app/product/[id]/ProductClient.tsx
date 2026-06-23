@@ -25,7 +25,7 @@ export default function ProductClient({ product }: { product: Product }) {
   const [activeDrawer, setActiveDrawer] = useState<DrawerType | null>(null)
   const [activeDesktopImage, setActiveDesktopImage] = useState(0)
   const imageRefs = useRef<(HTMLDivElement | null)[]>([])
-  const desktopImages = product.desktopImages ?? product.images
+  const desktopImages = product.desktopImages ?? product.mobileImages
 
   useEffect(() => {
     if (desktopImages.length < 2) return
@@ -48,7 +48,7 @@ export default function ProductClient({ product }: { product: Product }) {
       price: product.price,
       size: product.sizes[0] ?? 'ONE SIZE',
       quantity: 1,
-      image: product.images[0],
+      image: product.mobileImages[0],
     })
     setAddedToCart(true)
     toast.success(`${product.name} added to cart`)
@@ -64,7 +64,7 @@ export default function ProductClient({ product }: { product: Product }) {
       {/* ── Desktop: 50/50 split-screen ─────────────────────────────── */}
       <div className="hidden lg:flex">
 
-        {/* Left: stacked images, each capped to viewport height */}
+        {/* Left: stacked mobileImages, each capped to viewport height */}
         <div className="w-1/2">
           {desktopImages.map((image, index) => (
             <div
@@ -83,7 +83,7 @@ export default function ProductClient({ product }: { product: Product }) {
             </div>
           ))}
 
-          {/* Dot indicators — mirrors mobile, only shown when multiple images */}
+          {/* Dot indicators — mirrors mobile, only shown when multiple mobileImages */}
           {desktopImages.length > 1 && (
             <div className="fixed left-4 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5">
               {desktopImages.map((_, index) => (
@@ -136,7 +136,7 @@ export default function ProductClient({ product }: { product: Product }) {
 
       {/* ── Mobile: full-bleed hero + floating bottom sheet ─────────── */}
       <div className="lg:hidden relative h-[calc(100dvh_-_var(--header-height))] overflow-hidden">
-        <MobileProductHero images={product.images} productName={product.name} />
+        <MobileProductHero mobileImages={product.mobileImages} productName={product.name} />
         <MobileBottomSheet
           product={product}
           addedToCart={addedToCart}

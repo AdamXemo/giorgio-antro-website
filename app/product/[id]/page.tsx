@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${product.name} - ANTRO`,
       description: product.description,
-      images: [product.images[0]],
+      images: [product.mobileImages[0]],
     },
   }
 }

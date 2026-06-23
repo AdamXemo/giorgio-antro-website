@@ -4,12 +4,12 @@ import Image from 'next/image'
 import { useProductImageGallery } from '@/hooks/useProductImageGallery'
 
 interface ProductImageSliderProps {
-  images: string[]
+  mobileImages: string[]
   productName: string
 }
 
-export default function ProductImageSlider({ images, productName }: ProductImageSliderProps) {
-  const total = images.length
+export default function ProductImageSlider({ mobileImages, productName }: ProductImageSliderProps) {
+  const total = mobileImages.length
   const {
     selectedImage,
     setSelectedImage,
@@ -34,7 +34,7 @@ export default function ProductImageSlider({ images, productName }: ProductImage
             transition: isDragging ? 'none' : 'transform 0.55s cubic-bezier(0.25, 1, 0.5, 1)',
           }}
         >
-          {images.map((image, index) => (
+          {mobileImages.map((image, index) => (
             <div
               key={index}
               className="relative h-full flex-shrink-0"
@@ -84,7 +84,7 @@ export default function ProductImageSlider({ images, productName }: ProductImage
           role="tablist"
           aria-label="Image navigation"
         >
-          {images.map((_, index) => (
+          {mobileImages.map((_, index) => (
             <button
               key={index}
               type="button"

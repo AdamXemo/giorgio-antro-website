@@ -11,7 +11,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <Link href={`/product/${product.id}`} className="group">
       <div className="relative aspect-[3/4] mb-5 overflow-hidden bg-[#f0f0f0] dark:bg-[#1c1c1c]">
         <Image
-          src={product.images[0]}
+          src={product.mobileImages[0]}
           alt={product.name}
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
