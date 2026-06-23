@@ -27,7 +27,7 @@ export default function Home() {
             GPU-composited animation layer from swallowing touch events on mobile. */}
         <div aria-hidden className="absolute inset-0 pointer-events-none select-none">
           <Image
-            src={mainProduct.images[0]}
+            src={mainProduct.mobileImages[0]}
             alt={mainProduct.name}
             fill
             sizes="100vw"
@@ -107,7 +107,7 @@ export default function Home() {
             <ScrollReveal>
               <div className="relative aspect-[3/4] overflow-hidden group bg-[#f0f0f0] dark:bg-[#1c1c1c]">
                 <Image
-                  src={mainProduct.images[0]}
+                  src={mainProduct.mobileImages[0]}
                   alt={mainProduct.name}
                   fill
                   sizes="(min-width: 1024px) 50vw, 100vw"
