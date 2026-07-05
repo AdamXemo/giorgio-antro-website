@@ -6,7 +6,7 @@ const productHref = `/product/${mainProduct.id}`
 const src = (n: string) => `/home/collage/${n}.jpg`
 
 // Reading order matches the prototype (left→right, top→bottom).
-const ROW_TOP = ['07', '05', '06'] // product shots — linked
+const ROW_TOP = ['06', '05', '07'] // product shots — linked
 const ROW_BOTTOM = ['03', '01', '02'] // editorial shots — decorative
 
 const COL_SIZES = '(min-width: 640px) 33vw, 100vw'
@@ -26,34 +26,42 @@ const FEATURE_NARROW_SIZES = '(min-width: 1024px) 33vw, 100vw'
  */
 export default function HomeGallery() {
   return (
-    <section>
-      {/* Row 1 — three product shots */}
-      <GalleryRow className="grid-cols-1 sm:grid-cols-3">
-        {ROW_TOP.map((n, i) => (
-          <ScrollReveal key={n} delay={i * 80} className="aspect-[4/5]">
-            <GalleryImage src={src(n)} alt={mainProduct.name} href={productHref} sizes={COL_SIZES} />
-          </ScrollReveal>
-        ))}
-      </GalleryRow>
+    <section className="bg-white dark:bg-black px-3 py-16 sm:px-4 md:px-6 md:py-24">
 
-      {/* Row 2 — feature row: 08 wide (2/3) + 04 (1/3), equal height on desktop */}
-      <GalleryRow className="grid-cols-1 lg:grid-cols-3 lg:h-[70vh]">
-        <ScrollReveal className="aspect-[4/5] lg:aspect-auto lg:h-full lg:col-span-2">
-          <GalleryImage src={src('08')} alt={mainProduct.name} href={productHref} sizes={FEATURE_WIDE_SIZES} />
-        </ScrollReveal>
-        <ScrollReveal delay={80} className="aspect-[4/5] lg:aspect-auto lg:h-full">
-          <GalleryImage src={src('04')} alt={mainProduct.name} href={productHref} sizes={FEATURE_NARROW_SIZES} />
-        </ScrollReveal>
-      </GalleryRow>
+      {/* Uniform gutters: `gap-*` separates tiles within a row, `space-y-*`
+          separates the rows, and the section padding matches so the white
+          background frames every tile evenly. */}
+      <div className="space-y-16 md:space-y-24">
 
-      {/* Row 3 — three editorial shots (decorative) */}
-      <GalleryRow className="grid-cols-1 sm:grid-cols-3">
-        {ROW_BOTTOM.map((n, i) => (
-          <ScrollReveal key={n} delay={i * 80} className="aspect-[4/5]">
-            <GalleryImage src={src(n)} alt="" sizes={COL_SIZES} />
+        {/* Row 1 — three product shots */}
+        <GalleryRow className="grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 md:gap-6">
+          {ROW_TOP.map((n, i) => (
+            <ScrollReveal key={n} delay={i * 80} className="aspect-[4/5]">
+              <GalleryImage src={src(n)} alt={mainProduct.name} href={productHref} sizes={COL_SIZES} />
+            </ScrollReveal>
+          ))}
+        </GalleryRow>
+
+        {/* Row 2 — feature row: 08 wide (2/3) + 04 (1/3), equal height on desktop */}
+        <GalleryRow className="grid-cols-1 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3 lg:h-[70vh]">
+          <ScrollReveal className="aspect-[4/5] lg:aspect-auto lg:h-full lg:col-span-2">
+            <GalleryImage src={src('08')} alt={mainProduct.name} href={productHref} sizes={FEATURE_WIDE_SIZES} />
           </ScrollReveal>
-        ))}
-      </GalleryRow>
+          <ScrollReveal delay={80} className="aspect-[4/5] lg:aspect-auto lg:h-full">
+            <GalleryImage src={src('04')} alt={mainProduct.name} href={productHref} sizes={FEATURE_NARROW_SIZES} />
+          </ScrollReveal>
+        </GalleryRow>
+
+        {/* Row 3 — three editorial shots (decorative) */}
+        <GalleryRow className="grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 md:gap-6">
+          {ROW_BOTTOM.map((n, i) => (
+            <ScrollReveal key={n} delay={i * 80} className="aspect-[4/5]">
+              <GalleryImage src={src(n)} alt="" sizes={COL_SIZES} />
+            </ScrollReveal>
+          ))}
+        </GalleryRow>
+
+      </div>
     </section>
   )
 }
