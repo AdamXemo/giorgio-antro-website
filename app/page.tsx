@@ -23,14 +23,26 @@ export default function Home() {
       <section className="relative min-h-screen bg-black text-white overflow-hidden">
 
         {/* Full-screen hero image, framed on the upper bodies/heads via
-            HERO_IMAGE_POSITION (object-position). */}
+            HERO_IMAGE_POSITION (object-position). A dedicated portrait crop is
+            used on mobile; the wide crop takes over from `sm` up. */}
         <div aria-hidden className="absolute inset-0 select-none">
+          {/* Mobile — portrait crop */}
+          <Image
+            src="/home/mobile-hero.jpg"
+            alt={mainProduct.name}
+            fill
+            sizes="100vw"
+            className="object-cover object-center sm:hidden"
+            quality={90}
+            priority
+          />
+          {/* Desktop / tablet — wide crop */}
           <Image
             src="/home/hero.jpg"
             alt={mainProduct.name}
             fill
             sizes="100vw"
-            className="object-cover scale-[1.15]"
+            className="hidden object-cover scale-[1.15] sm:block"
             style={{ objectPosition: HERO_IMAGE_POSITION }}
             quality={90}
             priority
