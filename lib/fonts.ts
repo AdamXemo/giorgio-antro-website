@@ -41,12 +41,21 @@ export const fontBody = Sometype_Mono({
   display: 'swap',
 })
 
-// ─── Display / heading font ───────────────────────────────────────────────────
+// ─── Display / heading font (menu logo, section headings) ────────────────────
 export const fontDisplay = Playfair_Display({
-    subsets: ['latin'],
-    weight: ['400', '600', '700'],
-    style: ['normal', 'italic'],
-    variable: '--font-display',
-    display: 'swap',
-  })
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+// ─── Hero title font ──────────────────────────────────────────────────────────
+export const fontHero = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-hero',
+  display: 'swap',
+})
 

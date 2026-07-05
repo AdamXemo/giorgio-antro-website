@@ -45,7 +45,7 @@ export default function Home() {
 
           {/* ANTRO — each letter clips up independently */}
           <h1
-            className="text-center font-display font-light leading-[0.88] tracking-tight
+            className="text-center font-hero font-light leading-[0.88] tracking-tight
                        text-[17vw] sm:text-[14vw] md:text-[12vw] lg:text-[10.5vw]"
             aria-label="ANTRO"
           >

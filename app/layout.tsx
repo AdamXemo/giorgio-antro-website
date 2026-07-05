@@ -5,7 +5,7 @@ import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import { ThemedToaster } from '@/components/theme/ThemedToaster'
 import Header from '@/components/layout/Header'
 import ClientFooter from '@/components/layout/ClientFooter'
-import { fontSans, fontDisplay, fontBody } from '@/lib/fonts'
+import { fontSans, fontDisplay, fontBody, fontHero } from '@/lib/fonts'
 import { CheckoutSummaryProvider } from '@/components/checkout/CheckoutSummaryContext'
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontDisplay.variable} ${fontBody.variable}`}
+      className={`${fontSans.variable} ${fontDisplay.variable} ${fontBody.variable} ${fontHero.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
