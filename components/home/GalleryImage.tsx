@@ -29,6 +29,7 @@ export default function GalleryImage({ src, alt, href, sizes, className = '' }: 
       alt={alt}
       fill
       sizes={sizes}
+      quality={90}
       className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
     />
   )
