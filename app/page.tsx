@@ -2,35 +2,46 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { mainProduct } from '@/data/products'
 import ScrollReveal from '@/components/ui/ScrollReveal'
+import HomeGallery from '@/components/home/HomeGallery'
 
 const HERO_LETTERS = ['A', 'N', 'T', 'R', 'O']
+
+// ── Hero framing knobs — tweak these two values to place things perfectly ──
+// Vertical crop of the hero photo. 0% frames the very top (ceiling/heads),
+// 100% the floor. Lower keeps the heads in view; raise to reveal more torso.
+// Stay under ~35% or the heads start getting cropped on wide screens.
+const HERO_IMAGE_POSITION = 'center 20%'
+// Vertical centre of the ANTRO title, as a % of the hero height. 50% = dead
+// centre. Lower moves the title up; higher moves it down (onto more torso).
+const HERO_TITLE_TOP = '50%'
 
 export default function Home() {
   return (
     <div className="w-full">
 
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen bg-black text-white flex flex-col overflow-hidden">
+      <section className="relative min-h-screen bg-black text-white overflow-hidden">
 
-        {/* Background image — Ken Burns slow zoom. pointer-events-none prevents the
-            GPU-composited animation layer from swallowing touch events on mobile. */}
-        <div aria-hidden className="absolute inset-0 pointer-events-none select-none">
+        {/* Full-screen hero image, framed on the upper bodies/heads via
+            HERO_IMAGE_POSITION (object-position). */}
+        <div aria-hidden className="absolute inset-0 select-none">
           <Image
-            src={mainProduct.mobileImages[0]}
+            src="/home/hero.jpg"
             alt={mainProduct.name}
             fill
             sizes="100vw"
-            className="pointer-events-none object-cover opacity-[0.18] animate-ken-burns"
+            className="object-cover"
+            style={{ objectPosition: HERO_IMAGE_POSITION }}
             priority
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/40" />
         </div>
 
-        {/* Spacer for fixed header */}
-        <div className="h-[73px] flex-shrink-0" />
-
-        {/* Hero content */}
-        <div className="relative z-10 flex flex-col justify-center flex-1 px-6 md:px-12">
+        {/* Hero content — title vertically centred at HERO_TITLE_TOP, over the
+            black of the jackets so the white wordmark stays fully legible. */}
+        <div
+          className="absolute inset-x-0 z-10 -translate-y-1/2 px-6 md:px-12"
+          style={{ top: HERO_TITLE_TOP }}
+        >
 
           {/* ANTRO — each letter clips up independently */}
           <h1
@@ -74,6 +85,9 @@ export default function Home() {
         </div>
 
       </section>
+
+      {/* ── Editorial Gallery ─────────────────────────────── */}
+      <HomeGallery />
 
       {/* ── Brand Statement ───────────────────────────────── */}
       <section className="py-24 md:py-36 px-6 md:px-12 bg-black text-white">
