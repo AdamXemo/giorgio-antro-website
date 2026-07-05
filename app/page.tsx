@@ -10,7 +10,7 @@ const HERO_LETTERS = ['A', 'N', 'T', 'R', 'O']
 // Vertical crop of the hero photo. 0% frames the very top (ceiling/heads),
 // 100% the floor. Lower keeps the heads in view; raise to reveal more torso.
 // Stay under ~35% or the heads start getting cropped on wide screens.
-const HERO_IMAGE_POSITION = 'center 8%'
+const HERO_IMAGE_POSITION = 'center 0%'
 // Vertical centre of the ANTRO title, as a % of the hero height. 50% = dead
 // centre. Lower moves the title up; higher moves it down (onto more torso).
 const HERO_TITLE_TOP = '50%'
