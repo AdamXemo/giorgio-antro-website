@@ -10,7 +10,7 @@ const HERO_LETTERS = ['A', 'N', 'T', 'R', 'O']
 // Vertical crop of the hero photo. 0% frames the very top (ceiling/heads),
 // 100% the floor. Lower keeps the heads in view; raise to reveal more torso.
 // Stay under ~35% or the heads start getting cropped on wide screens.
-const HERO_IMAGE_POSITION = 'center 20%'
+const HERO_IMAGE_POSITION = 'center 8%'
 // Vertical centre of the ANTRO title, as a % of the hero height. 50% = dead
 // centre. Lower moves the title up; higher moves it down (onto more torso).
 const HERO_TITLE_TOP = '50%'
@@ -30,8 +30,9 @@ export default function Home() {
             alt={mainProduct.name}
             fill
             sizes="100vw"
-            className="object-cover"
+            className="object-cover scale-[1.15]"
             style={{ objectPosition: HERO_IMAGE_POSITION }}
+            quality={90}
             priority
           />
         </div>
@@ -61,25 +62,18 @@ export default function Home() {
             ))}
           </h1>
 
-          {/* Thin horizontal accent line, draws after title */}
-          <div className="mt-8 flex justify-center">
-            <div
-              className="h-px w-16 bg-white/20 animate-draw-line animate-delay-600"
-            />
-          </div>
-
-          {/* Subtitle + CTA */}
-          <div className="mt-8 md:mt-10 flex flex-col items-center text-center sm:flex-row sm:items-end sm:justify-center gap-8">
-            <p className="text-sm font-light text-white/45 max-w-xs leading-relaxed animate-reveal-fade animate-delay-600">
-              Elegance and technology
-            </p>
+          {/* CTA */}
+          <div className="mt-8 md:mt-10 flex flex-col items-center text-center">
             <Link
               href={`/product/${mainProduct.id}`}
-              className="group inline-flex items-center gap-6 animate-reveal-fade animate-delay-700"
+              className="inline-flex items-center justify-center bg-white px-11 py-4
+                         text-[11px] font-bold tracking-[0.3em] text-black
+                         shadow-lg shadow-black/20 transition-colors duration-300
+                         hover:bg-white/85 focus-visible:outline-none
+                         focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2
+                         focus-visible:ring-offset-black animate-reveal-fade animate-delay-700"
             >
-              <span className="text-[10px] tracking-[0.3em] border-b border-white/30 pb-0.5 hover:border-white transition-colors duration-300">
-                SHOP NOW
-              </span>
+              SHOP NOW
             </Link>
           </div>
         </div>
