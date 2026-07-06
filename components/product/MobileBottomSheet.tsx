@@ -13,7 +13,7 @@ interface MobileBottomSheetProps {
 }
 
 export default function MobileBottomSheet({ product, addedToCart, onAddToCart }: MobileBottomSheetProps) {
-  const { sheetRef, isExpanded, translateY, isDragging, toggle, dragHandlers } = useMobileBottomSheet()
+  const { sheetRef, translateY, isDragging, toggle, dragHandlers } = useMobileBottomSheet()
   const [expandedSection, setExpandedSection] = useState<'details' | 'shipping' | null>(null)
 
   const displayColor = 'BLACK'
