@@ -42,16 +42,9 @@ next-env.d.ts
 *.swo
 *~
 
-# Internal notes / audit docs (not for public repo)
-BACKEND_EXPLANATION.md
-claude_notes.md
-CODEBASE_AUDIT.md
-future_steps.md
-ideas.md
-PRODUCTION_ROADMAP.md
-SHOPIFY_READY.md
-README.md
-.md
+# markdown
+*.md
+!README.md
 
 # Scratch / screenshot files
 image.png
