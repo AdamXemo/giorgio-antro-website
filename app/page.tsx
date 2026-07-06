@@ -100,7 +100,9 @@ export default function Home() {
         <div className="max-w-screen-md mx-auto text-center">
 
           <ScrollReveal>
-            <p className="text-[10px] tracking-[0.3em] text-white/25 mb-6">ABOUT ANTRO</p>
+            <h2 className="font-display font-light italic text-4xl md:text-6xl leading-snug mb-8">
+              About Us
+            </h2>
             {/* Decorative horizontal line */}
             <div className="flex justify-center mb-10">
               <div className="h-px w-10 bg-white/15" />
@@ -108,27 +110,21 @@ export default function Home() {
           </ScrollReveal>
 
           <ScrollReveal delay={100}>
-            <h2 className="font-display font-light italic text-4xl md:text-6xl leading-snug mb-10">
-              More than clothing.<br />
-              A statement.
-            </h2>
-          </ScrollReveal>
-
-          <ScrollReveal delay={200}>
-            <p className="text-sm leading-loose text-white/45 max-w-sm mx-auto">
-              From concept to creation — quality you feel, style you live.
-              Each ANTRO piece is crafted with intention for the modern individual.
-            </p>
-          </ScrollReveal>
-
-          <ScrollReveal delay={300}>
-            <div className="mt-12">
-              <Link
-                href="/about"
-                className="text-[10px] tracking-[0.3em] border-b border-white/20 pb-0.5 hover:border-white transition-colors duration-300"
-              >
-                OUR STORY
-              </Link>
+            <div className="space-y-6 text-sm leading-loose text-white/45 max-w-xl mx-auto">
+              <p>
+                ANTRO is an emerging fashion brand founded by young designer Giorgio Antro,
+                currently studying Fashion Design at La Cambre.
+              </p>
+              <p>
+                The brand explores the elegance of relaxed tailoring, freedom of movement,
+                and the versatility of form. We create garments in small quantities, focusing
+                on silhouette, fit, and the feeling of freedom within clothing.
+              </p>
+              <p>
+                Our pieces are built around a unisex fit — a shape that is not limited to one
+                body type or gender. ANTRO creates clothing for people who value individuality,
+                quiet elegance, and freedom of self-expression.
+              </p>
             </div>
           </ScrollReveal>
         </div>
