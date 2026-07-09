@@ -45,11 +45,21 @@ export default function Footer() {
               ANTRO
             </Link>
 
-            {/* Two columns at every width — four legal links in one stack would run too long */}
-            <nav className="grid grid-cols-2 gap-x-10 gap-y-4 sm:gap-x-16">
+            {/*
+              Two columns at every width — four legal links in one stack would run too long.
+              Column labels are <p>, not headings: the footer renders ahead of the page <h1>
+              in the streamed HTML, so headings here would corrupt the document outline.
+              Each column is a <nav> named by its label instead.
+            */}
+            <div className="grid grid-cols-2 gap-x-10 gap-y-4 sm:gap-x-16">
               {FOOTER_COLUMNS.map(({ heading, links }) => (
-                <div key={heading}>
-                  <h2 className="text-[9px] tracking-[0.25em] text-white/25 mb-4">{heading}</h2>
+                <nav key={heading} aria-labelledby={`footer-${heading.toLowerCase()}`}>
+                  <p
+                    id={`footer-${heading.toLowerCase()}`}
+                    className="text-[9px] tracking-[0.25em] text-white/25 mb-4"
+                  >
+                    {heading}
+                  </p>
                   <ul className="flex flex-col gap-3">
                     {links.map(({ href, label }) => (
                       <li key={href}>
@@ -62,9 +72,9 @@ export default function Footer() {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </nav>
               ))}
-            </nav>
+            </div>
 
             <div className="flex items-center gap-5">
               <a
