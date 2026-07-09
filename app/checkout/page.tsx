@@ -5,12 +5,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
-import { ChevronLeft } from 'lucide-react'
 import { useCart } from '@/components/cart/CartContext'
 import { useTheme } from '@/components/theme/ThemeProvider'
 import { CheckoutForm } from '@/components/checkout/CheckoutForm'
 import { CheckoutOrderSummary } from '@/components/checkout/CheckoutOrderSummary'
 import { buildAppearance } from '@/components/checkout/checkout.config'
+import { useCheckoutSummary } from '@/components/checkout/CheckoutSummaryContext'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
@@ -18,6 +18,7 @@ function CheckoutContent() {
   const router = useRouter()
   const { cart, cartTotal } = useCart()
   const { theme } = useTheme()
+  const { setSummary } = useCheckoutSummary()
 
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [initError, setInitError] = useState<string | null>(null)
@@ -27,6 +28,11 @@ function CheckoutContent() {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional SSR guard: forces re-render after CartProvider hydrates from localStorage
     setMounted(true)
   }, [])
+
+  // Clear summary from header when leaving checkout
+  useEffect(() => {
+    return () => setSummary(null)
+  }, [setSummary])
 
   const isDark = theme === 'dark'
 
@@ -46,7 +52,9 @@ function CheckoutContent() {
     fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: cart }),
+      body: JSON.stringify({
+        items: cart.map((i) => ({ id: i.id, quantity: i.quantity })),
+      }),
     })
       .then((r) => r.json())
       .then((data) => {
@@ -65,27 +73,14 @@ function CheckoutContent() {
     [clientSecret, appearance]
   )
 
+  // Register summary into the header context once Stripe is ready
+  useEffect(() => {
+    if (!elementsOptions) return
+    setSummary({ items: cart, subtotal: cartTotal, shipping, total })
+  }, [elementsOptions, cart, cartTotal, shipping, total, setSummary])
+
   return (
     <div className="min-h-screen pt-[73px]">
-
-      {/* ── Page header ─────────────────────────────────── */}
-      <div className="px-6 md:px-12 py-5 flex items-center justify-between border-b border-black/8 dark:border-white/8">
-        <Link
-          href="/cart"
-          className="inline-flex items-center gap-2 text-black/30 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors group"
-          aria-label="Back to cart"
-        >
-          <ChevronLeft
-            size={14}
-            strokeWidth={1.5}
-            className="group-hover:-translate-x-0.5 transition-transform"
-          />
-          <span className="text-[10px] tracking-[0.2em]">CART</span>
-        </Link>
-        <span className="text-[10px] tracking-[0.3em] text-black/25 dark:text-white/25">
-          ANTRO — CHECKOUT
-        </span>
-      </div>
 
       {/* ── Error state ─────────────────────────────────── */}
       {initError && (
@@ -109,26 +104,16 @@ function CheckoutContent() {
         <Elements stripe={stripePromise} options={elementsOptions}>
           <div className="max-w-screen-lg mx-auto">
 
-            {/* Mobile summary strip — visible below lg */}
-            <div className="lg:hidden border-b border-black/8 dark:border-white/8">
-              <CheckoutOrderSummary
-                items={cart}
-                subtotal={cartTotal}
-                shipping={shipping}
-                total={total}
-              />
-            </div>
-
             {/* Two-column grid */}
             <div className="grid lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px]">
 
               {/* Left: form */}
-              <div className="px-6 md:px-12 py-10 lg:border-r border-black/8 dark:border-white/8">
+              <div className="px-6 md:px-12 pt-2 pb-12 lg:border-r border-black/8 dark:border-white/8">
                 <CheckoutForm />
               </div>
 
               {/* Right: summary — desktop only */}
-              <div className="hidden lg:block px-8 xl:px-12 py-10">
+              <div className="hidden lg:block px-8 xl:px-12 pt-2 pb-12 lg:sticky lg:top-[88px] self-start">
                 <CheckoutOrderSummary
                   items={cart}
                   subtotal={cartTotal}

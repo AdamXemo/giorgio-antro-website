@@ -19,21 +19,30 @@ export default function QuantitySelector({
   const spanClass =
     size === 'sm'
       ? 'w-10 text-sm'
-      : 'w-14 text-sm'
+      : 'w-14 text-base'
+
+  const btnBase =
+    'flex items-center justify-center text-black/55 dark:text-white/55 ' +
+    'hover:text-black dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.04] ' +
+    'transition-colors disabled:opacity-30'
 
   return (
-    <div className="flex items-center">
+    <div className="inline-flex items-stretch border border-black/15 dark:border-white/15 rounded-[2px]">
       <button
         onClick={onDecrement}
-        className={`${btnClass} border border-black/20 dark:border-white/20 hover:border-black dark:hover:border-white transition-colors`}
+        className={`${btnClass} ${btnBase}`}
         aria-label="Decrease quantity"
       >
         −
       </button>
-      <span className={`${spanClass} text-center tabular-nums`}>{value}</span>
+      <span
+        className={`${spanClass} flex items-center justify-center border-x border-black/15 dark:border-white/15 tabular-nums select-none`}
+      >
+        {value}
+      </span>
       <button
         onClick={onIncrement}
-        className={`${btnClass} border border-black/20 dark:border-white/20 hover:border-black dark:hover:border-white transition-colors`}
+        className={`${btnClass} ${btnBase}`}
         aria-label="Increase quantity"
       >
         +

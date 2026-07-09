@@ -3,31 +3,39 @@ export interface Product {
   name: string
   price: number
   description: string
-  images: string[]
+  mobileImages: string[]
+  desktopImages?: string[]
   sizes: string[]
   category: string
   inStock: boolean
   features: string[]
   shippingInfo: string
-  /** Must match the product handle (slug) in your Shopify store. */
-  shopifyHandle: string
 }
 
 // Main product - ANTRO Classic Hoodie
 export const mainProduct: Product = {
   id: 'antro-classic-hoodie',
-  shopifyHandle: 'sailor-hooded-zip-jacket',
-  name: 'ANTRO Classic Hoodie',
+  name: 'Sailor Hooded Jacket',
   price: 120,
   description:
-    'A modern adaptation of the zip hoodie — the ANTRO Classic is crafted from 100% cotton with a fluid, relaxed unisex silhouette. The hood is one large integrated pattern piece, creating a clean architectural line. Lightweight yet structured, waterproof and wrinkle resistant. A versatile designer piece that reflects understated luxury and contemporary elegance.',
-  images: [
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
-    '/antro-hoodie.jpg',
+    'The Sailor Hooded Jacket is a modern adaptation of a zip hoodie. This jacket features a unique cut that can be styled in various ways. The hood itself is one large pattern piece that is integrated into the jacket. The garment is crafted from 100% cotton, designed with a fluid and relaxed unisex silhouette. It is a versatile designer piece that reflects understated luxury and contemporary elegance.',
+  desktopImages: [
+    '/products/sailor-hooded-jacket/01.jpg',
+    '/products/sailor-hooded-jacket/02.jpg',
+    '/products/sailor-hooded-jacket/03.jpg',
+    '/products/sailor-hooded-jacket/04.jpg',
+    '/products/sailor-hooded-jacket/05.jpg',
+    '/products/sailor-hooded-jacket/06.jpg',
+    '/products/sailor-hooded-jacket/07.jpg',
+  ],
+  mobileImages: [
+    '/products/sailor-hooded-jacket/01.jpg',
+    '/products/sailor-hooded-jacket/02.jpg',
+    '/products/sailor-hooded-jacket/03.jpg',
+    '/products/sailor-hooded-jacket/04.jpg',
+    '/products/sailor-hooded-jacket/05.jpg',
+    '/products/sailor-hooded-jacket/06.jpg',
+    '/products/sailor-hooded-jacket/07.jpg',
   ],
   sizes: ['ONE SIZE'],
   category: 'Coats & Jackets',

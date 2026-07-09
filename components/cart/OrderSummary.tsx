@@ -30,9 +30,9 @@ export default function OrderSummary({ subtotal, shipping, total }: OrderSummary
             {shipping === 0 ? 'FREE' : `€${shipping.toFixed(2)}`}
           </span>
         </div>
-        <div className="border-t border-black/10 dark:border-white/10 pt-4 flex justify-between">
-          <span className="text-sm font-medium">Total</span>
-          <span className="text-sm tabular-nums font-medium">€{total.toFixed(2)}</span>
+        <div className="border-t border-black/10 dark:border-white/10 pt-5 flex justify-between items-baseline">
+          <span className="text-[13px] tracking-wide font-medium">Total</span>
+          <span className="text-base tabular-nums font-medium">€{total.toFixed(2)}</span>
         </div>
       </div>
 
@@ -44,7 +44,7 @@ export default function OrderSummary({ subtotal, shipping, total }: OrderSummary
 
       <Link
         href="/checkout"
-        className="w-full bg-black text-white py-4 text-[10px] tracking-[0.25em] flex items-center justify-center gap-3 border border-black hover:bg-white hover:text-black dark:bg-white dark:text-black dark:border-white dark:hover:bg-transparent dark:hover:text-white transition-colors duration-300 mb-4"
+        className="w-full bg-black text-white py-4 text-[10px] tracking-[0.3em] font-light flex items-center justify-center gap-3 border border-black hover:bg-white hover:text-black dark:bg-white dark:text-black dark:border-white dark:hover:bg-transparent dark:hover:text-white transition-colors duration-300 mb-4"
       >
         <Lock size={11} strokeWidth={1.5} />
         PROCEED TO CHECKOUT

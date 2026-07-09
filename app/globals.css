@@ -5,6 +5,9 @@
 :root {
   --background: #ffffff;
   --foreground: #000000;
+  /* Fixed header height — single source of truth for the layout offset.
+     Pages offset their content by this value (e.g. pt-[var(--header-height)]). */
+  --header-height: 70px;
 }
 
 html.dark {
@@ -109,6 +112,12 @@ body {
   to   { transform: scaleX(1); }
 }
 
+/* Checkmark stroke draw-in */
+@keyframes drawCheck {
+  from { stroke-dashoffset: 26; opacity: 0; }
+  to   { stroke-dashoffset: 0;  opacity: 1; }
+}
+
 @keyframes scrollReveal {
   from {
     opacity: 0;
@@ -161,6 +170,12 @@ body {
 .animate-draw-line {
   transform-origin: left center;
   animation: drawLine 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-draw-check {
+  stroke-dasharray: 26;
+  stroke-dashoffset: 26;
+  animation: drawCheck 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .sr-hidden {
@@ -247,9 +262,15 @@ body {
   .animate-char-reveal,
   .animate-ken-burns,
   .animate-draw-line,
+  .animate-draw-check,
   .animate-scroll-reveal,
   .animate-scroll-reveal-mobile {
     animation: none !important;
+  }
+
+  .animate-draw-check {
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
   }
 
   .animate-marquee {
@@ -268,7 +289,7 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply relative overflow-hidden inline-block bg-black text-white text-[10px]
+    @apply relative overflow-hidden inline-flex items-center justify-center bg-black text-white text-[10px]
            tracking-[0.25em] py-4 px-10 border border-black transition-colors duration-300;
   }
 
@@ -303,7 +324,7 @@ body {
   }
 
   .btn-ghost {
-    @apply relative overflow-hidden inline-block bg-white text-black text-[10px]
+    @apply relative overflow-hidden inline-flex items-center justify-center bg-white text-black text-[10px]
            tracking-[0.25em] py-4 px-10 border border-black transition-colors duration-300;
   }
 
@@ -354,6 +375,12 @@ body {
   }
 
   .underline-reveal:hover::after {
+    width: 100%;
+  }
+
+  /* Trigger underline-reveal on a child span when the parent button is hovered */
+  button:hover > .underline-reveal::after,
+  a:hover > .underline-reveal::after {
     width: 100%;
   }
 }
@@ -413,6 +440,16 @@ html.dark .input-field-wrapper::after {
 
 .input-field-wrapper:focus-within::after {
   width: 100%;
+}
+
+/* ─── Product image: studio-style gradient background ─────── */
+
+.studio-bg {
+  background: radial-gradient(ellipse at 50% 38%, #f2f2f2 0%, #e6e6e6 55%, #dcdcdc 100%);
+}
+
+html.dark .studio-bg {
+  background: radial-gradient(ellipse at 50% 38%, #2c2c2c 0%, #1e1e1e 55%, #141414 100%);
 }
 
 /* ─── Image skeleton ───────────────────────────────────── */

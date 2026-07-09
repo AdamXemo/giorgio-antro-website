@@ -1,8 +1,6 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
-import { ChevronDown } from 'lucide-react'
 import type { CartItem } from '@/types/cart'
 
 interface Props {
@@ -12,7 +10,7 @@ interface Props {
   total: number
 }
 
-function ItemList({ items }: { items: CartItem[] }) {
+export function ItemList({ items }: { items: CartItem[] }) {
   return (
     <div className="space-y-5">
       {items.map((item) => (
@@ -45,7 +43,7 @@ function ItemList({ items }: { items: CartItem[] }) {
   )
 }
 
-function Totals({
+export function Totals({
   subtotal,
   shipping,
   total,
@@ -88,50 +86,17 @@ function Totals({
 }
 
 export function CheckoutOrderSummary({ items, subtotal, shipping, total }: Props) {
-  const [isOpen, setIsOpen] = useState(false)
-
   return (
-    <>
-      {/* Mobile collapsible strip */}
-      <div className="lg:hidden border-b border-black/8 dark:border-white/8">
-        <button
-          type="button"
-          onClick={() => setIsOpen((v) => !v)}
-          className="w-full px-6 py-4 flex items-center justify-between"
-        >
-          <span className="flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-black dark:text-white">
-            <span>Order summary</span>
-            <ChevronDown
-              size={12}
-              strokeWidth={1.5}
-              className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-            />
-          </span>
-          <span className="text-sm tabular-nums">€{total.toFixed(2)}</span>
-        </button>
+    <div className="hidden lg:block">
+      <p className="text-[10px] tracking-[0.3em] uppercase text-black/35 dark:text-white/35 mb-7">
+        Order Summary
+      </p>
 
-        {isOpen && (
-          <div className="px-6 pb-6 space-y-5 border-t border-black/6 dark:border-white/6 pt-5">
-            <ItemList items={items} />
-            <div className="pt-4 border-t border-black/8 dark:border-white/8">
-              <Totals subtotal={subtotal} shipping={shipping} total={total} />
-            </div>
-          </div>
-        )}
+      <ItemList items={items} />
+
+      <div className="mt-6 pt-6 border-t border-black/8 dark:border-white/8">
+        <Totals subtotal={subtotal} shipping={shipping} total={total} />
       </div>
-
-      {/* Desktop summary panel */}
-      <div className="hidden lg:block">
-        <p className="text-[10px] tracking-[0.3em] uppercase text-black/35 dark:text-white/35 mb-7">
-          Order Summary
-        </p>
-
-        <ItemList items={items} />
-
-        <div className="mt-6 pt-6 border-t border-black/8 dark:border-white/8">
-          <Totals subtotal={subtotal} shipping={shipping} total={total} />
-        </div>
-      </div>
-    </>
+    </div>
   )
 }
