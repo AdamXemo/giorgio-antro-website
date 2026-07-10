@@ -1,38 +1,70 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
-import type { CartItem } from '@/types/cart'
+import { getProductById } from '@/data/products'
 
 export const runtime = 'nodejs'
 
+interface RequestLineItem {
+  id: string
+  quantity: number
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { items }: { items: CartItem[] } = await req.json()
+    const { items }: { items: RequestLineItem[] } = await req.json()
 
     if (!items?.length) {
       return NextResponse.json({ error: 'No items provided' }, { status: 400 })
     }
 
-    const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-    const shipping = subtotal >= 100 ? 0 : 10
-    const total = subtotal + shipping
-    const amountInCents = Math.round(total * 100)
+    // Price is looked up server-side per line item — never trusted from the
+    // request body. The client only sends { id, quantity }.
+    let subtotalCents = 0
+    const metadataItems: {
+      productId: string
+      productName: string
+      size: string
+      quantity: number
+      price: number
+    }[] = []
+
+    for (const { id, quantity } of items) {
+      if (!Number.isInteger(quantity) || quantity <= 0) {
+        return NextResponse.json({ error: 'Invalid quantity' }, { status: 400 })
+      }
+
+      const product = getProductById(id)
+      if (!product) {
+        return NextResponse.json({ error: `Unknown product: ${id}` }, { status: 400 })
+      }
+
+      const unitCents = Math.round(product.price * 100)
+      subtotalCents += unitCents * quantity
+
+      metadataItems.push({
+        productId: product.id,
+        productName: product.name,
+        size: product.sizes[0] ?? 'ONE SIZE',
+        quantity,
+        price: unitCents / 100,
+      })
+    }
+
+    const shippingCents = subtotalCents >= 10000 ? 0 : 1000
+    const totalCents = subtotalCents + shippingCents
+
+    if (totalCents <= 0) {
+      return NextResponse.json({ error: 'Invalid order amount' }, { status: 400 })
+    }
 
     const paymentIntent = await getStripe().paymentIntents.create({
-      amount: amountInCents,
+      amount: totalCents,
       currency: 'eur',
       metadata: {
-        items: JSON.stringify(
-          items.map((i) => ({
-            productId: i.id,
-            productName: i.name,
-            size: i.size,
-            quantity: i.quantity,
-            price: i.price,
-          }))
-        ),
-        subtotal: subtotal.toFixed(2),
-        shipping: shipping.toFixed(2),
-        total: total.toFixed(2),
+        items: JSON.stringify(metadataItems),
+        subtotal: (subtotalCents / 100).toFixed(2),
+        shipping: (shippingCents / 100).toFixed(2),
+        total: (totalCents / 100).toFixed(2),
       },
     })
 
