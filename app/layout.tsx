@@ -10,8 +10,24 @@ import { CheckoutSummaryProvider } from '@/components/checkout/CheckoutSummaryCo
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  title: 'ANTRO - Premium Streetwear',
+  title: 'ANTRO - Elegance and Technology',
   description: 'Discover unique, high-quality streetwear designed for the modern individual.',
+  openGraph: {
+    type: 'website',
+    siteName: 'ANTRO',
+    title: 'ANTRO - Elegance and Technology',
+    description: 'Discover unique, high-quality streetwear designed for the modern individual.',
+    url: '/',
+    locale: 'en_US',
+    // og:image is supplied automatically by app/opengraph-image.tsx.
+  },
+  twitter: {
+    // No brand accounts exist yet, so `site` / `creator` are intentionally omitted.
+    card: 'summary_large_image',
+    title: 'ANTRO - Elegance and Technology',
+    description: 'Discover unique, high-quality streetwear designed for the modern individual.',
+    // twitter:image falls back to app/opengraph-image.tsx.
+  },
 }
 
 export default function RootLayout({
