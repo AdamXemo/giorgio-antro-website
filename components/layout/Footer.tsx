@@ -56,7 +56,7 @@ export default function Footer() {
                 <nav key={heading} aria-labelledby={`footer-${heading.toLowerCase()}`}>
                   <p
                     id={`footer-${heading.toLowerCase()}`}
-                    className="text-[9px] tracking-[0.25em] text-white/25 mb-4"
+                    className="text-[11px] tracking-[0.25em] text-white/55 mb-4"
                   >
                     {heading}
                   </p>
@@ -65,7 +65,7 @@ export default function Footer() {
                       <li key={href}>
                         <Link
                           href={href}
-                          className="text-[10px] tracking-[0.2em] text-white/60 hover:text-white transition-colors"
+                          className="text-[11px] tracking-[0.2em] text-white/70 hover:text-white transition-colors"
                         >
                           {label}
                         </Link>
@@ -101,10 +101,10 @@ export default function Footer() {
 
         <ScrollReveal delay={120}>
           <div className="mt-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-[10px] tracking-[0.2em] text-white/25">
+            <p className="text-[11px] tracking-[0.2em] text-white/55">
               &copy; {new Date().getFullYear()} ANTRO. ALL RIGHTS RESERVED.
             </p>
-            <p className="text-[9px] tracking-[0.15em] text-white/15 font-body">
+            <p className="text-[11px] tracking-[0.15em] text-white/55 font-body">
               BRUSSELS, BELGIUM
             </p>
           </div>
