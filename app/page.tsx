@@ -26,12 +26,14 @@ export default function Home() {
             HERO_IMAGE_POSITION (object-position). A dedicated portrait crop is
             used on mobile; the wide crop takes over from `sm` up. */}
         <div aria-hidden className="absolute inset-0 select-none">
-          {/* Mobile — portrait crop */}
+          {/* Mobile — portrait crop. Each crop is display:none at the other's
+              breakpoint, so `sizes` must collapse to ~0 there or the browser
+              preloads both full-size heroes on every device. */}
           <Image
             src="/home/mobile-hero.jpg"
             alt={mainProduct.name}
             fill
-            sizes="100vw"
+            sizes="(min-width: 640px) 1px, 100vw"
             className="object-cover object-center sm:hidden"
             quality={90}
             priority
@@ -41,7 +43,7 @@ export default function Home() {
             src="/home/hero.jpg"
             alt={mainProduct.name}
             fill
-            sizes="100vw"
+            sizes="(min-width: 640px) 100vw, 1px"
             className="hidden object-cover scale-[1.15] sm:block"
             style={{ objectPosition: HERO_IMAGE_POSITION }}
             quality={90}
