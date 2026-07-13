@@ -20,7 +20,7 @@ export default function Home() {
     <div className="w-full">
 
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen bg-black text-white overflow-hidden">
+      <section className="relative min-h-svh bg-black text-white overflow-hidden">
 
         {/* Full-screen hero image, framed on the upper bodies/heads via
             HERO_IMAGE_POSITION (object-position). A dedicated portrait crop is
@@ -112,7 +112,7 @@ export default function Home() {
           </ScrollReveal>
 
           <ScrollReveal delay={100}>
-            <div className="space-y-6 text-sm leading-loose text-white/45 max-w-xl mx-auto">
+            <div className="space-y-6 text-sm leading-loose text-white/70 max-w-xl mx-auto">
               <p>
                 ANTRO is an emerging fashion brand founded by young designer Giorgio Antro,
                 currently studying Fashion Design at La Cambre.
