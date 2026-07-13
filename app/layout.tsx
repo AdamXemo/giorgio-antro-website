@@ -10,8 +10,9 @@ import { CheckoutSummaryProvider } from '@/components/checkout/CheckoutSummaryCo
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  title: 'ANTRO - Premium Streetwear',
-  description: 'Discover unique, high-quality streetwear designed for the modern individual.',
+  title: 'ANTRO',
+  description:
+    'ANTRO is an independent label by Giorgio Antro. Relaxed, unisex tailoring made in small quantities. Brussels.',
 }
 
 export default function RootLayout({
