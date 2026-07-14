@@ -20,7 +20,7 @@ import {
   // ── drop-in sans alternatives ──────────────────────────────────────────────
   // DM_Sans, Outfit, Plus_Jakarta_Sans, Syne, Space_Grotesk, Raleway,
   // ── drop-in display alternatives ──────────────────────────────────────────
-  // Playfair_Display, EB_Garamond, Libre_Baskerville, Bodoni_Moda,
+  Playfair_Display, EB_Garamond, Libre_Baskerville, Bodoni_Moda,
   // Italiana, Didact_Gothic, Cinzel,
   // ── drop-in body alternatives ─────────────────────────────────────────────
   // Roboto, Lato, Source_Sans_3, Nunito, Open_Sans, Work_Sans,
@@ -41,11 +41,21 @@ export const fontBody = Sometype_Mono({
   display: 'swap',
 })
 
-// ─── Display / heading font ───────────────────────────────────────────────────
-export const fontDisplay = Cormorant_Garamond({
+// ─── Display / heading font (menu logo, section headings) ────────────────────
+export const fontDisplay = Playfair_Display({
   subsets: ['latin'],
-  weight: ['300', '400', '600'],
+  weight: ['400', '600', '700'],
   style: ['normal', 'italic'],
   variable: '--font-display',
   display: 'swap',
 })
+
+// ─── Hero title font ──────────────────────────────────────────────────────────
+export const fontHero = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-hero',
+  display: 'swap',
+})
+

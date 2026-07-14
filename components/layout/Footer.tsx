@@ -4,6 +4,25 @@ import TikTokIcon from '@/components/icons/TikTokIcon'
 import { SOCIAL_LINKS } from '@/data/social-links'
 import ScrollReveal from '@/components/ui/ScrollReveal'
 
+const FOOTER_COLUMNS = [
+  {
+    heading: 'COMPANY',
+    links: [
+      { href: '/contact', label: 'CONTACT' },
+      { href: '/products', label: 'SHOP' },
+    ],
+  },
+  {
+    heading: 'LEGAL',
+    links: [
+      { href: '/privacy', label: 'PRIVACY' },
+      { href: '/terms', label: 'TERMS' },
+      { href: '/returns', label: 'RETURNS' },
+      { href: '/shipping', label: 'SHIPPING' },
+    ],
+  },
+]
+
 export default function Footer() {
   const instagram = SOCIAL_LINKS.find(l => l.platform === 'instagram')!
   const tiktok = SOCIAL_LINKS.find(l => l.platform === 'tiktok')!
@@ -20,16 +39,41 @@ export default function Footer() {
         </ScrollReveal>
 
         <ScrollReveal delay={60}>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
+          <div className="flex flex-col sm:flex-row items-start justify-between gap-12 sm:gap-8">
             <Link href="/" className="font-display font-light text-xl tracking-[0.3em]">
               ANTRO
             </Link>
 
-            <nav className="flex flex-col gap-3">
-              <Link href="/about"   className="text-[10px] tracking-[0.2em] text-white/60 hover:text-white transition-colors">ABOUT</Link>
-              <Link href="/contact" className="text-[10px] tracking-[0.2em] text-white/60 hover:text-white transition-colors">CONTACT</Link>
-              <Link href="/products" className="text-[10px] tracking-[0.2em] text-white/60 hover:text-white transition-colors">SHOP</Link>
-            </nav>
+            {/*
+              Two columns at every width — four legal links in one stack would run too long.
+              Column labels are <p>, not headings: the footer renders ahead of the page <h1>
+              in the streamed HTML, so headings here would corrupt the document outline.
+              Each column is a <nav> named by its label instead.
+            */}
+            <div className="grid grid-cols-2 gap-x-10 gap-y-4 sm:gap-x-16">
+              {FOOTER_COLUMNS.map(({ heading, links }) => (
+                <nav key={heading} aria-labelledby={`footer-${heading.toLowerCase()}`}>
+                  <p
+                    id={`footer-${heading.toLowerCase()}`}
+                    className="text-[11px] tracking-[0.25em] text-white/55 mb-4"
+                  >
+                    {heading}
+                  </p>
+                  <ul className="flex flex-col gap-3">
+                    {links.map(({ href, label }) => (
+                      <li key={href}>
+                        <Link
+                          href={href}
+                          className="text-[11px] tracking-[0.2em] text-white/70 hover:text-white transition-colors"
+                        >
+                          {label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              ))}
+            </div>
 
             <div className="flex items-center gap-5">
               <a
@@ -56,10 +100,10 @@ export default function Footer() {
 
         <ScrollReveal delay={120}>
           <div className="mt-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-[10px] tracking-[0.2em] text-white/25">
+            <p className="text-[11px] tracking-[0.2em] text-white/55">
               &copy; {new Date().getFullYear()} ANTRO. ALL RIGHTS RESERVED.
             </p>
-            <p className="text-[9px] tracking-[0.15em] text-white/15 font-body">
+            <p className="text-[11px] tracking-[0.15em] text-white/55 font-body">
               BRUSSELS, BELGIUM
             </p>
           </div>

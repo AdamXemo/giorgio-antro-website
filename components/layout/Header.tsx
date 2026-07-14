@@ -55,7 +55,7 @@ export default function Header() {
 
             <div className="hidden md:flex items-center gap-8">
               {desktopLinks.map(({ href, label }) => (
-                <Link key={href} href={href} className="text-[10px] tracking-[0.22em] underline-reveal">
+                <Link key={href} href={href} className="font-sans text-[11px] tracking-[0.22em] underline-reveal">
                   {label}
                 </Link>
               ))}
@@ -64,7 +64,7 @@ export default function Header() {
             <div className="pointer-events-none absolute inset-x-0 flex justify-center">
               <Link
                 href="/"
-                className="pointer-events-auto font-display font-light tracking-[0.3em] text-lg md:text-xl whitespace-nowrap"
+                className="pointer-events-auto font-display font-semibold tracking-[0.25em] text-2xl md:text-3xl whitespace-nowrap"
               >
                 ANTRO
               </Link>
