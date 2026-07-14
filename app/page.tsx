@@ -98,7 +98,7 @@ export default function Home() {
       <HomeGallery />
 
       {/* ── Brand Statement ───────────────────────────────── */}
-      <section className="py-24 md:py-36 px-6 md:px-12 bg-black text-white">
+      <section className="py-14 md:py-20 px-6 md:px-12 bg-black text-white">
         <div className="max-w-screen-md mx-auto text-center">
 
           <ScrollReveal>
