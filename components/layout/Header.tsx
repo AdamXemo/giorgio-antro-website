@@ -55,7 +55,7 @@ export default function Header() {
 
             <div className="hidden md:flex items-center gap-8">
               {desktopLinks.map(({ href, label }) => (
-                <Link key={href} href={href} className="font-sans text-[10px] tracking-[0.22em] underline-reveal">
+                <Link key={href} href={href} className="font-sans text-[11px] tracking-[0.22em] underline-reveal">
                   {label}
                 </Link>
               ))}
