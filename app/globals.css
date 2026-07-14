@@ -343,6 +343,22 @@ body {
     @apply text-black;
   }
 
+  /* A button sitting on media rather than on the page background. The photo
+     doesn't change with the theme, so neither does the button — it stays solid
+     white and opts out of the dark-mode transparent treatment above, which
+     would leave it invisible over the light areas of the hero. */
+  html.dark .btn-ghost.btn-on-media {
+    @apply bg-white text-black border-white;
+  }
+
+  html.dark .btn-ghost.btn-on-media::before {
+    @apply bg-black;
+  }
+
+  html.dark .btn-ghost.btn-on-media:hover {
+    @apply text-white;
+  }
+
   .underline-reveal {
     position: relative;
     text-decoration: none;
@@ -448,6 +464,17 @@ html.dark .studio-bg {
 html.dark .image-loading {
   background: linear-gradient(90deg, #1c1c1c 25%, #252525 50%, #1c1c1c 75%);
   background-size: 200% 100%;
+}
+
+/* ─── Hero wordmark ────────────────────────────────────────
+   The hero photo runs from near-white cyc wall to near-black garment, so a
+   plain white wordmark measures ~1.2:1 over the wall and ~19:1 over the coats.
+   The heavier weight thickens the stems that were dissolving; a soft falloff
+   under the glyphs separates the white fill from the light wall without laying
+   a scrim across the photograph. */
+
+.hero-wordmark {
+  text-shadow: 0 0 0.06em rgba(0, 0, 0, 0.4);
 }
 
 /* ─── Font optical sizing ──────────────────────────────── */

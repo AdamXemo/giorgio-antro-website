@@ -60,7 +60,7 @@ export default function Home() {
 
           {/* ANTRO — each letter clips up independently */}
           <h1
-            className="text-center font-hero font-light leading-[0.88] tracking-tight
+            className="hero-wordmark text-center font-hero font-semibold leading-[0.88] tracking-tight
                        text-[17vw] sm:text-[14vw] md:text-[12vw] lg:text-[10.5vw]"
             aria-label="ANTRO"
           >
@@ -78,16 +78,16 @@ export default function Home() {
 
           {/* CTA */}
           <div className="mt-8 md:mt-10 flex flex-col items-center text-center">
+            {/* Shared button pattern from globals.css. The label must stay in a
+                <span> — `.btn-ghost span` is what sits above the ::before wipe.
+                `btn-on-media` keeps it solid white in dark mode: it sits on the
+                photograph, which doesn't change with the theme. */}
             <Link
               href={`/product/${mainProduct.id}`}
-              className="inline-flex items-center justify-center bg-white px-11 py-4
-                         text-[11px] font-bold tracking-[0.3em] text-black
-                         shadow-lg shadow-black/20 transition-colors duration-300
-                         hover:bg-white/85 focus-visible:outline-none
-                         focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2
-                         focus-visible:ring-offset-black animate-reveal-fade animate-delay-700"
+              className="btn-ghost btn-on-media px-12 py-[18px] text-[13px]
+                         animate-reveal-fade animate-delay-700"
             >
-              SHOP NOW
+              <span>SHOP NOW</span>
             </Link>
           </div>
         </div>
