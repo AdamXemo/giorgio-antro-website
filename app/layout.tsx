@@ -5,13 +5,14 @@ import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import { ThemedToaster } from '@/components/theme/ThemedToaster'
 import Header from '@/components/layout/Header'
 import ClientFooter from '@/components/layout/ClientFooter'
-import { fontSans, fontDisplay, fontBody } from '@/lib/fonts'
+import { fontSans, fontDisplay, fontBody, fontHero } from '@/lib/fonts'
 import { CheckoutSummaryProvider } from '@/components/checkout/CheckoutSummaryContext'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  title: 'ANTRO - Premium Streetwear',
-  description: 'Discover unique, high-quality streetwear designed for the modern individual.',
+  title: 'ANTRO',
+  description:
+    'ANTRO is an independent label by Giorgio Antro. Relaxed, unisex tailoring made in small quantities. Brussels.',
 }
 
 export default function RootLayout({
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontDisplay.variable} ${fontBody.variable}`}
+      className={`${fontSans.variable} ${fontDisplay.variable} ${fontBody.variable} ${fontHero.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
