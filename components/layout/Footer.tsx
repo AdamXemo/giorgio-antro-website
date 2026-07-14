@@ -8,7 +8,6 @@ const FOOTER_COLUMNS = [
   {
     heading: 'COMPANY',
     links: [
-      { href: '/about', label: 'ABOUT' },
       { href: '/contact', label: 'CONTACT' },
       { href: '/products', label: 'SHOP' },
     ],
