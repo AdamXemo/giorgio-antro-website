@@ -1,18 +1,18 @@
 import { Resend } from 'resend'
 import type { Order } from './orders'
+import { optionalEnv, requireEnv } from './env'
 
 function getResend(): Resend {
-  if (!process.env.RESEND_API_KEY) {
-    throw new Error('[lib/email.ts] RESEND_API_KEY must be set.')
-  }
-  return new Resend(process.env.RESEND_API_KEY)
+  return new Resend(requireEnv('RESEND_API_KEY'))
 }
 
-// Must be a Resend-verified sending domain before launch.
-// For local testing use 'onboarding@resend.dev' with your own email as recipient.
+// FOLLOW-UP (ops, before launch): `onboarding@resend.dev` is Resend's shared
+// sandbox sender - it can only deliver to the Resend account owner's address.
+// Once giorgioantro.com is verified in Resend, change this to
+// 'ANTRO <orders@giorgioantro.com>'. Manual step, tracked in the README.
 const FROM_ADDRESS = 'ANTRO <onboarding@resend.dev>'
 // Inbox that receives contact form submissions
-const CONTACT_TO = process.env.CONTACT_EMAIL ?? 'info@giorgioantro.com'
+const CONTACT_TO = optionalEnv('CONTACT_EMAIL', 'info@giorgioantro.com')
 
 // ── Order confirmation ────────────────────────────────────────────────────────
 
@@ -74,7 +74,7 @@ export async function sendOrderConfirmation(order: Order): Promise<boolean> {
         <p style="margin:0">${order.customerInfo.address.country}</p>
       </div>
 
-      <p>Questions? Visit <a href="${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://giorgioantro.com'}/contact">our contact page</a>.</p>
+      <p>Questions? Visit <a href="${optionalEnv('NEXT_PUBLIC_SITE_URL', 'https://giorgioantro.com')}/contact">our contact page</a>.</p>
     </div>
     <div style="text-align:center;padding:20px;color:#999;font-size:12px">
       &copy; ${new Date().getFullYear()} ANTRO. All rights reserved.
