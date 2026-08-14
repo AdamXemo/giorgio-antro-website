@@ -4,6 +4,15 @@ import { getProductById } from '@/data/products'
 
 export const runtime = 'nodejs'
 
+/**
+ * Stripe rejects any metadata *value* longer than 500 characters. The whole
+ * cart is serialised into `metadata.items`, and the webhook rebuilds the order
+ * from it, so an oversized cart would fail at the Stripe API with an opaque
+ * error - or worse, quietly ship an order we cannot reconstruct. One product
+ * cannot come close to the limit today; this is the guard for when it can.
+ */
+const STRIPE_METADATA_VALUE_LIMIT = 500
+
 interface RequestLineItem {
   id: string
   quantity: number
@@ -57,11 +66,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid order amount' }, { status: 400 })
     }
 
+    const serializedItems = JSON.stringify(metadataItems)
+    if (serializedItems.length > STRIPE_METADATA_VALUE_LIMIT) {
+      console.error(
+        '[create-payment-intent] Cart metadata exceeds the Stripe limit:',
+        JSON.stringify({
+          bytes: serializedItems.length,
+          limit: STRIPE_METADATA_VALUE_LIMIT,
+          lineItems: metadataItems.length,
+        })
+      )
+      return NextResponse.json({ error: 'Cart is too large to process' }, { status: 400 })
+    }
+
     const paymentIntent = await getStripe().paymentIntents.create({
       amount: totalCents,
       currency: 'eur',
       metadata: {
-        items: JSON.stringify(metadataItems),
+        items: serializedItems,
         subtotal: (subtotalCents / 100).toFixed(2),
         shipping: (shippingCents / 100).toFixed(2),
         total: (totalCents / 100).toFixed(2),
