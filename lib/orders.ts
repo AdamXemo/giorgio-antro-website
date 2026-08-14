@@ -35,6 +35,37 @@ export interface Order {
   updatedAt: string
 }
 
+// ── Errors ────────────────────────────────────────────────────────────────────
+
+/** Postgres `unique_violation`. */
+export const UNIQUE_VIOLATION = '23505'
+
+/**
+ * Wraps a Supabase/Postgres failure while preserving the SQLSTATE code, so
+ * callers can tell a retryable outage apart from a permanent constraint
+ * violation (see `isUniqueViolation`).
+ */
+export class OrderDbError extends Error {
+  readonly code?: string
+  readonly details?: string
+
+  constructor(message: string, code?: string, details?: string) {
+    super(message)
+    this.name = 'OrderDbError'
+    this.code = code
+    this.details = details
+  }
+}
+
+/**
+ * True when the error is Postgres rejecting a duplicate row. For the orders
+ * table this means the `stripe_payment_intent_id` unique index fired — i.e.
+ * the order already exists and the write was a redundant one.
+ */
+export function isUniqueViolation(err: unknown): boolean {
+  return err instanceof OrderDbError && err.code === UNIQUE_VIOLATION
+}
+
 // ── Private helpers ───────────────────────────────────────────────────────────
 
 function generateOrderNumber(): string {
@@ -105,7 +136,7 @@ export async function createOrder(
     .select()
     .single()
 
-  if (error) throw new Error(`[createOrder] ${error.message}`)
+  if (error) throw new OrderDbError(`[createOrder] ${error.message}`, error.code, error.details)
   return rowToOrder(data as DbRow)
 }
 
@@ -116,7 +147,7 @@ export async function getOrderById(id: string): Promise<Order | null> {
     .eq('id', id)
     .maybeSingle()
 
-  if (error) throw new Error(`[getOrderById] ${error.message}`)
+  if (error) throw new OrderDbError(`[getOrderById] ${error.message}`, error.code, error.details)
   return data ? rowToOrder(data as DbRow) : null
 }
 
@@ -129,7 +160,13 @@ export async function getOrderByStripePaymentIntentId(
     .eq('stripe_payment_intent_id', paymentIntentId)
     .maybeSingle()
 
-  if (error) throw new Error(`[getOrderByStripePaymentIntentId] ${error.message}`)
+  if (error) {
+    throw new OrderDbError(
+      `[getOrderByStripePaymentIntentId] ${error.message}`,
+      error.code,
+      error.details
+    )
+  }
   return data ? rowToOrder(data as DbRow) : null
 }
 
@@ -144,6 +181,8 @@ export async function updateOrderStatus(
     .select()
     .single()
 
-  if (error) throw new Error(`[updateOrderStatus] ${error.message}`)
+  if (error) {
+    throw new OrderDbError(`[updateOrderStatus] ${error.message}`, error.code, error.details)
+  }
   return data ? rowToOrder(data as DbRow) : null
 }
