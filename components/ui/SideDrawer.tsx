@@ -13,7 +13,9 @@ interface SideDrawerProps {
 export default function SideDrawer({ isOpen, onClose, title, children }: SideDrawerProps) {
   // Stable ref so the effect never needs to re-attach when onClose changes identity
   const onCloseRef = useRef(onClose)
-  onCloseRef.current = onClose
+  useEffect(() => {
+    onCloseRef.current = onClose
+  }, [onClose])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -31,7 +33,7 @@ export default function SideDrawer({ isOpen, onClose, title, children }: SideDra
         onClick={onClose}
         className={[
           'fixed inset-0',
-          'bg-black/60 dark:bg-black/70',
+          'bg-black/60',
           'z-[140] transition-opacity duration-500',
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
         ].join(' ')}
@@ -45,7 +47,7 @@ export default function SideDrawer({ isOpen, onClose, title, children }: SideDra
         aria-label={title}
         className={[
           'fixed top-0 right-0 w-1/2 h-screen',
-          'bg-[var(--background)] border-l border-black/[0.08] dark:border-white/[0.08]',
+          'bg-[var(--background)] border-l border-black/[0.08]',
           'z-[150] overflow-y-auto',
           'transition-transform duration-500',
           isOpen ? 'translate-x-0' : 'translate-x-full',
@@ -56,7 +58,7 @@ export default function SideDrawer({ isOpen, onClose, title, children }: SideDra
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute top-5 right-6 p-1 text-black dark:text-white hover:opacity-60 transition-opacity duration-200"
+          className="absolute top-5 right-6 p-1 text-black hover:opacity-60 transition-opacity duration-200"
         >
           <X size={26} strokeWidth={1.25} />
         </button>
