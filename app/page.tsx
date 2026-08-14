@@ -79,12 +79,10 @@ export default function Home() {
           {/* CTA */}
           <div className="mt-8 md:mt-10 flex flex-col items-center text-center">
             {/* Shared button pattern from globals.css. The label must stay in a
-                <span> — `.btn-ghost span` is what sits above the ::before wipe.
-                `btn-on-media` keeps it solid white in dark mode: it sits on the
-                photograph, which doesn't change with the theme. */}
+                <span> — `.btn-ghost span` is what sits above the ::before wipe. */}
             <Link
               href={`/product/${mainProduct.id}`}
-              className="btn-ghost btn-on-media px-12 py-[18px] text-[13px]
+              className="btn-ghost px-12 py-[18px] text-[13px]
                          animate-reveal-fade animate-delay-700"
             >
               <span>SHOP NOW</span>
