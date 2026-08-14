@@ -93,8 +93,8 @@ export default function ProductClient({ product }: { product: Product }) {
                   aria-label={`View image ${index + 1}`}
                   className={`rounded-full transition-all duration-300 ${
                     index === activeDesktopImage
-                      ? 'w-2 h-2 bg-black dark:bg-white'
-                      : 'w-1.5 h-1.5 bg-black/25 dark:bg-white/25'
+                      ? 'w-2 h-2 bg-black'
+                      : 'w-1.5 h-1.5 bg-black/25'
                   }`}
                 />
               ))}
@@ -103,7 +103,7 @@ export default function ProductClient({ product }: { product: Product }) {
         </div>
 
         {/* Right: sticky product info + slide-in drawer */}
-        <div className="w-1/2 relative border-l border-black/[0.06] dark:border-white/[0.06]">
+        <div className="w-1/2 relative border-l border-black/[0.06]">
           <div className="sticky top-[var(--header-height)] h-[calc(100vh_-_var(--header-height))] overflow-y-auto">
             <div className="min-h-full flex items-center py-16">
               <div className="px-16 xl:px-24 w-full">

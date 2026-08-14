@@ -34,7 +34,7 @@ export default function GalleryImage({ src, alt, href, sizes, className = '' }: 
     />
   )
 
-  const wrapperClass = `group relative block h-full w-full overflow-hidden bg-[#f0f0f0] dark:bg-[#1c1c1c] ${className}`
+  const wrapperClass = `group relative block h-full w-full overflow-hidden bg-[#f0f0f0] ${className}`
 
   if (href) {
     return (

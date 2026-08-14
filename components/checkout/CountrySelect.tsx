@@ -62,14 +62,14 @@ export function CountrySelect({ id, value, onChange, options, error }: Props) {
   const triggerClass = [
     'w-full flex items-center justify-between',
     'border rounded-[2px] bg-transparent px-3 py-2 text-[13px] font-sans',
-    'text-black dark:text-white cursor-pointer',
+    'text-black cursor-pointer',
     error
-      ? 'border-red-300 dark:border-red-500/70'
-      : 'border-[#eaeaea] dark:border-white/10',
+      ? 'border-red-300'
+      : 'border-[#eaeaea]',
     open
-      ? 'border-black dark:border-white'
-      : 'hover:border-black/30 dark:hover:border-white/30',
-    'focus:outline-none focus:border-black dark:focus:border-white',
+      ? 'border-black'
+      : 'hover:border-black/30',
+    'focus:outline-none focus:border-black',
     'transition-colors duration-150',
   ].join(' ')
 
@@ -84,7 +84,7 @@ export function CountrySelect({ id, value, onChange, options, error }: Props) {
         onClick={() => setOpen((v) => !v)}
         className={triggerClass}
       >
-        <span className={selected ? '' : 'text-black/20 dark:text-white/18'}>
+        <span className={selected ? '' : 'text-black/20'}>
           {selected?.name ?? 'Select country'}
         </span>
         <svg
@@ -92,7 +92,7 @@ export function CountrySelect({ id, value, onChange, options, error }: Props) {
           height="6"
           viewBox="0 0 10 6"
           fill="none"
-          className={`flex-shrink-0 text-black/35 dark:text-white/35 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`flex-shrink-0 text-black/35 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         >
           <path
             d="M1 1l4 4 4-4"
@@ -110,8 +110,8 @@ export function CountrySelect({ id, value, onChange, options, error }: Props) {
           role="listbox"
           className={[
             'absolute z-50 top-full left-0 right-0 mt-0.5',
-            'border border-[#eaeaea] dark:border-white/10',
-            'bg-white dark:bg-[#0f0f0f]',
+            'border border-[#eaeaea]',
+            'bg-white',
             'max-h-44 overflow-y-auto',
             'rounded-[2px]',
             'shadow-sm',
@@ -131,8 +131,8 @@ export function CountrySelect({ id, value, onChange, options, error }: Props) {
                   'w-full text-left px-3 py-1.5 text-[13px]',
                   'transition-colors duration-100',
                   isActive
-                    ? 'text-black dark:text-white bg-black/[0.04] dark:bg-white/[0.05]'
-                    : 'text-black/60 dark:text-white/55 hover:bg-black/[0.03] dark:hover:bg-white/[0.03]',
+                    ? 'text-black bg-black/[0.04]'
+                    : 'text-black/60 hover:bg-black/[0.03]',
                 ].join(' ')}
               >
                 {o.name}

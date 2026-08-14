@@ -22,12 +22,12 @@ export default function QuantitySelector({
       : 'w-14 text-base'
 
   const btnBase =
-    'flex items-center justify-center text-black/55 dark:text-white/55 ' +
-    'hover:text-black dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.04] ' +
+    'flex items-center justify-center text-black/55 ' +
+    'hover:text-black hover:bg-black/[0.03] ' +
     'transition-colors disabled:opacity-30'
 
   return (
-    <div className="inline-flex items-stretch border border-black/15 dark:border-white/15 rounded-[2px]">
+    <div className="inline-flex items-stretch border border-black/15 rounded-[2px]">
       <button
         onClick={onDecrement}
         className={`${btnClass} ${btnBase}`}
@@ -36,7 +36,7 @@ export default function QuantitySelector({
         −
       </button>
       <span
-        className={`${spanClass} flex items-center justify-center border-x border-black/15 dark:border-white/15 tabular-nums select-none`}
+        className={`${spanClass} flex items-center justify-center border-x border-black/15 tabular-nums select-none`}
       >
         {value}
       </span>

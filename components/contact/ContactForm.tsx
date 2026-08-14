@@ -5,7 +5,7 @@ import { useContactForm } from '@/hooks/useContactForm'
 // No border on the input itself — handled by .input-field-wrapper pseudo-elements
 const INPUT_CLASS =
   'w-full px-0 py-3.5 bg-transparent outline-none text-sm ' +
-  'placeholder:text-black/25 dark:placeholder:text-white/25'
+  'placeholder:text-black/25'
 
 const FIELDS = [
   { id: 'name',    type: 'text',  placeholder: 'Name',    delay: '0.05s' },
@@ -71,8 +71,8 @@ export default function ContactForm() {
             className="relative w-full overflow-hidden py-4 text-[10px] tracking-[0.28em]
                        bg-black text-white border border-black
                        hover:text-black
-                       dark:bg-white dark:text-black dark:border-white
-                       dark:hover:text-white
+
+
                        disabled:opacity-40 disabled:cursor-not-allowed
                        transition-colors duration-300 group"
           >
@@ -81,7 +81,7 @@ export default function ContactForm() {
             </span>
             {!sending && (
               <span
-                className="absolute inset-0 bg-white dark:bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+                className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"
                 style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
               />
             )}

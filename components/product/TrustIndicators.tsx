@@ -9,11 +9,11 @@ const TRUST_ITEMS = [
 
 export default function TrustIndicators() {
   return (
-    <div className="flex items-center justify-between py-5 border-t border-b border-black/[0.08] dark:border-white/[0.08]">
+    <div className="flex items-center justify-between py-5 border-t border-b border-black/[0.08]">
       {TRUST_ITEMS.map(({ Icon, label }) => (
         <div key={label} className="flex flex-col items-center gap-2">
           <Icon size={16} strokeWidth={1.5} />
-          <p className="text-[9px] tracking-[0.15em] text-black/40 dark:text-white/40">{label}</p>
+          <p className="text-[9px] tracking-[0.15em] text-black/40">{label}</p>
         </div>
       ))}
     </div>

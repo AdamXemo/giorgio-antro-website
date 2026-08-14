@@ -10,24 +10,24 @@ import { POLICY_LAST_UPDATED } from '@/data/legal'
 
 /** Link styling used inside legal body copy. Underlined for contrast independence. */
 export const legalLink =
-  'underline underline-offset-4 decoration-black/25 dark:decoration-white/25 ' +
-  'hover:decoration-black dark:hover:decoration-white transition-colors ' +
+  'underline underline-offset-4 decoration-black/25 ' +
+  'hover:decoration-black transition-colors ' +
   'rounded-sm focus-visible:outline-none focus-visible:ring-2 ' +
-  'focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2 ' +
-  'focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#0f0f0f]'
+  'focus-visible:ring-black focus-visible:ring-offset-2 ' +
+  'focus-visible:ring-offset-white'
 
 /**
  * Body-copy typography. Applied once on the article wrapper via child selectors so
  * each page writes plain semantic HTML instead of repeating utility strings.
  */
 const prose = [
-  '[&_p]:text-sm [&_p]:leading-loose [&_p]:text-black/60 dark:[&_p]:text-white/60 [&_p]:mb-5',
-  '[&_li]:text-sm [&_li]:leading-loose [&_li]:text-black/60 dark:[&_li]:text-white/60',
+  '[&_p]:text-sm [&_p]:leading-loose [&_p]:text-black/60 [&_p]:mb-5',
+  '[&_li]:text-sm [&_li]:leading-loose [&_li]:text-black/60',
   '[&_ul]:mb-5 [&_ul]:space-y-2.5 [&_ol]:mb-5 [&_ol]:space-y-2.5',
   '[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5',
-  '[&_li]:pl-1.5 [&_li]:marker:text-black/30 dark:[&_li]:marker:text-white/30',
-  '[&_strong]:font-normal [&_strong]:text-black/85 dark:[&_strong]:text-white/85',
-  '[&_a]:text-black/85 dark:[&_a]:text-white/85',
+  '[&_li]:pl-1.5 [&_li]:marker:text-black/30',
+  '[&_strong]:font-normal [&_strong]:text-black/85',
+  '[&_a]:text-black/85',
 ].join(' ')
 
 interface LegalPageProps {
@@ -53,13 +53,13 @@ export default function LegalPage({ eyebrow, title, summary, children }: LegalPa
                 {title}
               </h1>
 
-              <div className="mt-8 h-px w-16 bg-black/15 dark:bg-white/15" />
+              <div className="mt-8 h-px w-16 bg-black/15" />
 
-              <p className="mt-8 text-sm leading-loose text-black/55 dark:text-white/55">
+              <p className="mt-8 text-sm leading-loose text-black/55">
                 {summary}
               </p>
 
-              <p className="mt-6 text-[10px] tracking-[0.3em] text-black/30 dark:text-white/30">
+              <p className="mt-6 text-[10px] tracking-[0.3em] text-black/30">
                 LAST UPDATED{' '}
                 <time dateTime={POLICY_LAST_UPDATED}>
                   {formatPolicyDate(POLICY_LAST_UPDATED)}
@@ -90,12 +90,12 @@ export function LegalSection({ n, id, title, children }: LegalSectionProps) {
     <ScrollReveal>
       <section
         id={id}
-        className="scroll-mt-28 py-10 md:py-12 border-t border-black/8 dark:border-white/8"
+        className="scroll-mt-28 py-10 md:py-12 border-t border-black/8"
       >
         <div className="grid grid-cols-1 md:grid-cols-[4rem_1fr] gap-4 md:gap-10">
           <span
             aria-hidden
-            className="text-[10px] tracking-[0.25em] text-black/25 dark:text-white/25 md:pt-2"
+            className="text-[10px] tracking-[0.25em] text-black/25 md:pt-2"
           >
             {n}
           </span>
@@ -116,7 +116,7 @@ export function LegalSection({ n, id, title, children }: LegalSectionProps) {
 export function LegalSubsection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="mt-9 first:mt-0">
-      <h3 className="text-[10px] tracking-[0.3em] text-black/45 dark:text-white/45 mb-4">
+      <h3 className="text-[10px] tracking-[0.3em] text-black/45 mb-4">
         {title.toUpperCase()}
       </h3>
       {children}
@@ -127,7 +127,7 @@ export function LegalSubsection({ title, children }: { title: string; children: 
 /** Boxed, copyable block — used for the statutory model withdrawal form. */
 export function LegalCallout({ children }: { children: ReactNode }) {
   return (
-    <div className="my-7 border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.03] p-6 md:p-8">
+    <div className="my-7 border border-black/10 bg-black/[0.02] p-6 md:p-8">
       {children}
     </div>
   )
@@ -139,14 +139,14 @@ export function LegalCallout({ children }: { children: ReactNode }) {
  * a stacked <dl> stays readable at 375px without horizontal scroll.
  */
 export function LegalDefinitionList({ children }: { children: ReactNode }) {
-  return <dl className="mb-5 divide-y divide-black/8 dark:divide-white/8">{children}</dl>
+  return <dl className="mb-5 divide-y divide-black/8">{children}</dl>
 }
 
 export function LegalDefinition({ term, children }: { term: string; children: ReactNode }) {
   return (
     <div className="py-5 first:pt-0 last:pb-0">
-      <dt className="text-sm text-black/85 dark:text-white/85 mb-2">{term}</dt>
-      <dd className="text-sm leading-loose text-black/60 dark:text-white/60">{children}</dd>
+      <dt className="text-sm text-black/85 mb-2">{term}</dt>
+      <dd className="text-sm leading-loose text-black/60">{children}</dd>
     </div>
   )
 }

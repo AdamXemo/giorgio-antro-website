@@ -78,7 +78,7 @@ export default function PrivacyPage() {
           {PROCESSING_PURPOSES.map(({ purpose, data, legalBasis }) => (
             <LegalDefinition key={purpose} term={purpose}>
               {data}
-              <span className="block mt-1 text-black/40 dark:text-white/40">{legalBasis}</span>
+              <span className="block mt-1 text-black/40">{legalBasis}</span>
             </LegalDefinition>
           ))}
         </LegalDefinitionList>
@@ -100,7 +100,7 @@ export default function PrivacyPage() {
           {SUB_PROCESSORS.map(({ name, purpose, dataHandled, transfers }) => (
             <LegalDefinition key={name} term={name}>
               {purpose}.
-              <span className="block mt-1 text-black/40 dark:text-white/40">
+              <span className="block mt-1 text-black/40">
                 Data handled: {dataHandled}. {transfers}
               </span>
             </LegalDefinition>
@@ -203,7 +203,7 @@ export default function PrivacyPage() {
         <ul>
           <li>
             <strong>Your cart</strong> is saved in your browser&rsquo;s{' '}
-            <code className="text-black/75 dark:text-white/75">localStorage</code> so that its
+            <code className="text-black/75">localStorage</code> so that its
             contents survive a page reload. It stays on your device, is never transmitted to us as a
             standalone record, and you can clear it at any time by emptying your cart or clearing
             your browser&rsquo;s site data.
