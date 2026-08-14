@@ -20,7 +20,8 @@ import {
   // ── drop-in sans alternatives ──────────────────────────────────────────────
   // DM_Sans, Outfit, Plus_Jakarta_Sans, Syne, Space_Grotesk, Raleway,
   // ── drop-in display alternatives ──────────────────────────────────────────
-  Playfair_Display, EB_Garamond, Libre_Baskerville, Bodoni_Moda,
+  Playfair_Display,
+  // EB_Garamond, Libre_Baskerville, Bodoni_Moda,
   // Italiana, Didact_Gothic, Cinzel,
   // ── drop-in body alternatives ─────────────────────────────────────────────
   // Roboto, Lato, Source_Sans_3, Nunito, Open_Sans, Work_Sans,
