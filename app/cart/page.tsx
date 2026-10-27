@@ -19,14 +19,14 @@ export default function CartPage() {
   return (
     <div className="min-h-screen pt-[73px]">
       <div className="max-w-screen-xl mx-auto px-6 md:px-12 py-16">
-        <p className="text-[10px] tracking-[0.3em] text-black/35 dark:text-white/35 mb-3">YOUR BAG</p>
+        <p className="text-[10px] tracking-[0.3em] text-black/35 mb-3">YOUR BAG</p>
         <h1 className="font-display font-light text-4xl md:text-5xl mb-16">Shopping Cart</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
 
           {/* ── Cart Items ── */}
           <div className="lg:col-span-2">
-            <div className="border-t border-black/10 dark:border-white/10">
+            <div className="border-t border-black/10">
               {cart.map((item, idx) => (
                 <CartItem
                   key={`${item.id}-${item.size}`}

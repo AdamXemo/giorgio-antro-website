@@ -13,7 +13,7 @@ export default function ProductsPage() {
         <div className="max-w-screen-xl mx-auto">
 
           <div className="mb-14">
-            <p className="text-[10px] tracking-[0.3em] text-black/35 dark:text-white/35 mb-4">COLLECTION</p>
+            <p className="text-[10px] tracking-[0.3em] text-black/35 mb-4">COLLECTION</p>
             <h1 className="font-display font-light text-4xl md:text-5xl">All Products</h1>
           </div>
 

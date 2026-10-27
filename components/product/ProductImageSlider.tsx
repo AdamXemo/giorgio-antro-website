@@ -58,7 +58,7 @@ export default function ProductImageSlider({ mobileImages, productName }: Produc
               type="button"
               onClick={prev}
               aria-label="Previous image"
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-[#1c1c1c] dark:ring-1 dark:ring-white/10 shadow-md dark:shadow-none flex items-center justify-center text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white hover:shadow-lg transition-all duration-200"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-black/40 hover:text-black hover:shadow-lg transition-all duration-200"
             >
               <svg width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden>
                 <path d="M7 1L1 7L7 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -68,7 +68,7 @@ export default function ProductImageSlider({ mobileImages, productName }: Produc
               type="button"
               onClick={next}
               aria-label="Next image"
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-[#1c1c1c] dark:ring-1 dark:ring-white/10 shadow-md dark:shadow-none flex items-center justify-center text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white hover:shadow-lg transition-all duration-200"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-black/40 hover:text-black hover:shadow-lg transition-all duration-200"
             >
               <svg width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden>
                 <path d="M1 1L7 7L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -94,8 +94,8 @@ export default function ProductImageSlider({ mobileImages, productName }: Produc
               onClick={() => setSelectedImage(index)}
               className={`rounded-full transition-all duration-300 ${
                 index === selectedImage
-                  ? 'w-2 h-2 bg-black dark:bg-white'
-                  : 'w-[7px] h-[7px] bg-black/15 dark:bg-white/15 hover:bg-black/35 dark:hover:bg-white/35'
+                  ? 'w-2 h-2 bg-black'
+                  : 'w-[7px] h-[7px] bg-black/15 hover:bg-black/35'
               }`}
             />
           ))}

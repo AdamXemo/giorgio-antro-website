@@ -91,8 +91,8 @@ export default function MobileProductHero({ mobileImages, productName }: MobileP
               aria-label={`View image ${index + 1}`}
               className={`rounded-full transition-all duration-300 ${
                 index === selectedImage
-                  ? 'w-2 h-2 bg-black dark:bg-white'
-                  : 'w-1.5 h-1.5 bg-black/25 dark:bg-white/25'
+                  ? 'w-2 h-2 bg-black'
+                  : 'w-1.5 h-1.5 bg-black/25'
               }`}
             />
           ))}

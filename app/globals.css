@@ -10,11 +10,6 @@
   --header-height: 70px;
 }
 
-html.dark {
-  --background: #0f0f0f;
-  --foreground: #f0f0f0;
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -269,7 +264,6 @@ body {
   }
 }
 
-
 /* ─── Component patterns ───────────────────────────────── */
 
 @layer components {
@@ -296,18 +290,6 @@ body {
     @apply text-black;
   }
 
-  html.dark .btn-primary {
-    @apply bg-white text-black border-white;
-  }
-
-  html.dark .btn-primary::before {
-    @apply bg-black;
-  }
-
-  html.dark .btn-primary:hover {
-    @apply text-white;
-  }
-
   .btn-ghost {
     @apply relative overflow-hidden inline-flex items-center justify-center bg-white text-black text-[10px]
            tracking-[0.25em] py-4 px-10 border border-black transition-colors duration-300;
@@ -328,34 +310,6 @@ body {
   }
 
   .btn-ghost:hover {
-    @apply text-white;
-  }
-
-  html.dark .btn-ghost {
-    @apply bg-transparent text-white border-white;
-  }
-
-  html.dark .btn-ghost::before {
-    @apply bg-white;
-  }
-
-  html.dark .btn-ghost:hover {
-    @apply text-black;
-  }
-
-  /* A button sitting on media rather than on the page background. The photo
-     doesn't change with the theme, so neither does the button — it stays solid
-     white and opts out of the dark-mode transparent treatment above, which
-     would leave it invisible over the light areas of the hero. */
-  html.dark .btn-ghost.btn-on-media {
-    @apply bg-white text-black border-white;
-  }
-
-  html.dark .btn-ghost.btn-on-media::before {
-    @apply bg-black;
-  }
-
-  html.dark .btn-ghost.btn-on-media:hover {
     @apply text-white;
   }
 
@@ -419,10 +373,6 @@ body {
   pointer-events: none;
 }
 
-html.dark .input-field-wrapper::before {
-  background: rgba(255, 255, 255, 0.15);
-}
-
 .input-field-wrapper::after {
   content: '';
   position: absolute;
@@ -435,10 +385,6 @@ html.dark .input-field-wrapper::before {
   transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html.dark .input-field-wrapper::after {
-  background: #fff;
-}
-
 .input-field-wrapper:focus-within::after {
   width: 100%;
 }
@@ -449,21 +395,12 @@ html.dark .input-field-wrapper::after {
   background: radial-gradient(ellipse at 50% 38%, #f2f2f2 0%, #e6e6e6 55%, #dcdcdc 100%);
 }
 
-html.dark .studio-bg {
-  background: radial-gradient(ellipse at 50% 38%, #2c2c2c 0%, #1e1e1e 55%, #141414 100%);
-}
-
 /* ─── Image skeleton ───────────────────────────────────── */
 
 .image-loading {
   background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
-}
-
-html.dark .image-loading {
-  background: linear-gradient(90deg, #1c1c1c 25%, #252525 50%, #1c1c1c 75%);
-  background-size: 200% 100%;
 }
 
 /* ─── Hero wordmark ────────────────────────────────────────
@@ -499,17 +436,8 @@ textarea:focus-visible {
   outline-offset: 3px;
 }
 
-html.dark button:focus-visible,
-html.dark a:focus-visible,
-html.dark input:focus-visible,
-html.dark textarea:focus-visible {
-  outline-color: #fff;
-}
-
 /* ─── Scrollbar ────────────────────────────────────────── */
 
 ::-webkit-scrollbar       { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #000; }
-
-html.dark ::-webkit-scrollbar-thumb { background: #444; }

@@ -26,7 +26,7 @@ const FEATURE_NARROW_SIZES = '(min-width: 1024px) 33vw, 100vw'
  */
 export default function HomeGallery() {
   return (
-    <section className="bg-white dark:bg-black px-3 py-16 sm:px-4 md:px-6 md:py-24">
+    <section className="bg-white px-3 py-16 sm:px-4 md:px-6 md:py-24">
 
       {/* Uniform gutters: `gap-*` separates tiles within a row, `space-y-*`
           separates the rows, and the section padding matches so the white

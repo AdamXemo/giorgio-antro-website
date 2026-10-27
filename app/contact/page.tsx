@@ -9,7 +9,7 @@ export default function ContactPage() {
         {/* Heading */}
         <ScrollReveal>
           <div className="mb-16 md:mb-20">
-            <p className="mb-4 text-[10px] tracking-[0.3em] text-black/35 dark:text-white/35">
+            <p className="mb-4 text-[10px] tracking-[0.3em] text-black/35">
               CONTACT
             </p>
             <h1 className="font-display text-4xl font-light md:text-5xl">Get in Touch</h1>
@@ -19,7 +19,7 @@ export default function ContactPage() {
         {/* Info + Form */}
         <div className="grid flex-1 grid-cols-1 gap-16 lg:grid-cols-[2fr_3fr] lg:gap-0">
           <ContactInfoSection />
-          <div className="border-black/8 dark:border-white/8 lg:border-l lg:pl-16">
+          <div className="border-black/8 lg:border-l lg:pl-16">
             <ContactForm />
           </div>
         </div>

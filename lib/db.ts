@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/supabase'
+import { requireEnv } from './env'
 
 let _db: SupabaseClient<Database> | null = null
 
@@ -11,14 +12,8 @@ let _db: SupabaseClient<Database> | null = null
 export function getDb(): SupabaseClient<Database> {
   if (_db) return _db
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-  if (!url || !key) {
-    throw new Error(
-      '[lib/db.ts] NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set.'
-    )
-  }
+  const url = requireEnv('NEXT_PUBLIC_SUPABASE_URL')
+  const key = requireEnv('SUPABASE_SERVICE_ROLE_KEY')
 
   _db = createClient<Database>(url, key, { auth: { persistSession: false } })
   return _db

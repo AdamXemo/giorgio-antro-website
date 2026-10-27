@@ -155,7 +155,7 @@ export default function ReturnsPage() {
 
         <LegalCallout>
           <LegalSubsection title="Model withdrawal form">
-            <p className="text-black/45 dark:text-white/45 italic">
+            <p className="text-black/45 italic">
               (Complete and return this form only if you wish to withdraw from the contract.)
             </p>
 
@@ -180,7 +180,7 @@ export default function ReturnsPage() {
               <li>Date: ______________________</li>
             </ul>
 
-            <p className="!mb-0 text-black/45 dark:text-white/45">(*) Delete as appropriate.</p>
+            <p className="!mb-0 text-black/45">(*) Delete as appropriate.</p>
           </LegalSubsection>
         </LegalCallout>
       </LegalSection>

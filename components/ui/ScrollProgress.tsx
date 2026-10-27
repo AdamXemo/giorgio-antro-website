@@ -24,7 +24,7 @@ export default function ScrollProgress() {
     <div aria-hidden className="pointer-events-none fixed top-0 left-0 right-0 z-[125] h-px">
       <div
         ref={barRef}
-        className="h-full bg-black dark:bg-white origin-left"
+        className="h-full bg-black origin-left"
         style={{ transform: 'scaleX(0)' }}
       />
     </div>

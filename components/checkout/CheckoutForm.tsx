@@ -9,13 +9,13 @@ import { inputBase, inputError, stripeAddressOptions, stripePaymentOptions } fro
 function SectionLabel({ number, title }: { number: string; title: string }) {
   return (
     <div className="flex items-center gap-4 mb-5">
-      <span className="text-[10px] tracking-[0.3em] text-black/25 dark:text-white/25 font-body tabular-nums">
+      <span className="text-[10px] tracking-[0.3em] text-black/25 font-body tabular-nums">
         {number}
       </span>
-      <span className="text-[10px] tracking-[0.3em] uppercase text-black dark:text-white">
+      <span className="text-[10px] tracking-[0.3em] uppercase text-black">
         {title}
       </span>
-      <div className="flex-1 h-px bg-black/8 dark:bg-white/8" />
+      <div className="flex-1 h-px bg-black/8" />
     </div>
   )
 }
@@ -78,8 +78,8 @@ export function CheckoutForm() {
 
       {/* Submission-level errors only — card/validation errors are shown inline by Stripe */}
       {submitError && (
-        <div className="mt-6 px-4 py-3 border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/20">
-          <p className="text-[13px] text-red-600 dark:text-red-400">{submitError}</p>
+        <div className="mt-6 px-4 py-3 border border-red-200 bg-red-50">
+          <p className="text-[13px] text-red-600">{submitError}</p>
         </div>
       )}
 
@@ -90,13 +90,13 @@ export function CheckoutForm() {
           disabled={!stripe || !elements || isSubmitting}
           className={[
             'w-full py-3.5 border rounded-[2px]',
-            'border-black dark:border-white',
-            'bg-black dark:bg-white',
-            'text-white dark:text-black',
+            'border-black',
+            'bg-black',
+            'text-white',
             'text-[10px] tracking-[0.3em] font-light',
             'flex items-center justify-center gap-2.5',
             'transition-colors duration-500',
-            'hover:bg-white hover:text-black dark:hover:bg-transparent dark:hover:text-white',
+            'hover:bg-white hover:text-black',
             'disabled:opacity-30 disabled:cursor-not-allowed',
           ].join(' ')}
         >
@@ -110,7 +110,7 @@ export function CheckoutForm() {
           )}
         </button>
 
-        <p className="mt-4 text-center text-[10px] tracking-[0.15em] text-black/22 dark:text-white/22">
+        <p className="mt-4 text-center text-[10px] tracking-[0.15em] text-black/22">
           SECURED BY STRIPE · SSL ENCRYPTED
         </p>
       </div>
